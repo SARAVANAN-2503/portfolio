@@ -1,0 +1,38 @@
+# Dependencies
+node_modules/
+
+# Environment
+.env
+.env.*
+!.env.example
+
+# Build output
+.next
+out
+dist
+
+# TypeScript
+*.tsbuildinfo
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+npm-debug.log*
+
+# Test coverage
+coverage/
+.nyc_output/
+
+# Database
+*.db
+data/
+
+# Debug
+report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
