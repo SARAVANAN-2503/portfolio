@@ -1,0 +1,68 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  body {
+    @apply bg-navy-900 text-slate-200 font-sans;
+    background-image:
+      radial-gradient(circle, rgba(148, 163, 184, 0.07) 1px, transparent 1px);
+    background-size: 24px 24px;
+  }
+
+  ::selection {
+    @apply bg-accent/30 text-amber-50;
+  }
+
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    @apply bg-slate-700 rounded-full;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-slate-600;
+  }
+}
+
+@layer components {
+  .section-container {
+    @apply mx-auto max-w-6xl px-6 lg:px-8;
+  }
+
+  .card-surface {
+    @apply rounded-lg border border-slate-800/60 bg-navy-700/50 backdrop-blur-sm;
+  }
+
+  .text-gradient {
+    @apply bg-gradient-to-r from-accent to-amber-300 bg-clip-text text-transparent;
+  }
+
+  .tag {
+    @apply inline-flex items-center rounded-full border border-slate-700/60
+           bg-slate-800/40 px-2.5 py-0.5 text-xs font-mono text-slate-400;
+  }
+
+  .tag-accent {
+    @apply inline-flex items-center rounded-full border border-accent/30
+           bg-accent-dim px-2.5 py-0.5 text-xs font-mono text-accent;
+  }
+}
+
+@layer utilities {
+  .animate-delay-100 { animation-delay: 100ms; }
+  .animate-delay-200 { animation-delay: 200ms; }
+  .animate-delay-300 { animation-delay: 300ms; }
+  .animate-delay-400 { animation-delay: 400ms; }
+  .animate-delay-500 { animation-delay: 500ms; }
+}
