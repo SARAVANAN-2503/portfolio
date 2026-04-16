@@ -3,8 +3,16 @@ import type { Project } from './types';
 export const expertconnect: Project = {
   slug: 'expertconnect',
   title: 'ExpertConnect',
-  tagline: 'Real-time WebSocket Consultation Platform',
+  tagline: 'Real-Time Expert Consultation Platform',
   category: 'Real-time Platform',
+  status: 'shipped',
+  year: '2024',
+  highlights: [
+    '5,000+ concurrent WebSocket connections',
+    'Redis pub/sub fan-out — stateless, horizontally scalable',
+    'Sub-120ms P99 message delivery',
+    'Reconnect buffer replays last 100 msgs on mobile drop',
+  ],
   problem:
     'Building a live consultation platform where 5000+ concurrent users need sub-200ms message delivery, presence tracking ("Dr. Smith is typing..."), and guaranteed message ordering. The business model requires experts and clients to communicate in real time with session recording for compliance, while mobile connections drop and reconnect unpredictably.',
   architecture:
@@ -19,7 +27,7 @@ export const expertconnect: Project = {
   ],
   stack: [
     'Node.js',
-    'WebSocket (ws)',
+    'Socket.io',
     'Redis Pub/Sub',
     'JWT Auth on Upgrade',
     'Monotonic Sequencing',

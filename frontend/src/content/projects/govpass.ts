@@ -3,8 +3,16 @@ import type { Project } from './types';
 export const govpass: Project = {
   slug: 'govpass',
   title: 'GovPass',
-  tagline: 'Government Visa Application System',
+  tagline: 'Government Visa Application Management System',
   category: 'Government / Compliance',
+  status: 'shipped',
+  year: '2024',
+  highlights: [
+    'Replaced paper workflow — 30% error rate → < 2%',
+    'Immutable event-sourced audit log (7-year retention)',
+    '15+ officer role tiers with RBAC middleware',
+    'Fault-tolerant Stripe + Square payment flows',
+  ],
   problem:
     'Processing visa applications for a government agency with strict regulatory constraints: mandatory document retention, audit trails for every state transition, role-based access across 15+ officer tiers, and zero tolerance for data loss. The existing paper-based workflow processed ~200 applications/day with a 30% error rate from manual data entry.',
   architecture:
@@ -18,13 +26,17 @@ export const govpass: Project = {
     { label: 'Audit Retention', value: '7 years' },
   ],
   stack: [
+    'React',
     'Node.js',
     'Express',
-    'PostgreSQL',
+    'MySQL',
+    'AWS S3',
+    'Stripe',
+    'Square',
     'Redis Queues',
-    'Tesseract OCR',
-    'State Machine (XState)',
     'RBAC Middleware',
+    'Swagger/OpenAPI',
+    'Knex.js',
   ],
   explainMode: {
     interviewPitch:

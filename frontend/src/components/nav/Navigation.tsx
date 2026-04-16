@@ -22,7 +22,7 @@ export function Navigation() {
           href="/"
           className="font-display text-lg font-bold tracking-tight text-slate-100 hover:text-accent transition-colors"
         >
-          S<span className="text-accent">.</span>
+          Saravanan<span className="text-accent">.</span>
         </Link>
 
         <div className="flex items-center gap-1">

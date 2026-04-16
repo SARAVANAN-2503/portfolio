@@ -3,8 +3,16 @@ import type { Project } from './types';
 export const tenantcraft: Project = {
   slug: 'tenantcraft',
   title: 'TenantCraft',
-  tagline: 'Multi-tenant SaaS Website Builder',
+  tagline: 'Multi-Tenant SaaS Website Builder',
   category: 'SaaS Platform',
+  status: 'shipped',
+  year: '2024',
+  highlights: [
+    '200+ isolated business tenants on shared infra',
+    'Subdomain routing resolves tenant identity at the edge',
+    'Stripe subscription billing with webhook lifecycle',
+    '50+ drag-and-drop page builder components',
+  ],
   problem:
     'Building a website builder serving 200+ business tenants on shared infrastructure while guaranteeing data isolation. Each tenant requires custom subdomains, independent configuration, and the assurance that their data never leaks across boundaries.',
   architecture:
@@ -19,12 +27,15 @@ export const tenantcraft: Project = {
   ],
   stack: [
     'Next.js',
+    'Node.js',
     'Express',
-    'SQLite + PostgreSQL',
+    'MySQL',
     'Redis',
+    'Stripe',
     'JWT (HS256)',
     'Subdomain Routing',
-    'Zod Validation',
+    'Knex.js',
+    'Zod',
   ],
   explainMode: {
     interviewPitch:
