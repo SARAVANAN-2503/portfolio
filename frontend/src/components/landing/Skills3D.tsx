@@ -18,6 +18,17 @@ interface SkillCategory {
 
 const categories: SkillCategory[] = [
   {
+    label: 'Languages',
+    color: 'from-slate-500/20 to-slate-400/10',
+    glow: 'rgba(148,163,184,0.25)',
+    border: 'border-slate-500/20 hover:border-slate-400/50',
+    skills: [
+      { name: 'JavaScript (ES6+)', icon: 'JS', level: 5 },
+      { name: 'TypeScript', icon: 'TS', level: 5 },
+      { name: 'PHP', icon: '🐘', level: 3 },
+    ],
+  },
+  {
     label: 'Frontend',
     color: 'from-cyan-500/20 to-blue-500/10',
     glow: 'rgba(34,211,238,0.25)',
@@ -25,9 +36,11 @@ const categories: SkillCategory[] = [
     skills: [
       { name: 'React.js', icon: '⚛', level: 5 },
       { name: 'Next.js', icon: '▲', level: 5 },
-      { name: 'TypeScript', icon: 'TS', level: 4 },
-      { name: 'Tailwind CSS', icon: '🎨', level: 5 },
+      { name: 'Vue.js', icon: '🟢', level: 4 },
       { name: 'Redux Toolkit', icon: '⚙', level: 4 },
+      { name: 'Zustand', icon: '🐻', level: 3 },
+      { name: 'Tailwind CSS', icon: '🎨', level: 5 },
+      { name: 'Ant Design', icon: '🐜', level: 3 },
     ],
   },
   {
@@ -38,9 +51,12 @@ const categories: SkillCategory[] = [
     skills: [
       { name: 'Node.js', icon: '⬡', level: 5 },
       { name: 'Express.js', icon: '🚀', level: 5 },
+      { name: 'Laravel', icon: '🔺', level: 3 },
       { name: 'REST APIs', icon: '⇄', level: 5 },
-      { name: 'WebSockets', icon: '⚡', level: 4 },
-      { name: 'Redis', icon: '🔴', level: 4 },
+      { name: 'JWT', icon: '🔐', level: 5 },
+      { name: 'OAuth', icon: '🔑', level: 4 },
+      { name: 'WebSockets', icon: '⚡', level: 5 },
+      { name: 'Socket.IO', icon: '🔌', level: 5 },
     ],
   },
   {
@@ -51,8 +67,9 @@ const categories: SkillCategory[] = [
     skills: [
       { name: 'MySQL', icon: '🐬', level: 5 },
       { name: 'MongoDB', icon: '🍃', level: 4 },
-      { name: 'Query Optim.', icon: '📊', level: 4 },
+      { name: 'Redis', icon: '🔴', level: 4 },
       { name: 'Schema Design', icon: '🗂', level: 5 },
+      { name: 'Query Optimization', icon: '📊', level: 4 },
     ],
   },
   {
@@ -62,33 +79,27 @@ const categories: SkillCategory[] = [
     border: 'border-amber-500/20 hover:border-amber-400/50',
     skills: [
       { name: 'AWS Lambda', icon: 'λ', level: 4 },
-      { name: 'AWS S3 / SQS', icon: '☁', level: 4 },
+      { name: 'AWS S3', icon: '☁', level: 4 },
+      { name: 'AWS SQS', icon: '📬', level: 4 },
       { name: 'Docker', icon: '🐳', level: 3 },
       { name: 'GitHub Actions', icon: '⚙', level: 3 },
+      { name: 'CI/CD', icon: '🔁', level: 3 },
+      { name: 'Linux Admin', icon: '🐧', level: 3 },
     ],
   },
   {
-    label: 'Payments & Auth',
+    label: 'Tools & Integrations',
     color: 'from-purple-500/20 to-violet-500/10',
     glow: 'rgba(168,85,247,0.25)',
     border: 'border-purple-500/20 hover:border-purple-400/50',
     skills: [
       { name: 'Stripe', icon: '💳', level: 5 },
-      { name: 'Razorpay', icon: '₹', level: 5 },
-      { name: 'JWT / OAuth', icon: '🔐', level: 5 },
-      { name: 'RBAC', icon: '🛡', level: 4 },
-    ],
-  },
-  {
-    label: 'Concepts',
-    color: 'from-rose-500/20 to-pink-500/10',
-    glow: 'rgba(244,63,94,0.25)',
-    border: 'border-rose-500/20 hover:border-rose-400/50',
-    skills: [
-      { name: 'Multi-Tenancy', icon: '🏗', level: 5 },
-      { name: 'Serverless', icon: '⚡', level: 4 },
-      { name: 'Real-Time Sys', icon: '📡', level: 5 },
-      { name: 'API Design', icon: '📐', level: 5 },
+      { name: 'Razorpay', icon: '₹', level: 4 },
+      { name: 'Square', icon: '■', level: 3 },
+      { name: 'Firebase/FCM', icon: '🔥', level: 4 },
+      { name: 'Zoom SDK', icon: '🎥', level: 4 },
+      { name: 'Swagger/OpenAPI', icon: '📜', level: 4 },
+      { name: 'Jest', icon: '🧪', level: 3 },
     ],
   },
 ];

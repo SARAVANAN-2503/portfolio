@@ -53,9 +53,9 @@ export default function Home() {
             </h1>
 
             <p className="mt-6 text-lg text-slate-400 leading-relaxed max-w-2xl">
-              Full-stack developer with 3+ years shipping production systems —
-              multi-tenant SaaS, real-time platforms, government-grade APIs, and
-              serverless pipelines. I care about clean architecture, measurable
+              Full-stack developer with 4+ years shipping production systems —
+              multi-tenant SaaS, LMS platforms, marketplace/wallet flows, government-grade
+              APIs, and serverless pipelines. I care about clean architecture, measurable
               performance, and code that actually works in production.
             </p>
 
@@ -154,7 +154,7 @@ export default function Home() {
         <div className="card-surface p-8 lg:p-10 flex flex-col lg:flex-row gap-8 lg:gap-16 items-start">
           {/* Avatar placeholder / initials */}
           <div className="shrink-0">
-            <div className="h-20 w-20 rounded-2xl bg-gradient-to-br from-accent/30 to-accent/5 border border-accent/20 flex items-center justify-center">
+            <div className="h-20 w-20 rounded-2xl bg-linear-to-br from-accent/30 to-accent/5 border border-accent/20 flex items-center justify-center">
               <span className="font-display text-3xl font-bold text-accent">S</span>
             </div>
           </div>
@@ -169,8 +169,8 @@ export default function Home() {
             </h2>
             <p className="text-slate-400 leading-relaxed text-sm max-w-2xl">
               I&apos;m Saravanan, a full-stack developer based in Chennai, India. I started out building
-              internal tools and ERP systems, and over the past 3 years I&apos;ve shipped everything from
-              government visa platforms to real-time expert consultation apps and multi-tenant SaaS builders.
+              internal ERP and CRM tooling, and over the past 4+ years I&apos;ve shipped everything from
+              government visa platforms to LMS/coaching apps, expert marketplaces, and multi-tenant SaaS builders.
             </p>
             <p className="text-slate-400 leading-relaxed text-sm max-w-2xl mt-3">
               I enjoy the intersection of backend architecture and clean frontend UX — writing APIs that
@@ -189,7 +189,7 @@ export default function Home() {
                 <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                   <rect width="20" height="14" x="2" y="7" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/>
                 </svg>
-                3+ years experience
+                4+ years experience
               </span>
               <span className="flex items-center gap-1.5 text-xs text-green-500">
                 <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -197,6 +197,56 @@ export default function Home() {
                 </svg>
                 Open to remote &amp; hybrid
               </span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Experience teaser */}
+      <section className="section-container pb-16">
+        <div className="flex items-center gap-4 mb-8">
+          <div className="h-px w-8 bg-accent" />
+          <span className="font-mono text-xs text-accent tracking-widest uppercase">Experience</span>
+          <div className="h-px flex-1 bg-slate-800/60" />
+          <Link href="/experience" className="text-xs font-mono text-slate-500 hover:text-accent transition-colors">
+            Full timeline →
+          </Link>
+        </div>
+        <div className="grid gap-4 sm:grid-cols-2">
+          {/* Job 1 */}
+          <div className="card-surface p-5 border-l-2 border-emerald-500/50">
+            <div className="flex items-start justify-between gap-2 mb-3">
+              <div>
+                <div className="flex items-center gap-2">
+                  <span className="font-display text-base font-bold text-slate-100">Gnxtace Technology</span>
+                  <span className="inline-flex items-center gap-1 rounded-full border border-green-500/30 bg-green-500/10 px-2 py-0.5 text-[10px] font-mono text-green-400">
+                    <span className="relative flex h-1.5 w-1.5"><span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75" /><span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-green-500" /></span>
+                    Current
+                  </span>
+                </div>
+                <p className="text-xs text-emerald-400 font-mono mt-0.5">Full Stack Developer</p>
+              </div>
+              <span className="font-mono text-[10px] text-slate-600 shrink-0">May 2024 – Present</span>
+            </div>
+            <div className="flex flex-wrap gap-1">
+              {['NexusOne.coach', 'Seltrix', 'GovPass', 'ZPONZ'].map(p => (
+                <span key={p} className="tag text-[10px]">{p}</span>
+              ))}
+            </div>
+          </div>
+          {/* Job 2 */}
+          <div className="card-surface p-5 border-l-2 border-blue-500/50">
+            <div className="flex items-start justify-between gap-2 mb-3">
+              <div>
+                <span className="font-display text-base font-bold text-slate-100">Jnana Inventive Pvt Ltd</span>
+                <p className="text-xs text-blue-400 font-mono mt-0.5">Full Stack Developer</p>
+              </div>
+              <span className="font-mono text-[10px] text-slate-600 shrink-0">Jun 2022 – May 2024</span>
+            </div>
+            <div className="flex flex-wrap gap-1">
+              {['AdUnity', 'QuickBizz'].map(p => (
+                <span key={p} className="tag text-[10px]">{p}</span>
+              ))}
             </div>
           </div>
         </div>

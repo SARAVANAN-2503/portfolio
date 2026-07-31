@@ -4,9 +4,10 @@ import type { Project } from '@/content/projects';
 const categoryMeta: Record<string, { color: string; bg: string; pattern: string; dot: string }> = {
   'SaaS Platform':           { color: 'text-emerald-400', bg: 'from-emerald-900/40 to-teal-900/20',    pattern: 'bg-emerald-500/5',  dot: 'bg-emerald-400' },
   'Government / Compliance': { color: 'text-blue-400',    bg: 'from-blue-900/40 to-indigo-900/20',     pattern: 'bg-blue-500/5',    dot: 'bg-blue-400' },
-  'Real-time Platform':      { color: 'text-purple-400',  bg: 'from-purple-900/40 to-violet-900/20',   pattern: 'bg-purple-500/5',  dot: 'bg-purple-400' },
+  'Marketplace / Wallet':    { color: 'text-purple-400',  bg: 'from-purple-900/40 to-violet-900/20',   pattern: 'bg-purple-500/5',  dot: 'bg-purple-400' },
   'Serverless / EdTech':     { color: 'text-orange-400',  bg: 'from-orange-900/40 to-amber-900/20',    pattern: 'bg-orange-500/5',  dot: 'bg-orange-400' },
   'AI / CRM':                { color: 'text-pink-400',    bg: 'from-pink-900/40 to-rose-900/20',       pattern: 'bg-pink-500/5',    dot: 'bg-pink-400' },
+  'LMS / Coaching':          { color: 'text-cyan-400',    bg: 'from-cyan-900/40 to-sky-900/20',        pattern: 'bg-cyan-500/5',    dot: 'bg-cyan-400' },
 };
 
 const statusLabel: Record<string, { label: string; cls: string }> = {
@@ -27,7 +28,7 @@ export function ProjectCard({ project }: { project: Project }) {
       className="group card-surface flex flex-col overflow-hidden hover:border-accent/40 hover:shadow-[0_0_32px_-8px_rgba(245,158,11,0.18)] transition-all duration-300"
     >
       {/* Image / Placeholder banner */}
-      <div className={`relative h-36 bg-gradient-to-br ${meta.bg} overflow-hidden`}>
+      <div className={`relative h-36 bg-linear-to-br ${meta.bg} overflow-hidden`}>
         {/* Grid pattern */}
         <div
           className="absolute inset-0 opacity-40"

@@ -9,7 +9,7 @@ export function ExplainMode({ project }: { project: Project }) {
   const { explainMode } = project;
 
   return (
-    <div className="rounded-lg border border-dashed border-amber-500/30 bg-amber-500/[0.03]">
+    <div className="rounded-lg border border-dashed border-amber-500/30 bg-amber-500/3">
       <button
         onClick={() => setOpen(!open)}
         className="flex w-full items-center justify-between p-5 text-left"

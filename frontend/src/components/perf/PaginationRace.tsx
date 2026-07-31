@@ -50,12 +50,12 @@ export function PaginationRace() {
       for (let i = 1; i <= pages; i++) {
         if (signal.aborted) break;
 
-        const url = cursor
+        const url: string = cursor
           ? `${API}/api/users?limit=${limit}&cursor=${encodeURIComponent(cursor)}`
           : `${API}/api/users?limit=${limit}`;
 
         const start = performance.now();
-        const res = await fetch(url, {
+        const res: Response = await fetch(url, {
           headers: {
             Authorization: `Bearer ${token}`,
             'X-Tenant-ID': user.tenantId,
@@ -63,7 +63,7 @@ export function PaginationRace() {
           signal,
         });
         const cursorMs = Math.round(performance.now() - start);
-        const data = await res.json();
+        const data: { pageInfo?: { nextCursor?: string | null; hasMore?: boolean } } = await res.json();
 
         cursor = data.pageInfo?.nextCursor ?? null;
         const offsetMs = simulateOffsetLatency(cursorMs, i);
@@ -102,7 +102,7 @@ export function PaginationRace() {
             value={pages}
             onChange={e => setPages(Number(e.target.value))}
             disabled={running}
-            className="w-16 rounded-md border border-slate-800 bg-navy-700 px-2 py-1 font-mono text-xs text-slate-300 focus:border-accent focus:outline-none"
+            className="w-16 rounded-md border border-slate-800 bg-navy-700 px-2 py-1 font-mono text-xs text-slate-300 focus:border-accent focus:outline-hidden"
           />
         </div>
         <div className="text-xs text-slate-600 font-mono">

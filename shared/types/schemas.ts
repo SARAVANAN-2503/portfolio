@@ -8,7 +8,7 @@ export type LoginInput = z.infer<typeof LoginSchema>;
 
 export const WebhookSchema = z.object({
   event: z.string().min(1),
-  data: z.record(z.unknown()),
+  data: z.record(z.string(), z.unknown()),
   idempotencyKey: z.string().min(8),
 });
 export type WebhookInput = z.infer<typeof WebhookSchema>;

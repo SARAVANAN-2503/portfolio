@@ -10,10 +10,10 @@ interface Metric {
 }
 
 const metrics: Metric[] = [
-  { value: 5000, suffix: '+', label: 'Concurrent Users', detail: 'ExpertConnect WebSocket platform' },
-  { value: 200, suffix: '+', label: 'Business Tenants', detail: 'TenantCraft multi-tenant SaaS' },
-  { value: 120, suffix: 'ms', label: 'P99 Latency', detail: 'Real-time message delivery' },
-  { value: 99.95, suffix: '%', label: 'Uptime SLA', detail: 'Across all production systems' },
+  { value: 1000, suffix: '+', label: 'Concurrent Notifications', detail: 'Appolo Firebase FCM + SQS pipeline' },
+  { value: 90, suffix: '%', label: 'Manual Effort Cut', detail: 'Appolo serverless PDF pipeline' },
+  { value: 60, suffix: '%', label: 'Faster API Response', detail: 'Cursor-based MongoDB pagination' },
+  { value: 10, suffix: '+', label: 'Production Apps', detail: 'Across SaaS, LMS, CRM, ERP domains' },
 ];
 
 function easeOutCubic(t: number): number {

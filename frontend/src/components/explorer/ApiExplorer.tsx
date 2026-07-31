@@ -294,7 +294,7 @@ export function ApiExplorer() {
               }
               spellCheck={false}
               rows={8}
-              className="w-full bg-transparent p-4 font-mono text-xs text-slate-300 leading-relaxed resize-y focus:outline-none"
+              className="w-full bg-transparent p-4 font-mono text-xs text-slate-300 leading-relaxed resize-y focus:outline-hidden"
             />
           </div>
         )}

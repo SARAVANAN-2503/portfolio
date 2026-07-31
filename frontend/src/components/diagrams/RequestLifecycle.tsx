@@ -63,7 +63,7 @@ export function RequestLifecycle() {
       >
         <Background color="#1e293b" gap={20} size={1} />
         <Controls showInteractive={false}
-          className="!bg-navy-700 !border-slate-800 !shadow-none [&>button]:!bg-navy-700 [&>button]:!border-slate-800 [&>button]:!text-slate-400 [&>button:hover]:!bg-slate-800" />
+          className="bg-navy-700! border-slate-800! shadow-none! [&>button]:bg-navy-700! [&>button]:border-slate-800! [&>button]:text-slate-400! [&>button:hover]:bg-slate-800!" />
       </ReactFlow>
     </div>
   );

@@ -8,28 +8,29 @@ export const appolo: Project = {
   status: 'live',
   year: '2025',
   highlights: [
-    '10,000+ exam submissions processed per 2-hr window',
-    'Serverless cost 60% less than always-on ECS',
-    'TUS resumable uploads for 500MB+ video files',
-    'Firebase FCM + SQS — 1,000+ concurrent push notifications',
+    'Serverless PDF processing pipeline — 90% less manual grading effort',
+    'Cursor-based MongoDB pagination — 60% faster API response times',
+    'TUS resumable uploads for 500MB+ video files, XSS/injection hardened',
+    'Firebase FCM + SQS — 1,000+ concurrent push notifications, zero memory spikes',
   ],
   problem:
-    'Processing 10,000+ exam submissions within a 2-hour window after an exam closes. Each submission requires OCR on handwritten answer sheets, scoring against a rubric, and generating individual feedback reports. The workload is bursty (zero traffic for weeks, then a tsunami) making always-on infrastructure wasteful. Cold starts on serverless functions were adding 3-8 seconds to the first invocation, violating the SLA.',
+    'Processing exam submissions after an exam closes used to mean manual grading and PDF handling — slow, error-prone, and impossible to scale during peak windows. The workload is bursty (zero traffic for weeks, then a flood at exam close) making always-on infrastructure wasteful. Cold starts on serverless functions were adding 3-8 seconds to the first invocation, violating the SLA.',
   architecture:
-    'Fan-out queue architecture: an API endpoint receives submission batches and publishes individual scoring jobs to an SQS-compatible queue. Lambda workers pull jobs, run OCR + scoring, and write results to DynamoDB. A separate aggregation Lambda fires when all jobs for an exam complete (tracked via an atomic counter in DynamoDB) to generate the class-wide analytics report. Cold starts are mitigated with provisioned concurrency for the first 50 workers and a pre-warming cron that fires 5 minutes before known exam windows.',
+    'Serverless fan-out pipeline: submission batches hit a REST API (50+ endpoints, JWT RS256 auth) and publish individual processing jobs to SQS. Lambda workers pull jobs, run PDF processing, and write results to MongoDB, with Mongoose plugins and cursor-based pagination keeping list endpoints fast as the collection grows. An Agenda.js job scheduler drives the exam lifecycle itself — timed start/end, auto-submission when a candidate\'s time runs out, and idempotent reminder notifications so a retried job never double-sends. Cold starts are mitigated with provisioned concurrency and a pre-warming cron that fires ahead of known exam windows. A 40+ route React dashboard gives staff a single place to monitor submissions, and video answer uploads go through the TUS protocol for resumable, interruption-proof transfers of 500MB+ files.',
   tradeoffs:
-    "Provisioned concurrency eliminates cold starts but costs money even when idle. We profiled: 50 provisioned instances handle the initial burst while on-demand instances spin up behind them. Total cost is ~60% less than an always-on ECS cluster sized for peak. The DynamoDB atomic counter for completion tracking is simpler than a Step Functions orchestration but can't handle partial retries as gracefully — a failed job requires manual re-enqueue rather than automatic retry with backoff.",
+    'Provisioned concurrency eliminates cold starts but costs money even when idle — we sized it to absorb the initial burst while on-demand instances spin up behind it, landing at roughly 60% less cost than an always-on ECS cluster sized for peak. Cursor-based pagination with Mongoose plugins pushed more complexity into query construction than offset pagination would have, but it\'s what took list-endpoint response times down by 60% as submission volume grew. Security was treated as a first-class requirement rather than an afterthought: Helmet, XSS sanitization, MongoDB injection prevention, and rate limiting are applied uniformly across all 50+ endpoints.',
   metrics: [
-    { label: 'Submissions/Window', value: '10,000+' },
-    { label: 'Processing Time', value: '< 45min' },
-    { label: 'Cold Start', value: '< 500ms' },
+    { label: 'Manual Effort', value: '-90%' },
+    { label: 'API Speed (cursor)', value: '+60%' },
     { label: 'Cost vs Always-On', value: '-60%' },
+    { label: 'REST Endpoints', value: '50+' },
   ],
   stack: [
     'AWS Lambda',
     'SQS',
     'S3',
     'MongoDB',
+    'Mongoose',
     'React',
     'Node.js',
     'Razorpay',
@@ -40,15 +41,16 @@ export const appolo: Project = {
   ],
   explainMode: {
     interviewPitch:
-      "Appolo processes 10K+ exam submissions in a 2-hour window — a completely bursty workload that's zero for weeks then a tsunami. The interesting engineering was around cold-start mitigation (provisioned concurrency + pre-warming cron) and completion tracking (DynamoDB atomic counter vs Step Functions).",
+      "Appolo Smart Test is a serverless exam evaluation platform — a completely bursty workload that's zero for weeks then floods in at exam close. The interesting engineering was cold-start mitigation on Lambda, an Agenda.js scheduler driving the exam lifecycle itself (timed auto-submission, idempotent reminders), and cursor-based MongoDB pagination that cut API response times by 60%.",
     talkingPoints: [
-      'Fan-out: API → SQS queue → Lambda workers → results → aggregation trigger',
-      'Cold-start mitigation: 50 provisioned instances absorb initial burst while on-demand scales behind',
-      'Pre-warming cron fires 5 minutes before known exam windows based on schedule metadata',
-      'DynamoDB atomic counter tracks completed jobs — simpler than Step Functions for this fan-out pattern',
-      'Cost: ~60% cheaper than always-on ECS sized for peak, profiled over 6 exam cycles',
+      'Fan-out: REST API → SQS queue → Lambda workers → MongoDB, with 50+ documented endpoints behind JWT (RS256)',
+      'Agenda.js job scheduler: timed exam start/end, auto-submission on timeout, idempotent reminder notifications',
+      'Cursor-based MongoDB pagination + Mongoose plugins — 60% faster API response times as data grew',
+      'Cold-start mitigation via provisioned concurrency + pre-warming cron ahead of known exam windows',
+      'TUS protocol for resumable 500MB+ video uploads that survive flaky connections mid-transfer',
+      'Cost: ~60% cheaper than an always-on ECS cluster sized for the same peak load',
     ],
     tradeoffsExplained:
-      "Step Functions would give us built-in retry, backoff, and visual execution tracking. But the fan-out pattern (10K parallel jobs, each independent) doesn't benefit from Step Functions' orchestration — it's embarrassingly parallel. The atomic counter is 3 lines of DynamoDB code vs a complex state machine. The tradeoff is manual re-enqueue on failure, which we handle with a dead-letter queue that a cron processes hourly.",
+      "Serverless is the right call for a workload that's idle for weeks and then spikes hard — an always-on cluster sized for that peak would sit mostly idle. The cost is cold starts, which we addressed with provisioned concurrency rather than accepting multi-second latency on the first request of a burst. On the data side, cursor pagination is more work to implement correctly than offset pagination, but offset degrades badly exactly when it matters most — during the post-exam flood when everyone is querying submission lists at once.",
   },
 };

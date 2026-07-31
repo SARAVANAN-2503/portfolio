@@ -1,4 +1,4 @@
-import type { Metadata } from 'next';
+import type { Metadata } from 'next/types';
 import { PaginationRace } from '@/components/perf/PaginationRace';
 
 export const metadata: Metadata = {

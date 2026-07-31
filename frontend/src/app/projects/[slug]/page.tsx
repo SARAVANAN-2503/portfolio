@@ -1,18 +1,19 @@
 import { notFound } from 'next/navigation';
-import type { Metadata } from 'next';
+import type { Metadata } from 'next/types';
 import Link from 'next/link';
 import { projects, getProject } from '@/content/projects';
 import { ExplainMode } from '@/components/projects/ExplainMode';
 
 interface Props {
-  params: { slug: string };
+  params: Promise<{ slug: string }>;
 }
 
 export function generateStaticParams() {
   return projects.map(p => ({ slug: p.slug }));
 }
 
-export function generateMetadata({ params }: Props): Metadata {
+export async function generateMetadata(props: Props): Promise<Metadata> {
+  const params = await props.params;
   const project = getProject(params.slug);
   if (!project) return {};
   return {
@@ -24,20 +25,23 @@ export function generateMetadata({ params }: Props): Metadata {
 const categoryGlow: Record<string, string> = {
   'SaaS Platform':           'from-emerald-500/10 to-transparent',
   'Government / Compliance': 'from-blue-500/10 to-transparent',
-  'Real-time Platform':      'from-purple-500/10 to-transparent',
+  'Marketplace / Wallet':    'from-purple-500/10 to-transparent',
   'Serverless / EdTech':     'from-orange-500/10 to-transparent',
   'AI / CRM':                'from-pink-500/10 to-transparent',
+  'LMS / Coaching':          'from-cyan-500/10 to-transparent',
 };
 
 const categoryAccent: Record<string, string> = {
   'SaaS Platform':           'text-emerald-400 border-emerald-500/30 bg-emerald-500/10',
   'Government / Compliance': 'text-blue-400 border-blue-500/30 bg-blue-500/10',
-  'Real-time Platform':      'text-purple-400 border-purple-500/30 bg-purple-500/10',
+  'Marketplace / Wallet':    'text-purple-400 border-purple-500/30 bg-purple-500/10',
   'Serverless / EdTech':     'text-orange-400 border-orange-500/30 bg-orange-500/10',
   'AI / CRM':                'text-pink-400 border-pink-500/30 bg-pink-500/10',
+  'LMS / Coaching':          'text-cyan-400 border-cyan-500/30 bg-cyan-500/10',
 };
 
-export default function ProjectDetail({ params }: Props) {
+export default async function ProjectDetail(props: Props) {
+  const params = await props.params;
   const project = getProject(params.slug);
   if (!project) notFound();
 
@@ -50,7 +54,7 @@ export default function ProjectDetail({ params }: Props) {
   return (
     <div className="pt-14">
       {/* Hero banner */}
-      <div className={`relative overflow-hidden border-b border-slate-800/50 bg-gradient-to-b ${glow}`}>
+      <div className={`relative overflow-hidden border-b border-slate-800/50 bg-linear-to-b ${glow}`}>
         <div
           className="absolute inset-0 opacity-30"
           style={{

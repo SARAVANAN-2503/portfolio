@@ -1,4 +1,4 @@
-import type { Metadata } from 'next';
+import type { Metadata } from 'next/types';
 import { ApiExplorer } from '@/components/explorer/ApiExplorer';
 
 export const metadata: Metadata = {

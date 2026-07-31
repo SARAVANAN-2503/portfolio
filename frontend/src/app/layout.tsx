@@ -1,4 +1,4 @@
-import type { Metadata } from 'next';
+import type { Metadata } from 'next/types';
 import { Syne, DM_Sans, JetBrains_Mono } from 'next/font/google';
 import { Navigation } from '@/components/nav/Navigation';
 import { Footer } from '@/components/nav/Footer';
@@ -39,6 +39,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
+      suppressHydrationWarning
       className={`${syne.variable} ${dmSans.variable} ${jetBrainsMono.variable}`}
     >
       <body className="min-h-screen flex flex-col">

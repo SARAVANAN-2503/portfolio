@@ -5,6 +5,7 @@ import { usePathname } from 'next/navigation';
 import { clsx } from 'clsx';
 
 const links = [
+  { href: '/experience', label: 'Experience' },
   { href: '/projects', label: 'Projects' },
   { href: '/api-explorer', label: 'API Explorer' },
   { href: '/architecture', label: 'Architecture' },

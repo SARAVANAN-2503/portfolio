@@ -1,20 +1,20 @@
-import { tenantcraft } from './tenantcraft';
+import { nexusone } from './nexusone';
+import { seltrix } from './seltrix';
+import { zponz } from './zponz';
 import { govpass } from './govpass';
-import { expertconnect } from './expertconnect';
 import { appolo } from './appolo';
-import { leadpulse } from './leadpulse';
-import { livebid } from './livebid';
+import { adunity } from './adunity';
 import type { Project } from './types';
 
 export type { Project, ProjectMetric } from './types';
 
 export const projects: Project[] = [
-  tenantcraft,
+  nexusone,
+  seltrix,
+  zponz,
   govpass,
-  expertconnect,
   appolo,
-  leadpulse,
-  livebid,
+  adunity,
 ];
 
 export function getProject(slug: string): Project | undefined {

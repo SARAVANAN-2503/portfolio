@@ -1,4 +1,4 @@
-import type { Metadata } from 'next';
+import type { Metadata } from 'next/types';
 import { ProjectCard } from '@/components/projects/ProjectCard';
 import { projects } from '@/content/projects';
 
