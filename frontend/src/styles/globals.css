@@ -1,5 +1,5 @@
-@import 'tailwindcss';
-@import 'tw-animate-css';
+@import "tailwindcss";
+@import "tw-animate-css";
 
 @custom-variant dark (&:is(.dark *));
 
@@ -14,74 +14,152 @@
   }
 }
 
+/* ─────────────────────────────────────────────────────────────────────────
+   Obsidian Crimson — runtime tokens (theme-aware via .dark / :root)
+   ───────────────────────────────────────────────────────────────────────── */
+:root {
+  /* light theme (default, no .dark class) */
+  --bg-obsidian: #faf9f6;
+  --bg-elevated: #f3f1ea;
+  --bg-surface: #ffffff;
+  --bg-surface-2: #f0ede6;
+  --fg-ivory: #14161c;
+  --fg-ivory-dim: #383a42;
+  --fg-grey: #52545c;
+  --fg-grey-muted: #6b7280;
+  --line: rgba(127, 29, 45, 0.12);
+  --line-strong: rgba(127, 29, 45, 0.24);
+  --radius: 0.75rem;
+}
+
+.dark {
+  --bg-obsidian: #08090b;
+  --bg-elevated: #0e1014;
+  --bg-surface: #14161c;
+  --bg-surface-2: #1a1d24;
+  --fg-ivory: #f5f2ea;
+  --fg-ivory-dim: #d9d5cb;
+  --fg-grey: #9ca3af;
+  --fg-grey-muted: #6b7280;
+  --line: rgba(229, 72, 77, 0.18);
+  --line-strong: rgba(229, 72, 77, 0.35);
+}
+
 @theme {
-  --color-navy-50: #e8ecf4;
-  --color-navy-100: #c5cee3;
-  --color-navy-200: #8b9dc2;
-  --color-navy-400: #2d3f6b;
-  --color-navy-600: #141c35;
-  --color-navy-700: #111827;
-  --color-navy-800: #0e1322;
-  --color-navy-900: #0a0f1e;
-  --color-navy-950: #070b16;
-  --color-navy: #0a0f1e;
+  /* ── Spec-named Obsidian Crimson tokens (new components use these) ── */
+  --color-obsidian: var(--bg-obsidian);
+  --color-elevated: var(--bg-elevated);
+  --color-surface: var(--bg-surface);
+  --color-surface-2: var(--bg-surface-2);
+  --color-ivory: var(--fg-ivory);
+  --color-ivory-dim: var(--fg-ivory-dim);
+  --color-grey: var(--fg-grey);
+  --color-grey-muted: var(--fg-grey-muted);
+  --color-line: var(--line);
+  --color-line-strong: var(--line-strong);
+  --color-crimson: #e5484d;
+  --color-crimson-bright: #ff5a65;
+  --color-wine: #7f1d2d;
+  --color-live: #34d399;
 
-  --color-accent: #f59e0b;
-  --color-accent-foreground: #0a0f1e;
-  --color-accent-dim: rgba(245, 158, 11, 0.15);
-  --color-accent-hover: #fbbf24;
-  --color-accent-muted: rgba(245, 158, 11, 0.08);
+  /* ── Legacy scale names, repointed to the runtime tokens above so every
+     existing navy and slate utility class site-wide inherits the new
+     system (and responds to theme toggling) without a JSX rewrite ── */
+  --color-navy-50: var(--fg-ivory);
+  --color-navy-100: var(--fg-ivory);
+  --color-navy-200: var(--fg-ivory-dim);
+  --color-navy-400: var(--fg-grey-muted);
+  --color-navy-600: var(--bg-surface-2);
+  --color-navy-700: var(--bg-surface);
+  --color-navy-800: var(--bg-elevated);
+  --color-navy-900: var(--bg-obsidian);
+  --color-navy-950: var(--bg-obsidian);
+  --color-navy: var(--bg-obsidian);
 
-  --color-terminal: #4ade80;
-  --color-border: hsl(var(--border));
-  --color-input: hsl(var(--input));
-  --color-ring: hsl(var(--ring));
-  --color-background: hsl(var(--background));
-  --color-foreground: hsl(var(--foreground));
+  --color-slate-50: var(--fg-ivory);
+  --color-slate-100: var(--fg-ivory);
+  --color-slate-200: var(--fg-ivory);
+  --color-slate-300: var(--fg-ivory-dim);
+  --color-slate-400: var(--fg-grey);
+  --color-slate-500: var(--fg-grey);
+  --color-slate-600: var(--fg-grey-muted);
+  --color-slate-700: var(--line-strong);
+  --color-slate-800: var(--bg-surface);
+  --color-slate-900: var(--bg-elevated);
+  --color-slate-950: var(--bg-obsidian);
 
-  --color-primary: hsl(var(--primary));
-  --color-primary-foreground: hsl(var(--primary-foreground));
+  /* amber-* repointed to the deep-wine family (used for freelance /
+     "explain mode" secondary-highlight sections) */
+  --color-amber-400: #c77680;
+  --color-amber-500: #7f1d2d;
+  --color-amber-900: #2a0a10;
 
-  --color-secondary: hsl(var(--secondary));
-  --color-secondary-foreground: hsl(var(--secondary-foreground));
+  --color-accent: #e5484d;
+  --color-accent-foreground: #ffffff;
+  --color-accent-dim: rgba(229, 72, 77, 0.15);
+  --color-accent-hover: #ff5a65;
+  --color-accent-muted: rgba(229, 72, 77, 0.08);
 
-  --color-destructive: hsl(var(--destructive));
-  --color-destructive-foreground: hsl(var(--destructive-foreground));
+  --color-terminal: #34d399;
 
-  --color-muted: hsl(var(--muted));
-  --color-muted-foreground: hsl(var(--muted-foreground));
+  /* ── shadcn/ui semantic tokens ── */
+  --color-border: var(--line);
+  --color-input: var(--line);
+  --color-ring: #ff5a65;
+  --color-background: var(--bg-obsidian);
+  --color-foreground: var(--fg-ivory);
 
-  --color-popover: hsl(var(--popover));
-  --color-popover-foreground: hsl(var(--popover-foreground));
+  --color-primary: #e5484d;
+  --color-primary-foreground: #ffffff;
 
-  --color-card: hsl(var(--card));
-  --color-card-foreground: hsl(var(--card-foreground));
+  --color-secondary: var(--bg-elevated);
+  --color-secondary-foreground: var(--fg-ivory);
+
+  --color-destructive: #dc2626;
+  --color-destructive-foreground: #ffffff;
+
+  --color-muted: var(--bg-elevated);
+  --color-muted-foreground: var(--fg-grey);
+
+  --color-popover: var(--bg-surface);
+  --color-popover-foreground: var(--fg-ivory);
+
+  --color-card: var(--bg-surface);
+  --color-card-foreground: var(--fg-ivory);
 
   --radius-lg: var(--radius);
-  --radius-md: calc(var(--radius) - 2px);
-  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 4px);
+  --radius-sm: calc(var(--radius) - 6px);
+  --radius-xl: calc(var(--radius) + 4px);
 
-  --font-display: var(--font-syne), system-ui, sans-serif;
-  --font-sans: var(--font-dm-sans), system-ui, sans-serif;
+  --font-display: var(--font-manrope), system-ui, sans-serif;
+  --font-sans: var(--font-manrope), system-ui, sans-serif;
   --font-mono: var(--font-mono), Menlo, monospace;
 
   --background-image-dot-grid: radial-gradient(
     circle,
-    rgba(148, 163, 184, 0.07) 1px,
+    rgba(245, 242, 234, 0.05) 1px,
     transparent 1px
   );
   --background-image-glow-radial: radial-gradient(
-    ellipse 60% 40% at 50% 0%,
-    rgba(245, 158, 11, 0.08),
-    transparent
+    ellipse 70% 55% at 62% 42%,
+    rgba(245, 242, 234, 0.05),
+    transparent 70%
   );
+  --background-image-hero-grid: linear-gradient(
+      rgba(245, 242, 234, 0.05) 1px,
+      transparent 1px
+    ),
+    linear-gradient(90deg, rgba(245, 242, 234, 0.05) 1px, transparent 1px);
 
   --background-size-dot-grid: 24px 24px;
+  --background-size-hero-grid: 56px 56px;
 
   --animate-fade-in: fadeIn 0.6s ease-out both;
   --animate-slide-up: slideUp 0.6s ease-out both;
   --animate-accordion-down: accordion-down 0.2s ease-out;
   --animate-accordion-up: accordion-up 0.2s ease-out;
+  --animate-pulse-slow: pulseSlow 3s ease-in-out infinite;
 
   @keyframes fadeIn {
     from {
@@ -101,6 +179,11 @@
       transform: translateY(0);
     }
   }
+  @keyframes dash {
+    to {
+      stroke-dashoffset: -14;
+    }
+  }
   @keyframes accordion-down {
     from {
       height: 0;
@@ -117,15 +200,21 @@
       height: 0;
     }
   }
+  @keyframes pulseSlow {
+    0%,
+    100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.5;
+    }
+  }
 }
 
 /*
   The default border color has changed to `currentcolor` in Tailwind CSS v4,
   so we've added these compatibility styles to make sure everything still
   looks the same as it did with Tailwind CSS v3.
-
-  If we ever want to remove these styles, we need to add an explicit border
-  color utility to any element that depends on these defaults.
 */
 @layer base {
   *,
@@ -133,25 +222,25 @@
   ::before,
   ::backdrop,
   ::file-selector-button {
-    border-color: var(--color-gray-200, currentcolor);
+    border-color: var(--color-line, currentcolor);
   }
 }
 
 @utility section-container {
-  @apply mx-auto max-w-6xl px-6 lg:px-8;
+  @apply mx-auto max-w-7xl px-4 sm:px-6 lg:px-8;
 }
 
 @utility card-surface {
-  @apply rounded-lg border border-slate-800/60 bg-navy-700/50 backdrop-blur-xs;
+  @apply rounded-lg border border-line bg-surface/60 backdrop-blur-xs;
 }
 
 @utility text-gradient {
-  @apply bg-linear-to-r from-accent to-amber-300 bg-clip-text text-transparent;
+  @apply bg-linear-to-r from-crimson to-crimson-bright bg-clip-text text-transparent;
 }
 
 @utility tag {
-  @apply inline-flex items-center rounded-full border border-slate-700/60
-           bg-slate-800/40 px-2.5 py-0.5 text-xs font-mono text-slate-400;
+  @apply inline-flex items-center rounded-full border border-line
+           bg-surface-2/60 px-2.5 py-0.5 text-xs font-mono text-grey;
 }
 
 @utility tag-accent {
@@ -162,61 +251,46 @@
 @utility animate-delay-100 {
   animation-delay: 100ms;
 }
-
 @utility animate-delay-200 {
   animation-delay: 200ms;
 }
-
 @utility animate-delay-300 {
   animation-delay: 300ms;
 }
-
 @utility animate-delay-400 {
   animation-delay: 400ms;
 }
-
 @utility animate-delay-500 {
   animation-delay: 500ms;
 }
 
 @layer base {
-  :root {
-    /* shadcn/ui tokens, tuned to this portfolio's navy/amber dark theme */
-    --background: 225 50% 8%;         /* navy-900 */
-    --foreground: 214 32% 91%;        /* slate-200 */
-    --card: 225 42% 9%;               /* navy-800 */
-    --card-foreground: 214 32% 91%;
-    --popover: 225 42% 9%;
-    --popover-foreground: 214 32% 91%;
-    --primary: 38 92% 50%;            /* amber-500, matches accent */
-    --primary-foreground: 225 50% 8%;
-    --secondary: 221 39% 11%;         /* navy-700 */
-    --secondary-foreground: 214 32% 91%;
-    --muted: 221 39% 11%;
-    --muted-foreground: 215 20% 65%;
-    --destructive: 0 63% 31%;
-    --destructive-foreground: 214 32% 91%;
-    --border: 221 39% 18%;
-    --input: 221 39% 18%;
-    --ring: 38 92% 50%;
-    --radius: 0.5rem;
-  }
-
   html {
     scroll-behavior: smooth;
+    overflow-x: clip;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    color-scheme: dark;
+  }
+  html:not(.dark) {
+    color-scheme: light;
   }
 
   body {
-    @apply bg-navy-900 text-slate-200 font-sans;
-    background-image:
-      radial-gradient(circle, rgba(148, 163, 184, 0.07) 1px, transparent 1px);
-    background-size: 24px 24px;
+    @apply bg-obsidian text-ivory font-sans;
+    overflow-x: clip;
+    background-image: radial-gradient(
+      ellipse 80% 45% at 50% -10%,
+      rgba(245, 242, 234, 0.025),
+      transparent 72%
+    );
+    transition:
+      background-color 0.2s ease,
+      color 0.2s ease;
   }
 
   ::selection {
-    @apply bg-accent/30 text-amber-50;
+    @apply bg-crimson/30 text-ivory;
   }
 
   ::-webkit-scrollbar {
@@ -227,9 +301,20 @@
     background: transparent;
   }
   ::-webkit-scrollbar-thumb {
-    @apply bg-slate-700 rounded-full;
+    @apply bg-line-strong rounded-full;
   }
   ::-webkit-scrollbar-thumb:hover {
-    @apply bg-slate-600;
+    @apply bg-crimson/40;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    ::before,
+    ::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
   }
 }

@@ -1,18 +1,14 @@
 import type { Metadata } from 'next/types';
-import { Syne, DM_Sans, JetBrains_Mono } from 'next/font/google';
+import { Manrope, JetBrains_Mono } from 'next/font/google';
 import { Navigation } from '@/components/nav/Navigation';
 import { Footer } from '@/components/nav/Footer';
+import { ThemeProvider } from '@/components/theme/ThemeProvider';
+import { TooltipProvider } from '@/components/ui/tooltip';
 import '@/styles/globals.css';
 
-const syne = Syne({
+const manrope = Manrope({
   subsets: ['latin'],
-  variable: '--font-syne',
-  display: 'swap',
-});
-
-const dmSans = DM_Sans({
-  subsets: ['latin'],
-  variable: '--font-dm-sans',
+  variable: '--font-manrope',
   display: 'swap',
 });
 
@@ -40,12 +36,21 @@ export default function RootLayout({
     <html
       lang="en"
       suppressHydrationWarning
-      className={`${syne.variable} ${dmSans.variable} ${jetBrainsMono.variable}`}
+      className={`${manrope.variable} ${jetBrainsMono.variable}`}
     >
-      <body className="min-h-screen flex flex-col">
-        <Navigation />
-        <main className="flex-1">{children}</main>
-        <Footer />
+      <body className="min-h-screen flex flex-col antialiased">
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="dark"
+          enableSystem={false}
+          disableTransitionOnChange
+        >
+          <TooltipProvider delayDuration={200}>
+            <Navigation />
+            <main className="flex-1">{children}</main>
+            <Footer />
+          </TooltipProvider>
+        </ThemeProvider>
       </body>
     </html>
   );

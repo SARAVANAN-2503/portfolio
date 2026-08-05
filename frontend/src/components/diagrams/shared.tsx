@@ -6,11 +6,11 @@ import { Handle, Position } from '@xyflow/react';
 export type NodeCategory = 'client' | 'middleware' | 'service' | 'database' | 'queue';
 
 const categoryStyles: Record<NodeCategory, { border: string; dot: string; bg: string }> = {
-  client:     { border: 'border-blue-500/40',    dot: 'bg-blue-400',    bg: 'bg-blue-500/5' },
-  middleware: { border: 'border-slate-600/60',    dot: 'bg-slate-400',   bg: 'bg-slate-800/30' },
-  service:    { border: 'border-emerald-500/40',  dot: 'bg-emerald-400', bg: 'bg-emerald-500/5' },
-  database:   { border: 'border-amber-500/40',    dot: 'bg-amber-400',   bg: 'bg-amber-500/5' },
-  queue:      { border: 'border-purple-500/40',   dot: 'bg-purple-400',  bg: 'bg-purple-500/5' },
+  client:     { border: 'border-crimson/40',      dot: 'bg-crimson',      bg: 'bg-crimson/5' },
+  middleware: { border: 'border-line-strong',      dot: 'bg-grey',         bg: 'bg-surface-2/40' },
+  service:    { border: 'border-live/40',          dot: 'bg-live',         bg: 'bg-live/5' },
+  database:   { border: 'border-crimson-bright/40', dot: 'bg-crimson-bright', bg: 'bg-crimson-bright/5' },
+  queue:      { border: 'border-purple-500/40',    dot: 'bg-purple-400',   bg: 'bg-purple-500/5' },
 };
 
 export interface DiagramNodeData {
@@ -39,36 +39,39 @@ export const DiagramNode = memo(function DiagramNode({
           key={`t-${i}`}
           type="target"
           position={pos}
-          className="w-2! h-2! bg-slate-600! border-slate-700!"
+          className="w-2! h-2! bg-line-strong! border-line!"
         />
       ))}
-      <div
+      <button
+        type="button"
         onClick={() => data.detail && setExpanded(!expanded)}
-        className={`rounded-lg border ${style.border} ${style.bg} px-4 py-2.5 min-w-[130px] backdrop-blur-xs ${data.detail ? 'cursor-pointer' : ''}`}
+        disabled={!data.detail}
+        aria-expanded={data.detail ? expanded : undefined}
+        className={`rounded-lg border ${style.border} ${style.bg} px-4 py-2.5 min-w-[130px] text-left backdrop-blur-xs transition-shadow focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-crimson-bright disabled:cursor-default ${data.detail ? 'cursor-pointer hover:shadow-[0_0_16px_-4px_rgba(229,72,77,0.4)]' : ''}`}
       >
         <div className="flex items-center gap-2">
           <div className={`w-1.5 h-1.5 rounded-full ${style.dot}`} />
-          <span className="text-[11px] font-semibold text-slate-200 whitespace-nowrap">
+          <span className="text-[11px] font-semibold text-ivory whitespace-nowrap">
             {data.label}
           </span>
         </div>
         {data.description && (
-          <div className="text-[9px] text-slate-500 mt-0.5 ml-3.5">
+          <div className="text-[9px] text-grey-muted mt-0.5 ml-3.5">
             {data.description}
           </div>
         )}
         {expanded && data.detail && (
-          <div className="mt-2 ml-3.5 text-[9px] text-slate-400 leading-relaxed border-t border-slate-700/40 pt-1.5">
+          <div className="mt-2 ml-3.5 text-[9px] text-grey leading-relaxed border-t border-line pt-1.5">
             {data.detail}
           </div>
         )}
-      </div>
+      </button>
       {sourceHandles.map((pos, i) => (
         <Handle
           key={`s-${i}`}
           type="source"
           position={pos}
-          className="w-2! h-2! bg-slate-600! border-slate-700!"
+          className="w-2! h-2! bg-line-strong! border-line!"
         />
       ))}
     </>

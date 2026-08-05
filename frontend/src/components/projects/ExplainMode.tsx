@@ -11,18 +11,20 @@ export function ExplainMode({ project }: { project: Project }) {
   return (
     <div className="rounded-lg border border-dashed border-amber-500/30 bg-amber-500/3">
       <button
+        type="button"
         onClick={() => setOpen(!open)}
-        className="flex w-full items-center justify-between p-5 text-left"
+        aria-expanded={open}
+        className="flex w-full items-center justify-between gap-3 p-5 text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-crimson-bright"
       >
         <div className="flex items-center gap-3">
           <span className="flex h-7 w-7 items-center justify-center rounded-md bg-accent/15 text-accent text-sm font-mono">
             ?
           </span>
-          <div>
+          <div className="flex flex-col sm:block">
             <span className="text-sm font-semibold text-accent">
               Explain Mode
             </span>
-            <span className="ml-2 text-xs text-slate-500">
+            <span className="text-xs text-slate-500 sm:ml-2">
               How I would explain this in an interview
             </span>
           </div>

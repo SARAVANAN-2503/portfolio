@@ -2,6 +2,7 @@
 
 import { useState, useCallback, useRef } from 'react';
 import { clsx } from 'clsx';
+import { Play, Square, Zap, TrendingDown } from 'lucide-react';
 
 const API = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000';
 
@@ -88,72 +89,103 @@ export function PaginationRace() {
   const maxMs = Math.max(1, ...results.map(r => Math.max(r.cursorMs, r.offsetMs)));
   const totalCursor = results.reduce((s, r) => s + r.cursorMs, 0);
   const totalOffset = results.reduce((s, r) => s + r.offsetMs, 0);
+  const speedup = totalOffset > 0 ? (totalOffset / Math.max(totalCursor, 1) - 1) * 100 : 0;
 
   return (
     <div className="space-y-6">
-      {/* Controls */}
-      <div className="flex items-center gap-4 flex-wrap">
+      {/* Control panel */}
+      <div className="card-surface flex flex-wrap items-center gap-4 p-4">
         <div className="flex items-center gap-2">
-          <label className="text-xs text-slate-500">Pages:</label>
+          <label htmlFor="pages-input" className="text-xs text-grey-muted">Pages:</label>
           <input
+            id="pages-input"
             type="number"
             min={3}
             max={50}
             value={pages}
             onChange={e => setPages(Number(e.target.value))}
             disabled={running}
-            className="w-16 rounded-md border border-slate-800 bg-navy-700 px-2 py-1 font-mono text-xs text-slate-300 focus:border-accent focus:outline-hidden"
+            className="w-16 rounded-md border border-line bg-surface-2/60 px-2 py-1.5 font-mono text-xs text-ivory focus:border-crimson focus:outline-none disabled:opacity-50"
           />
         </div>
-        <div className="text-xs text-slate-600 font-mono">
+        <div className="font-mono text-xs text-grey-muted">
           limit={limit} &middot; {limit * pages} rows
         </div>
+        <div className="flex-1" />
         <button
+          type="button"
           onClick={running ? stop : run}
           className={clsx(
-            'rounded-md px-4 py-2 text-sm font-semibold transition-colors',
+            'inline-flex items-center gap-2 rounded-md px-4 py-2 text-sm font-semibold transition-colors cursor-pointer',
             running
-              ? 'bg-red-500/15 text-red-400 border border-red-500/30 hover:bg-red-500/25'
-              : 'bg-accent text-navy-900 hover:bg-accent-hover'
+              ? 'border border-red-500/30 bg-red-500/15 text-red-400 hover:bg-red-500/25'
+              : 'bg-crimson text-white hover:bg-crimson-bright'
           )}
         >
+          {running ? <Square className="h-3.5 w-3.5" /> : <Play className="h-3.5 w-3.5" />}
           {running ? 'Stop' : 'Start Race'}
         </button>
       </div>
 
       {error && (
-        <div className="text-xs text-red-400 font-mono">
+        <div role="alert" className="rounded-md border border-red-500/30 bg-red-500/5 px-4 py-2.5 font-mono text-xs text-red-400">
           Error: {error}. Is the backend running on {API}?
+        </div>
+      )}
+
+      {/* Result summary */}
+      {results.length > 0 && (
+        <div className="grid gap-3 sm:grid-cols-3" aria-live="polite">
+          <div className="card-surface p-4 text-center">
+            <div className="font-mono text-2xl font-black text-live">{totalCursor}ms</div>
+            <div className="mt-0.5 text-[11px] text-grey-muted">Cursor total ({results.length} pages)</div>
+          </div>
+          <div className="card-surface p-4 text-center">
+            <div className="font-mono text-2xl font-black text-red-400">{totalOffset}ms</div>
+            <div className="mt-0.5 text-[11px] text-grey-muted">Offset total ({results.length} pages)</div>
+          </div>
+          <div className="card-surface flex flex-col items-center justify-center border-crimson/25 bg-crimson/5 p-4 text-center">
+            <div className="flex items-center gap-1.5 font-mono text-2xl font-black text-crimson">
+              <TrendingDown className="h-5 w-5" />
+              {speedup.toFixed(0)}%
+            </div>
+            <div className="mt-0.5 text-[11px] text-grey-muted">Cursor is faster, this run</div>
+          </div>
         </div>
       )}
 
       {/* Legend */}
       <div className="flex items-center gap-6 text-xs">
         <div className="flex items-center gap-2">
-          <div className="w-3 h-2 rounded-sm bg-emerald-500" />
-          <span className="text-slate-400">Cursor (real API calls)</span>
+          <div className="h-2 w-3 rounded-sm bg-live" />
+          <span className="text-grey">Cursor (real API calls)</span>
         </div>
         <div className="flex items-center gap-2">
-          <div className="w-3 h-2 rounded-sm bg-red-500" />
-          <span className="text-slate-400">Offset (simulated scan overhead)</span>
+          <div className="h-2 w-3 rounded-sm bg-red-500" />
+          <span className="text-grey">Offset (simulated scan overhead)</span>
         </div>
+        {running && (
+          <span className="ml-auto inline-flex items-center gap-1.5 font-mono text-[10px] text-crimson">
+            <Zap className="h-3 w-3 animate-pulse" /> racing…
+          </span>
+        )}
       </div>
 
       {/* Chart */}
       {results.length > 0 && (
-        <div className="card-surface p-5 space-y-2">
+        <div className="card-surface space-y-2 p-5">
           {results.map(r => (
             <div key={r.page} className="flex items-center gap-3 text-xs">
-              <span className="w-8 font-mono text-slate-600 text-right shrink-0">
+              <span className="w-8 shrink-0 text-right font-mono text-grey-muted">
                 {r.page}
               </span>
-              <div className="flex-1 flex flex-col gap-0.5">
+              <div className="flex flex-1 flex-col gap-0.5">
                 <div className="flex items-center gap-2">
                   <div
-                    className="h-3 rounded-sm bg-emerald-500/80 transition-all duration-300"
+                    className="h-3 rounded-sm bg-live/80 transition-all duration-300"
                     style={{ width: `${Math.max(2, (r.cursorMs / maxMs) * 100)}%` }}
                   />
-                  <span className="font-mono text-emerald-400 shrink-0">
+                  <span className="shrink-0 font-mono text-live">
                     {r.cursorMs}ms
                   </span>
                 </div>
@@ -162,40 +194,24 @@ export function PaginationRace() {
                     className="h-3 rounded-sm bg-red-500/60 transition-all duration-300"
                     style={{ width: `${Math.max(2, (r.offsetMs / maxMs) * 100)}%` }}
                   />
-                  <span className="font-mono text-red-400 shrink-0">
+                  <span className="shrink-0 font-mono text-red-400">
                     {r.offsetMs}ms
                   </span>
                 </div>
               </div>
             </div>
           ))}
-
-          {/* Totals */}
-          <div className="flex items-center justify-between pt-3 border-t border-slate-800/40 font-mono text-xs">
-            <div className="text-slate-500">
-              Total ({results.length} pages):
-            </div>
-            <div className="flex gap-6">
-              <span className="text-emerald-400">{totalCursor}ms cursor</span>
-              <span className="text-red-400">{totalOffset}ms offset</span>
-              {totalOffset > 0 && (
-                <span className="text-accent">
-                  {((totalOffset / Math.max(totalCursor, 1)) * 100 - 100).toFixed(0)}% slower
-                </span>
-              )}
-            </div>
-          </div>
         </div>
       )}
 
       {/* Explanation */}
-      <div className="card-surface p-5 space-y-3">
-        <h3 className="text-sm font-semibold text-slate-300">
+      <div className="card-surface space-y-3 p-5">
+        <h3 className="text-sm font-semibold text-ivory">
           Why cursor pagination wins at depth
         </h3>
-        <div className="grid gap-4 sm:grid-cols-2 text-xs text-slate-400">
+        <div className="grid gap-4 text-xs text-grey sm:grid-cols-2">
           <div>
-            <div className="font-mono text-emerald-400 mb-1">
+            <div className="mb-1 font-mono text-live">
               Cursor: WHERE id &gt; ? LIMIT N
             </div>
             <p className="leading-relaxed">
@@ -205,7 +221,7 @@ export function PaginationRace() {
             </p>
           </div>
           <div>
-            <div className="font-mono text-red-400 mb-1">
+            <div className="mb-1 font-mono text-red-400">
               Offset: OFFSET M LIMIT N
             </div>
             <p className="leading-relaxed">

@@ -38,15 +38,15 @@ const initialNodes: Node<DiagramNodeData>[] = [
 ];
 
 const staticEdges: Edge[] = [
-  { id: 'e1', source: 'api', target: 'verify', animated: true, style: { stroke: '#475569' }, markerEnd: { type: MarkerType.ArrowClosed, color: '#475569' } },
-  { id: 'e2', source: 'verify', target: 'validate', animated: true, style: { stroke: '#475569' }, markerEnd: { type: MarkerType.ArrowClosed, color: '#475569' } },
-  { id: 'e3', source: 'validate', target: 'dedup', animated: true, style: { stroke: '#475569' }, markerEnd: { type: MarkerType.ArrowClosed, color: '#475569' } },
+  { id: 'e1', source: 'api', target: 'verify', animated: true, style: { stroke: '#3a3d45' }, markerEnd: { type: MarkerType.ArrowClosed, color: '#3a3d45' } },
+  { id: 'e2', source: 'verify', target: 'validate', animated: true, style: { stroke: '#3a3d45' }, markerEnd: { type: MarkerType.ArrowClosed, color: '#3a3d45' } },
+  { id: 'e3', source: 'validate', target: 'dedup', animated: true, style: { stroke: '#3a3d45' }, markerEnd: { type: MarkerType.ArrowClosed, color: '#3a3d45' } },
   { id: 'e4', source: 'dedup', target: 'enqueue', animated: true, style: { stroke: '#a855f7' }, markerEnd: { type: MarkerType.ArrowClosed, color: '#a855f7' } },
   { id: 'e5', source: 'enqueue', target: 'pending', animated: true, style: { stroke: '#a855f7' }, markerEnd: { type: MarkerType.ArrowClosed, color: '#a855f7' } },
-  { id: 'e6', source: 'pending', target: 'worker', animated: true, style: { stroke: '#f59e0b' }, markerEnd: { type: MarkerType.ArrowClosed, color: '#f59e0b' } },
-  { id: 'e7', source: 'worker', target: 'done', animated: true, style: { stroke: '#4ade80' }, markerEnd: { type: MarkerType.ArrowClosed, color: '#4ade80' } },
-  { id: 'e8', source: 'done', target: 'poll', style: { stroke: '#475569', strokeDasharray: '5,5' }, markerEnd: { type: MarkerType.ArrowClosed, color: '#475569' } },
-  { id: 'e9', source: 'poll', target: 'pending', style: { stroke: '#475569', strokeDasharray: '5,5' }, markerEnd: { type: MarkerType.ArrowClosed, color: '#475569' } },
+  { id: 'e6', source: 'pending', target: 'worker', animated: true, style: { stroke: '#e5484d' }, markerEnd: { type: MarkerType.ArrowClosed, color: '#e5484d' } },
+  { id: 'e7', source: 'worker', target: 'done', animated: true, style: { stroke: '#34d399' }, markerEnd: { type: MarkerType.ArrowClosed, color: '#34d399' } },
+  { id: 'e8', source: 'done', target: 'poll', style: { stroke: '#3a3d45', strokeDasharray: '5,5' }, markerEnd: { type: MarkerType.ArrowClosed, color: '#3a3d45' } },
+  { id: 'e9', source: 'poll', target: 'pending', style: { stroke: '#3a3d45', strokeDasharray: '5,5' }, markerEnd: { type: MarkerType.ArrowClosed, color: '#3a3d45' } },
 ];
 
 export function QueueFlow() {
@@ -73,9 +73,9 @@ export function QueueFlow() {
       if (phase === 'enqueued' && ['e4', 'e5'].includes(e.id))
         return { ...e, style: { stroke: '#a855f7' }, animated: true };
       if (phase === 'processing' && e.id === 'e6')
-        return { ...e, style: { stroke: '#f59e0b' }, animated: true };
+        return { ...e, style: { stroke: '#e5484d' }, animated: true };
       if (phase === 'done' && e.id === 'e7')
-        return { ...e, style: { stroke: '#4ade80' }, animated: true };
+        return { ...e, style: { stroke: '#34d399' }, animated: true };
       return { ...e, animated: false, style: { ...e.style, opacity: 0.3 } };
     });
   }, [phase]);
@@ -109,9 +109,9 @@ export function QueueFlow() {
           nodesDraggable={false} nodesConnectable={false}
           panOnDrag zoomOnScroll minZoom={0.4} maxZoom={1.5}
         >
-          <Background color="#1e293b" gap={20} size={1} />
+          <Background color="#2a1418" gap={20} size={1} />
           <Controls showInteractive={false}
-            className="bg-navy-700! border-slate-800! shadow-none! [&>button]:bg-navy-700! [&>button]:border-slate-800! [&>button]:text-slate-400! [&>button:hover]:bg-slate-800!" />
+            className="bg-navy-700! border-line-strong! shadow-none! [&>button]:bg-navy-700! [&>button]:border-line-strong! [&>button]:text-grey-muted! [&>button:hover]:bg-surface-2!" />
         </ReactFlow>
       </div>
     </div>

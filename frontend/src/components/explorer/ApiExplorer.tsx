@@ -2,6 +2,8 @@
 
 import { useState, useCallback } from 'react';
 import { clsx } from 'clsx';
+import { Send, Loader2, KeyRound } from 'lucide-react';
+import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { ResponseViewer } from './ResponseViewer';
 
 const API = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000';
@@ -77,7 +79,7 @@ function defaultBody(id: string): string {
       {
         event: 'payment.captured',
         data: { amount: 4200, currency: 'USD' },
-        idempotencyKey: `evt_${Date.now()}`,
+        idempotencyKey: 'evt_demo_payment_001',
       },
       null,
       2
@@ -99,10 +101,8 @@ function MethodBadge({ method }: { method: string }) {
   return (
     <span
       className={clsx(
-        'inline-flex items-center rounded px-1.5 py-0.5 text-[10px] font-mono font-bold',
-        method === 'GET'
-          ? 'bg-emerald-500/15 text-emerald-400'
-          : 'bg-blue-500/15 text-blue-400'
+        'inline-flex items-center rounded px-1.5 py-0.5 font-mono text-[10px] font-bold',
+        method === 'GET' ? 'bg-live/15 text-live' : 'bg-crimson/15 text-crimson'
       )}
     >
       {method}
@@ -204,149 +204,156 @@ export function ApiExplorer() {
   const isLoading = loading[activeId] || false;
 
   return (
-    <div className="flex flex-col lg:flex-row gap-6">
-      {/* Sidebar tabs */}
-      <div className="flex lg:flex-col gap-2 lg:w-44 shrink-0 overflow-x-auto lg:overflow-visible">
-        {endpoints.map(ep => (
-          <button
-            key={ep.id}
-            onClick={() => setActiveId(ep.id)}
-            className={clsx(
-              'flex items-center gap-2 rounded-md px-3 py-2 text-left text-sm font-medium transition-colors shrink-0',
-              activeId === ep.id
-                ? 'bg-accent-muted border border-accent/30 text-accent'
-                : 'border border-transparent text-slate-400 hover:text-slate-200 hover:bg-slate-800/40'
-            )}
-          >
-            <MethodBadge method={ep.method} />
-            <span>{ep.label}</span>
-          </button>
-        ))}
-
-        {/* Token status */}
+    <div className="overflow-hidden rounded-xl border border-line bg-surface/40">
+      {/* Console header bar */}
+      <div className="flex items-center justify-between border-b border-line bg-elevated/60 px-4 py-2.5">
+        <div className="flex items-center gap-2">
+          <span className="h-2.5 w-2.5 rounded-full bg-red-500/70" />
+          <span className="h-2.5 w-2.5 rounded-full bg-amber-500/70" />
+          <span className="h-2.5 w-2.5 rounded-full bg-live/70" />
+          <span className="ml-2 font-mono text-[11px] text-grey-muted">api-console</span>
+        </div>
         {token && (
-          <div className="mt-2 rounded-md border border-emerald-500/20 bg-emerald-500/5 px-3 py-2">
-            <div className="text-[10px] font-mono text-emerald-400 mb-0.5">
-              Token Active
-            </div>
-            <div className="text-[10px] font-mono text-slate-500 truncate">
-              {tenantId}
-            </div>
+          <div className="flex items-center gap-1.5 rounded-full border border-live/25 bg-live/5 px-2.5 py-1">
+            <KeyRound className="h-3 w-3 text-live" />
+            <span className="font-mono text-[10px] text-live">token active</span>
           </div>
         )}
       </div>
 
-      {/* Main panel */}
-      <div className="flex-1 min-w-0 space-y-5">
-        {/* Endpoint header */}
-        <div>
-          <div className="flex items-center gap-2 mb-1">
-            <MethodBadge method={active.method} />
-            <code className="font-mono text-sm text-slate-200">
-              {active.path}
-            </code>
-          </div>
-          <p className="text-xs text-slate-500">{active.description}</p>
-        </div>
+      <div className="p-4 sm:p-6">
+        {/* Endpoint tabs */}
+        <Tabs value={activeId} onValueChange={setActiveId}>
+          <TabsList className="mb-6 h-auto! w-full flex-wrap justify-start gap-1.5 bg-transparent p-0">
+            {endpoints.map(ep => (
+              <TabsTrigger
+                key={ep.id}
+                value={ep.id}
+                className="gap-1.5 rounded-md border border-line bg-surface-2/40 px-3 py-2 data-[state=active]:border-crimson/40 data-[state=active]:bg-crimson/10 data-[state=active]:text-crimson data-[state=active]:shadow-none"
+              >
+                <MethodBadge method={ep.method} />
+                {ep.label}
+              </TabsTrigger>
+            ))}
+          </TabsList>
+        </Tabs>
 
-        {/* Headers display */}
-        <div className="card-surface overflow-hidden">
-          <div className="border-b border-slate-800/40 px-4 py-2">
-            <span className="text-[10px] font-mono text-slate-600 uppercase tracking-wider">
-              Request Headers
-            </span>
-          </div>
-          <div className="p-4 space-y-1">
-            {Object.entries(getHeaders(activeId)).map(([k, v]) => (
-              <div key={k} className="flex gap-2 font-mono text-xs">
-                <span className="text-slate-500">{k}:</span>
-                <span
-                  className={clsx(
-                    'truncate',
-                    v.startsWith('<') ? 'text-slate-600 italic' : 'text-slate-300'
-                  )}
-                >
-                  {v.length > 80 ? v.slice(0, 80) + '...' : v}
+        <div className="grid gap-6 lg:grid-cols-2">
+          {/* Request panel */}
+          <div className="space-y-5">
+            <div>
+              <div className="mb-1 flex items-center gap-2">
+                <MethodBadge method={active.method} />
+                <code className="font-mono text-sm text-ivory">{active.path}</code>
+              </div>
+              <p className="text-xs text-grey-muted">{active.description}</p>
+            </div>
+
+            {/* Headers display */}
+            <div className="overflow-hidden rounded-md border border-line bg-elevated/40">
+              <div className="border-b border-line px-4 py-2">
+                <span className="font-mono text-[10px] uppercase tracking-wider text-grey-muted">
+                  Request Headers
                 </span>
               </div>
-            ))}
-            {activeId === 'webhook' && (
-              <div className="flex gap-2 font-mono text-xs">
-                <span className="text-slate-500">X-Signature:</span>
-                <span className="text-purple-400 italic">computed on send</span>
+              <div className="space-y-1 p-4">
+                {Object.entries(getHeaders(activeId)).map(([k, v]) => (
+                  <div key={k} className="flex gap-2 font-mono text-xs">
+                    <span className="text-grey-muted">{k}:</span>
+                    <span
+                      className={clsx(
+                        'truncate',
+                        v.startsWith('<') ? 'italic text-grey-muted' : 'text-grey'
+                      )}
+                    >
+                      {v.length > 80 ? v.slice(0, 80) + '...' : v}
+                    </span>
+                  </div>
+                ))}
+                {activeId === 'webhook' && (
+                  <div className="flex gap-2 font-mono text-xs">
+                    <span className="text-grey-muted">X-Signature:</span>
+                    <span className="italic text-crimson-bright">computed on send</span>
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {/* Body editor (POST only) */}
+            {active.method === 'POST' && (
+              <div className="overflow-hidden rounded-md border border-line bg-elevated/40">
+                <div className="border-b border-line px-4 py-2">
+                  <span className="font-mono text-[10px] uppercase tracking-wider text-grey-muted">
+                    Request Body
+                  </span>
+                </div>
+                <textarea
+                  aria-label={`${active.label} request body`}
+                  value={bodies[activeId] || ''}
+                  onChange={e =>
+                    setBodies(b => ({ ...b, [activeId]: e.target.value }))
+                  }
+                  spellCheck={false}
+                  rows={8}
+                  className="w-full resize-y bg-transparent p-4 font-mono text-xs leading-relaxed text-ivory-dim focus:outline-none"
+                />
+              </div>
+            )}
+
+            {/* Send button */}
+            <div>
+              <button
+                type="button"
+                onClick={() => sendRequest(active)}
+                disabled={isLoading || (activeId === 'users' && !token)}
+                className={clsx(
+                  'inline-flex items-center gap-2 rounded-md px-4 py-2 text-sm font-semibold transition-colors cursor-pointer disabled:cursor-not-allowed',
+                  isLoading || (activeId === 'users' && !token)
+                    ? 'bg-surface-2 text-grey-muted'
+                    : 'bg-crimson text-white hover:bg-crimson-bright'
+                )}
+              >
+                {isLoading ? (
+                  <>
+                    <Loader2 className="h-3.5 w-3.5 animate-spin" />
+                    Sending...
+                  </>
+                ) : (
+                  <>
+                    <Send className="h-3.5 w-3.5" />
+                    Send Request
+                  </>
+                )}
+              </button>
+              {activeId === 'users' && !token && (
+                <span className="ml-3 text-xs text-grey-muted">
+                  Login first to get a token
+                </span>
+              )}
+            </div>
+          </div>
+
+          {/* Response panel */}
+          <div aria-live="polite" aria-busy={isLoading}>
+            <div className="mb-1 h-[21px] font-mono text-[10px] uppercase tracking-wider text-grey-muted">
+              {(result || isLoading) && 'Response'}
+            </div>
+            {isLoading ? (
+              <ResponseViewer status={0} latencyMs={0} body={null} headers={{}} loading />
+            ) : result ? (
+              <ResponseViewer
+                status={result.status}
+                latencyMs={result.latencyMs}
+                body={result.body}
+                headers={result.headers}
+              />
+            ) : (
+              <div className="flex h-40 items-center justify-center rounded-md border border-dashed border-line text-xs text-grey-muted">
+                Send a request to see the response
               </div>
             )}
           </div>
         </div>
-
-        {/* Body editor (POST only) */}
-        {active.method === 'POST' && (
-          <div className="card-surface overflow-hidden">
-            <div className="border-b border-slate-800/40 px-4 py-2">
-              <span className="text-[10px] font-mono text-slate-600 uppercase tracking-wider">
-                Request Body
-              </span>
-            </div>
-            <textarea
-              value={bodies[activeId] || ''}
-              onChange={e =>
-                setBodies(b => ({ ...b, [activeId]: e.target.value }))
-              }
-              spellCheck={false}
-              rows={8}
-              className="w-full bg-transparent p-4 font-mono text-xs text-slate-300 leading-relaxed resize-y focus:outline-hidden"
-            />
-          </div>
-        )}
-
-        {/* Send button */}
-        <button
-          onClick={() => sendRequest(active)}
-          disabled={isLoading || (activeId === 'users' && !token)}
-          className={clsx(
-            'inline-flex items-center gap-2 rounded-md px-4 py-2 text-sm font-semibold transition-colors',
-            isLoading || (activeId === 'users' && !token)
-              ? 'bg-slate-800 text-slate-600 cursor-not-allowed'
-              : 'bg-accent text-navy-900 hover:bg-accent-hover'
-          )}
-        >
-          {isLoading ? (
-            <>
-              <span className="h-3 w-3 animate-spin rounded-full border-2 border-navy-900 border-t-transparent" />
-              Sending...
-            </>
-          ) : (
-            <>
-              <svg
-                width="14"
-                height="14"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2.5"
-              >
-                <path d="M5 12h14" />
-                <path d="m12 5 7 7-7 7" />
-              </svg>
-              Send Request
-            </>
-          )}
-        </button>
-        {activeId === 'users' && !token && (
-          <span className="text-xs text-slate-600 ml-3">
-            Login first to get a token
-          </span>
-        )}
-
-        {/* Response */}
-        {result && (
-          <ResponseViewer
-            status={result.status}
-            latencyMs={result.latencyMs}
-            body={result.body}
-            headers={result.headers}
-          />
-        )}
       </div>
     </div>
   );

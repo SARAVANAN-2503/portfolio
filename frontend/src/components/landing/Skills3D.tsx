@@ -1,191 +1,117 @@
 'use client';
 
-import { useRef, MouseEvent } from 'react';
+import { Code2, LayoutTemplate, Server, Database, Cloud, Puzzle } from 'lucide-react';
+import type { LucideIcon } from 'lucide-react';
 
 interface Skill {
   name: string;
-  icon: string;
-  level: number; // 1-5
+  mono: string;
 }
 
 interface SkillCategory {
   label: string;
-  color: string;
-  glow: string;
-  border: string;
+  icon: LucideIcon;
   skills: Skill[];
 }
 
 const categories: SkillCategory[] = [
   {
     label: 'Languages',
-    color: 'from-slate-500/20 to-slate-400/10',
-    glow: 'rgba(148,163,184,0.25)',
-    border: 'border-slate-500/20 hover:border-slate-400/50',
+    icon: Code2,
     skills: [
-      { name: 'JavaScript (ES6+)', icon: 'JS', level: 5 },
-      { name: 'TypeScript', icon: 'TS', level: 5 },
-      { name: 'PHP', icon: '🐘', level: 3 },
+      { name: 'JavaScript (ES6+)', mono: 'JS' },
+      { name: 'TypeScript', mono: 'TS' },
+      { name: 'PHP', mono: 'PHP' },
     ],
   },
   {
-    label: 'Frontend',
-    color: 'from-cyan-500/20 to-blue-500/10',
-    glow: 'rgba(34,211,238,0.25)',
-    border: 'border-cyan-500/20 hover:border-cyan-400/50',
+    label: 'Frontend Engineering',
+    icon: LayoutTemplate,
     skills: [
-      { name: 'React.js', icon: '⚛', level: 5 },
-      { name: 'Next.js', icon: '▲', level: 5 },
-      { name: 'Vue.js', icon: '🟢', level: 4 },
-      { name: 'Redux Toolkit', icon: '⚙', level: 4 },
-      { name: 'Zustand', icon: '🐻', level: 3 },
-      { name: 'Tailwind CSS', icon: '🎨', level: 5 },
-      { name: 'Ant Design', icon: '🐜', level: 3 },
+      { name: 'React.js', mono: 'RC' },
+      { name: 'Next.js', mono: 'NX' },
+      { name: 'Vue.js', mono: 'VU' },
+      { name: 'Redux Toolkit', mono: 'RTK' },
+      { name: 'Zustand', mono: 'ZU' },
+      { name: 'Tailwind CSS', mono: 'TW' },
+      { name: 'Ant Design', mono: 'AD' },
     ],
   },
   {
-    label: 'Backend',
-    color: 'from-green-500/20 to-emerald-500/10',
-    glow: 'rgba(74,222,128,0.25)',
-    border: 'border-green-500/20 hover:border-green-400/50',
+    label: 'Backend & APIs',
+    icon: Server,
     skills: [
-      { name: 'Node.js', icon: '⬡', level: 5 },
-      { name: 'Express.js', icon: '🚀', level: 5 },
-      { name: 'Laravel', icon: '🔺', level: 3 },
-      { name: 'REST APIs', icon: '⇄', level: 5 },
-      { name: 'JWT', icon: '🔐', level: 5 },
-      { name: 'OAuth', icon: '🔑', level: 4 },
-      { name: 'WebSockets', icon: '⚡', level: 5 },
-      { name: 'Socket.IO', icon: '🔌', level: 5 },
+      { name: 'Node.js', mono: 'ND' },
+      { name: 'Express.js', mono: 'EX' },
+      { name: 'Laravel', mono: 'LV' },
+      { name: 'REST APIs', mono: 'API' },
+      { name: 'JWT', mono: 'JWT' },
+      { name: 'OAuth', mono: 'OA' },
+      { name: 'WebSockets', mono: 'WS' },
+      { name: 'Socket.IO', mono: 'IO' },
     ],
   },
   {
     label: 'Databases',
-    color: 'from-orange-500/20 to-amber-500/10',
-    glow: 'rgba(249,115,22,0.25)',
-    border: 'border-orange-500/20 hover:border-orange-400/50',
+    icon: Database,
     skills: [
-      { name: 'MySQL', icon: '🐬', level: 5 },
-      { name: 'MongoDB', icon: '🍃', level: 4 },
-      { name: 'Redis', icon: '🔴', level: 4 },
-      { name: 'Schema Design', icon: '🗂', level: 5 },
-      { name: 'Query Optimization', icon: '📊', level: 4 },
+      { name: 'MySQL', mono: 'SQL' },
+      { name: 'MongoDB', mono: 'MDB' },
+      { name: 'Redis', mono: 'RD' },
+      { name: 'Schema Design', mono: 'SD' },
+      { name: 'Query Optimization', mono: 'QO' },
     ],
   },
   {
     label: 'Cloud & DevOps',
-    color: 'from-amber-500/20 to-yellow-500/10',
-    glow: 'rgba(245,158,11,0.25)',
-    border: 'border-amber-500/20 hover:border-amber-400/50',
+    icon: Cloud,
     skills: [
-      { name: 'AWS Lambda', icon: 'λ', level: 4 },
-      { name: 'AWS S3', icon: '☁', level: 4 },
-      { name: 'AWS SQS', icon: '📬', level: 4 },
-      { name: 'Docker', icon: '🐳', level: 3 },
-      { name: 'GitHub Actions', icon: '⚙', level: 3 },
-      { name: 'CI/CD', icon: '🔁', level: 3 },
-      { name: 'Linux Admin', icon: '🐧', level: 3 },
+      { name: 'AWS Lambda', mono: 'λ' },
+      { name: 'AWS S3', mono: 'S3' },
+      { name: 'AWS SQS', mono: 'SQS' },
+      { name: 'Docker', mono: 'DK' },
+      { name: 'GitHub Actions', mono: 'GA' },
+      { name: 'CI/CD', mono: 'CI' },
+      { name: 'Linux Admin', mono: 'LX' },
     ],
   },
   {
     label: 'Tools & Integrations',
-    color: 'from-purple-500/20 to-violet-500/10',
-    glow: 'rgba(168,85,247,0.25)',
-    border: 'border-purple-500/20 hover:border-purple-400/50',
+    icon: Puzzle,
     skills: [
-      { name: 'Stripe', icon: '💳', level: 5 },
-      { name: 'Razorpay', icon: '₹', level: 4 },
-      { name: 'Square', icon: '■', level: 3 },
-      { name: 'Firebase/FCM', icon: '🔥', level: 4 },
-      { name: 'Zoom SDK', icon: '🎥', level: 4 },
-      { name: 'Swagger/OpenAPI', icon: '📜', level: 4 },
-      { name: 'Jest', icon: '🧪', level: 3 },
+      { name: 'Stripe', mono: 'ST' },
+      { name: 'Razorpay', mono: 'RP' },
+      { name: 'Square', mono: 'SQ' },
+      { name: 'Firebase/FCM', mono: 'FB' },
+      { name: 'Zoom SDK', mono: 'ZM' },
+      { name: 'Swagger/OpenAPI', mono: 'SW' },
+      { name: 'Jest', mono: 'JT' },
     ],
   },
 ];
 
-const levelLabels = ['', 'Basic', 'Familiar', 'Proficient', 'Advanced', 'Expert'];
-
-function SkillCard({ skill, glow }: { skill: Skill; glow: string }) {
-  const cardRef = useRef<HTMLDivElement>(null);
-
-  function handleMouseMove(e: MouseEvent<HTMLDivElement>) {
-    const el = cardRef.current;
-    if (!el) return;
-    const rect = el.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
-    const cx = rect.width / 2;
-    const cy = rect.height / 2;
-    const rotX = ((y - cy) / cy) * -12;
-    const rotY = ((x - cx) / cx) * 12;
-    el.style.transform = `perspective(600px) rotateX(${rotX}deg) rotateY(${rotY}deg) scale3d(1.04,1.04,1.04)`;
-    el.style.setProperty('--glow-x', `${(x / rect.width) * 100}%`);
-    el.style.setProperty('--glow-y', `${(y / rect.height) * 100}%`);
-  }
-
-  function handleMouseLeave() {
-    const el = cardRef.current;
-    if (!el) return;
-    el.style.transform = 'perspective(600px) rotateX(0deg) rotateY(0deg) scale3d(1,1,1)';
-  }
-
-  return (
-    <div
-      ref={cardRef}
-      onMouseMove={handleMouseMove}
-      onMouseLeave={handleMouseLeave}
-      style={{ transition: 'transform 0.15s ease-out', willChange: 'transform' }}
-      className="relative rounded-lg border border-slate-700/50 bg-navy-800/60 p-3 cursor-default overflow-hidden group"
-    >
-      {/* Shine overlay */}
-      <div
-        className="pointer-events-none absolute inset-0 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-        style={{
-          background: `radial-gradient(circle at var(--glow-x, 50%) var(--glow-y, 50%), ${glow} 0%, transparent 60%)`,
-        }}
-      />
-      {/* Icon */}
-      <div className="text-lg mb-1.5 leading-none">{skill.icon}</div>
-      {/* Name */}
-      <div className="text-xs font-medium text-slate-300 leading-tight">{skill.name}</div>
-      {/* Level bar */}
-      <div className="mt-2 flex gap-0.5">
-        {Array.from({ length: 5 }).map((_, i) => (
-          <div
-            key={i}
-            className="h-0.5 flex-1 rounded-full transition-colors duration-300"
-            style={{
-              background: i < skill.level
-                ? glow.replace('0.25', '0.9')
-                : 'rgba(148,163,184,0.15)',
-            }}
-          />
-        ))}
-      </div>
-      <div className="mt-1 text-[9px] font-mono text-slate-600">
-        {levelLabels[skill.level]}
-      </div>
-    </div>
-  );
-}
-
 export function Skills3D() {
   return (
-    <div className="space-y-6">
+    <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
       {categories.map(cat => (
-        <div key={cat.label}>
-          {/* Category header */}
-          <div className="flex items-center gap-3 mb-3">
-            <span className="font-mono text-xs text-slate-500 uppercase tracking-widest">
-              {cat.label}
-            </span>
-            <div className="h-px flex-1 bg-slate-800/60" />
+        <div key={cat.label} className="card-surface p-5">
+          <div className="mb-4 flex items-center gap-2.5">
+            <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-md border border-crimson/25 bg-crimson/10">
+              <cat.icon className="h-4 w-4 text-crimson" strokeWidth={1.75} />
+            </div>
+            <span className="font-mono text-xs uppercase tracking-widest text-grey">{cat.label}</span>
           </div>
-          {/* Skills grid */}
-          <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-5">
+          <div className="flex flex-wrap gap-1.5">
             {cat.skills.map(skill => (
-              <SkillCard key={skill.name} skill={skill} glow={cat.glow} />
+              <span
+                key={skill.name}
+                className="group inline-flex items-center gap-1.5 rounded-md border border-line bg-surface-2/50 py-1 pl-1 pr-2.5 text-xs text-grey transition-colors hover:border-crimson/30 hover:text-ivory"
+              >
+                <span className="flex h-5 min-w-5 items-center justify-center rounded bg-surface-2 px-1 font-mono text-[9px] font-semibold text-crimson">
+                  {skill.mono}
+                </span>
+                {skill.name}
+              </span>
             ))}
           </div>
         </div>

@@ -37,12 +37,12 @@ const nodes: Node<DiagramNodeData>[] = [
       handles: { target: [Position.Top], source: [Position.Top] } } },
 ];
 
-const edgeDefaults = { animated: true, style: { stroke: '#475569' }, markerEnd: { type: MarkerType.ArrowClosed as const, color: '#475569' } };
+const edgeDefaults = { animated: true, style: { stroke: '#3a3d45' }, markerEnd: { type: MarkerType.ArrowClosed as const, color: '#3a3d45' } };
 
 const edges: Edge[] = [
   { id: 'e1', source: 'client', target: 'nextjs', ...edgeDefaults },
   { id: 'e2', source: 'nextjs', target: 'json', ...edgeDefaults },
-  { id: 'e3', source: 'json', target: 'cors', ...edgeDefaults, label: 'Express', labelStyle: { fill: '#94a3b8', fontSize: 9 } },
+  { id: 'e3', source: 'json', target: 'cors', ...edgeDefaults, label: 'Express', labelStyle: { fill: '#9ca3af', fontSize: 9 } },
   { id: 'e4', source: 'cors', target: 'reqid', ...edgeDefaults },
   { id: 'e5', source: 'reqid', target: 'logger', ...edgeDefaults },
   { id: 'e6', source: 'logger', target: 'rate', ...edgeDefaults },
@@ -61,9 +61,9 @@ export function RequestLifecycle() {
         nodesDraggable={false} nodesConnectable={false}
         panOnDrag zoomOnScroll minZoom={0.4} maxZoom={1.5}
       >
-        <Background color="#1e293b" gap={20} size={1} />
+        <Background color="#2a1418" gap={20} size={1} />
         <Controls showInteractive={false}
-          className="bg-navy-700! border-slate-800! shadow-none! [&>button]:bg-navy-700! [&>button]:border-slate-800! [&>button]:text-slate-400! [&>button:hover]:bg-slate-800!" />
+          className="bg-navy-700! border-line-strong! shadow-none! [&>button]:bg-navy-700! [&>button]:border-line-strong! [&>button]:text-grey-muted! [&>button:hover]:bg-surface-2!" />
       </ReactFlow>
     </div>
   );

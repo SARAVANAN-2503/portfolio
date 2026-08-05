@@ -23,17 +23,17 @@ export default function ArchitecturePage() {
     <div className="pt-14">
       <div className="section-container py-16">
         <div className="flex items-center gap-3 mb-4">
-          <div className="h-px w-8 bg-accent" />
-          <span className="font-mono text-xs text-accent tracking-widest uppercase">
+          <div className="h-px w-8 bg-crimson" />
+          <span className="font-mono text-xs text-crimson tracking-widest uppercase">
             System Design
           </span>
         </div>
-        <h1 className="font-display text-3xl font-bold text-slate-100 mb-3">
+        <h1 className="font-display text-3xl font-bold text-ivory mb-3">
           Architecture
         </h1>
-        <p className="text-slate-400 mb-10 max-w-xl">
-          Interactive diagrams with clickable nodes for deep-dives into
-          architectural patterns and system data flows.
+        <p className="text-grey mb-10 max-w-xl">
+          The same engineering-system language from the homepage constellation,
+          expanded into interactive diagrams — click a node for details.
         </p>
 
         <div className="grid gap-8 lg:grid-cols-4">
@@ -41,22 +41,24 @@ export default function ArchitecturePage() {
           <div className="lg:col-span-1 space-y-2">
             {DIAGRAMS.map(d => (
               <button
+                type="button"
                 key={d.id}
                 onClick={() => setActiveId(d.id)}
+                aria-pressed={activeId === d.id}
                 className={clsx(
-                  'w-full flex flex-col items-start gap-1 rounded-lg border p-4 text-left transition-all',
+                  'w-full flex flex-col items-start gap-1 rounded-lg border p-4 text-left transition-all cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-crimson-bright',
                   activeId === d.id
-                    ? 'bg-accent-muted border-accent/40 ring-1 ring-accent/20'
-                    : 'bg-navy-700/30 border-slate-800/60 hover:border-slate-700 text-slate-400'
+                    ? 'bg-crimson/10 border-crimson/40 ring-1 ring-crimson/20'
+                    : 'bg-surface-2/30 border-line hover:border-line-strong text-grey'
                 )}
               >
                 <span className={clsx(
                   'font-display text-sm font-semibold transition-colors',
-                  activeId === d.id ? 'text-accent' : 'text-slate-200'
+                  activeId === d.id ? 'text-crimson' : 'text-ivory'
                 )}>
                   {d.title}
                 </span>
-                <p className="text-[10px] leading-relaxed text-slate-500 line-clamp-2">
+                <p className="text-[10px] leading-relaxed text-grey-muted line-clamp-2">
                   {d.description}
                 </p>
               </button>
@@ -66,19 +68,19 @@ export default function ArchitecturePage() {
           {/* Canvas Area */}
           <div className="lg:col-span-3 space-y-4">
             <div className="flex items-center justify-between px-1">
-              <h2 className="text-xs font-mono text-slate-500 uppercase tracking-widest">
+              <h2 className="text-xs font-mono text-grey-muted uppercase tracking-widest">
                 Interactive Canvas
               </h2>
-              <span className="text-[10px] text-slate-600 font-mono">
+              <span className="text-[10px] text-grey-muted font-mono hidden sm:inline">
                 Click nodes for details • Drag to pan • Scroll to zoom
               </span>
             </div>
             <ActiveComponent />
-            <div className="rounded-md border border-slate-800/40 bg-navy-950/20 p-4">
-              <h3 className="text-xs font-semibold text-slate-300 mb-1.5 uppercase tracking-wide">
+            <div className="rounded-md border border-line bg-elevated/40 p-4">
+              <h3 className="text-xs font-semibold text-ivory mb-1.5 uppercase tracking-wide">
                 Key Concept: {activeDiagram.title}
               </h3>
-              <p className="text-xs text-slate-500 leading-relaxed">
+              <p className="text-xs text-grey leading-relaxed">
                 {activeId === 'multi-tenant' && 'Demonstrates how the system maps a request to a specific tenant container or schema based on the hostname, and preserves that isolation all the way to the storage engine.'}
                 {activeId === 'lifecycle' && 'Shows the onion-style architecture of our Node.js services, where each layer of middleware (logging, auth, rate-limiting) is a distinct, testable boundary.'}
                 {activeId === 'rbac' && 'Illustrates how hierarchical roles map to functional permissions, allowing for a flexible yet strict security model across different tenant tiers.'}

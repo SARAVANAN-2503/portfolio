@@ -52,14 +52,14 @@ const nodes: Node<DiagramNodeData>[] = [
 ];
 
 const edges: Edge[] = [
-  { id: 'e1', source: 'browser', target: 'subdomain', animated: true, style: { stroke: '#475569' }, markerEnd: { type: MarkerType.ArrowClosed, color: '#475569' } },
-  { id: 'e2', source: 'subdomain', target: 'express', animated: true, style: { stroke: '#475569' }, markerEnd: { type: MarkerType.ArrowClosed, color: '#475569' } },
-  { id: 'e3', source: 'express', target: 'auth', animated: true, style: { stroke: '#475569' }, markerEnd: { type: MarkerType.ArrowClosed, color: '#475569' } },
-  { id: 'e4', source: 'express', target: 'tenant', animated: true, style: { stroke: '#475569' }, markerEnd: { type: MarkerType.ArrowClosed, color: '#475569' } },
-  { id: 'e5', source: 'auth', target: 'handler', animated: true, style: { stroke: '#475569' }, markerEnd: { type: MarkerType.ArrowClosed, color: '#475569' } },
-  { id: 'e6', source: 'tenant', target: 'handler', animated: true, style: { stroke: '#475569' }, markerEnd: { type: MarkerType.ArrowClosed, color: '#475569' } },
-  { id: 'e7', source: 'handler', target: 'rowlevel', animated: true, style: { stroke: '#f59e0b' }, label: 'default', labelStyle: { fill: '#94a3b8', fontSize: 10 }, markerEnd: { type: MarkerType.ArrowClosed, color: '#f59e0b' } },
-  { id: 'e8', source: 'handler', target: 'schema', style: { stroke: '#475569', strokeDasharray: '5,5' }, label: 'enterprise', labelStyle: { fill: '#94a3b8', fontSize: 10 }, markerEnd: { type: MarkerType.ArrowClosed, color: '#475569' } },
+  { id: 'e1', source: 'browser', target: 'subdomain', animated: true, style: { stroke: '#3a3d45' }, markerEnd: { type: MarkerType.ArrowClosed, color: '#3a3d45' } },
+  { id: 'e2', source: 'subdomain', target: 'express', animated: true, style: { stroke: '#3a3d45' }, markerEnd: { type: MarkerType.ArrowClosed, color: '#3a3d45' } },
+  { id: 'e3', source: 'express', target: 'auth', animated: true, style: { stroke: '#3a3d45' }, markerEnd: { type: MarkerType.ArrowClosed, color: '#3a3d45' } },
+  { id: 'e4', source: 'express', target: 'tenant', animated: true, style: { stroke: '#3a3d45' }, markerEnd: { type: MarkerType.ArrowClosed, color: '#3a3d45' } },
+  { id: 'e5', source: 'auth', target: 'handler', animated: true, style: { stroke: '#3a3d45' }, markerEnd: { type: MarkerType.ArrowClosed, color: '#3a3d45' } },
+  { id: 'e6', source: 'tenant', target: 'handler', animated: true, style: { stroke: '#3a3d45' }, markerEnd: { type: MarkerType.ArrowClosed, color: '#3a3d45' } },
+  { id: 'e7', source: 'handler', target: 'rowlevel', animated: true, style: { stroke: '#e5484d' }, label: 'default', labelStyle: { fill: '#9ca3af', fontSize: 10 }, markerEnd: { type: MarkerType.ArrowClosed, color: '#e5484d' } },
+  { id: 'e8', source: 'handler', target: 'schema', style: { stroke: '#3a3d45', strokeDasharray: '5,5' }, label: 'enterprise', labelStyle: { fill: '#9ca3af', fontSize: 10 }, markerEnd: { type: MarkerType.ArrowClosed, color: '#3a3d45' } },
 ];
 
 export function MultiTenantFlow() {
@@ -80,10 +80,10 @@ export function MultiTenantFlow() {
         minZoom={0.4}
         maxZoom={1.5}
       >
-        <Background color="#1e293b" gap={20} size={1} />
+        <Background color="#2a1418" gap={20} size={1} />
         <Controls
           showInteractive={false}
-          className="bg-navy-700! border-slate-800! shadow-none! [&>button]:bg-navy-700! [&>button]:border-slate-800! [&>button]:text-slate-400! [&>button:hover]:bg-slate-800!"
+          className="bg-navy-700! border-line-strong! shadow-none! [&>button]:bg-navy-700! [&>button]:border-line-strong! [&>button]:text-grey-muted! [&>button:hover]:bg-surface-2!"
         />
       </ReactFlow>
     </div>

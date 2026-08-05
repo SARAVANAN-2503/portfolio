@@ -1,6 +1,7 @@
 import { notFound } from 'next/navigation';
 import type { Metadata } from 'next/types';
 import Link from 'next/link';
+import { ArrowLeft, ArrowRight, CheckCircle2 } from 'lucide-react';
 import { projects, getProject } from '@/content/projects';
 import { ExplainMode } from '@/components/projects/ExplainMode';
 
@@ -22,22 +23,10 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
   };
 }
 
-const categoryGlow: Record<string, string> = {
-  'SaaS Platform':           'from-emerald-500/10 to-transparent',
-  'Government / Compliance': 'from-blue-500/10 to-transparent',
-  'Marketplace / Wallet':    'from-purple-500/10 to-transparent',
-  'Serverless / EdTech':     'from-orange-500/10 to-transparent',
-  'AI / CRM':                'from-pink-500/10 to-transparent',
-  'LMS / Coaching':          'from-cyan-500/10 to-transparent',
-};
-
-const categoryAccent: Record<string, string> = {
-  'SaaS Platform':           'text-emerald-400 border-emerald-500/30 bg-emerald-500/10',
-  'Government / Compliance': 'text-blue-400 border-blue-500/30 bg-blue-500/10',
-  'Marketplace / Wallet':    'text-purple-400 border-purple-500/30 bg-purple-500/10',
-  'Serverless / EdTech':     'text-orange-400 border-orange-500/30 bg-orange-500/10',
-  'AI / CRM':                'text-pink-400 border-pink-500/30 bg-pink-500/10',
-  'LMS / Coaching':          'text-cyan-400 border-cyan-500/30 bg-cyan-500/10',
+const statusLabel: Record<string, { label: string; cls: string }> = {
+  live: { label: '● Live', cls: 'text-live border-live/30 bg-live/10' },
+  shipped: { label: '✓ Shipped', cls: 'text-grey border-line-strong bg-surface-2/40' },
+  internal: { label: '⬤ Internal', cls: 'text-grey-muted border-line bg-surface-2/30' },
 };
 
 export default async function ProjectDetail(props: Props) {
@@ -48,61 +37,54 @@ export default async function ProjectDetail(props: Props) {
   const currentIdx = projects.findIndex(p => p.slug === params.slug);
   const prev = currentIdx > 0 ? projects[currentIdx - 1] : null;
   const next = currentIdx < projects.length - 1 ? projects[currentIdx + 1] : null;
-  const glow = categoryGlow[project.category] ?? 'from-slate-500/10 to-transparent';
-  const accentCls = categoryAccent[project.category] ?? 'text-slate-400 border-slate-600 bg-slate-800/40';
+  const status = project.status ? statusLabel[project.status] : null;
 
   return (
     <div className="pt-14">
       {/* Hero banner */}
-      <div className={`relative overflow-hidden border-b border-slate-800/50 bg-linear-to-b ${glow}`}>
+      <div className="relative overflow-hidden border-b border-line bg-elevated">
         <div
           className="absolute inset-0 opacity-30"
           style={{
-            backgroundImage: 'linear-gradient(rgba(148,163,184,0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(148,163,184,0.05) 1px, transparent 1px)',
+            backgroundImage:
+              'linear-gradient(var(--color-line) 1px, transparent 1px), linear-gradient(90deg, var(--color-line) 1px, transparent 1px)',
             backgroundSize: '40px 40px',
           }}
         />
-        <div className="section-container relative py-14 max-w-4xl">
+        <div className="absolute -top-24 right-0 h-72 w-72 rounded-full bg-crimson/10 blur-3xl" />
+        <div className="section-container relative max-w-4xl py-14">
           {/* Breadcrumb */}
-          <div className="flex items-center gap-2 text-xs font-mono text-slate-500 mb-6">
-            <Link href="/projects" className="hover:text-accent transition-colors">Projects</Link>
+          <div className="mb-6 flex items-center gap-2 font-mono text-xs text-grey-muted">
+            <Link href="/projects" className="inline-flex items-center gap-1 transition-colors hover:text-crimson">
+              <ArrowLeft className="h-3 w-3" /> Projects
+            </Link>
             <span>/</span>
-            <span className="text-slate-400">{project.title}</span>
+            <span className="text-grey">{project.title}</span>
           </div>
 
-          <div className="flex flex-wrap items-start gap-3 mb-4">
-            <span className={`inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-mono ${accentCls}`}>
+          <div className="mb-4 flex flex-wrap items-start gap-3">
+            <span className="inline-flex items-center rounded-full border border-line-strong bg-surface/60 px-2.5 py-0.5 font-mono text-xs text-grey">
               {project.category}
             </span>
-            {project.status && (
-              <span className={`inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-mono ${
-                project.status === 'live'
-                  ? 'text-green-400 border-green-500/30 bg-green-500/10'
-                  : 'text-slate-400 border-slate-600/40 bg-slate-700/20'
-              }`}>
-                {project.status === 'live' ? '● Live' : '✓ Shipped'}
+            {status && (
+              <span className={`inline-flex items-center rounded-full border px-2.5 py-0.5 font-mono text-xs ${status.cls}`}>
+                {status.label}
               </span>
             )}
-            {project.year && (
-              <span className="font-mono text-xs text-slate-500">{project.year}</span>
-            )}
+            {project.year && <span className="font-mono text-xs text-grey-muted">{project.year}</span>}
           </div>
 
-          <h1 className="font-display text-4xl font-bold text-slate-100 sm:text-5xl mb-3">
+          <h1 className="mb-3 font-display text-4xl font-bold text-ivory sm:text-5xl">
             {project.title}
           </h1>
-          <p className="text-lg text-slate-400 max-w-2xl">
-            {project.tagline}
-          </p>
+          <p className="max-w-2xl text-lg text-grey">{project.tagline}</p>
 
           {/* Quick highlights */}
           {project.highlights && (
-            <div className="mt-6 grid sm:grid-cols-2 gap-2 max-w-2xl">
+            <div className="mt-6 grid max-w-2xl gap-2 sm:grid-cols-2">
               {project.highlights.map(h => (
-                <div key={h} className="flex items-start gap-2 text-sm text-slate-400">
-                  <svg className="mt-0.5 shrink-0 text-accent/60" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="m9 12 2 2 4-4" /><circle cx="12" cy="12" r="10" />
-                  </svg>
+                <div key={h} className="flex items-start gap-2 text-sm text-grey">
+                  <CheckCircle2 className="mt-0.5 h-3.5 w-3.5 shrink-0 text-crimson/70" />
                   {h}
                 </div>
               ))}
@@ -111,29 +93,29 @@ export default async function ProjectDetail(props: Props) {
         </div>
       </div>
 
-      <div className="section-container py-12 max-w-4xl">
+      <div className="section-container max-w-4xl py-12">
 
-        {/* Placeholder image area */}
-        <div className="mb-10 rounded-xl border border-slate-800/60 bg-navy-800/40 h-56 flex items-center justify-center overflow-hidden relative">
+        {/* Visual placeholder — brand monogram, no fake screenshots */}
+        <div className="relative mb-10 flex h-52 items-center justify-center overflow-hidden rounded-xl border border-line bg-surface">
           <div
             className="absolute inset-0 opacity-20"
             style={{
-              backgroundImage: 'linear-gradient(rgba(148,163,184,0.08) 1px, transparent 1px), linear-gradient(90deg, rgba(148,163,184,0.08) 1px, transparent 1px)',
+              backgroundImage:
+                'linear-gradient(var(--color-line) 1px, transparent 1px), linear-gradient(90deg, var(--color-line) 1px, transparent 1px)',
               backgroundSize: '20px 20px',
             }}
           />
-          <div className="text-center z-10">
-            <div className="text-slate-700 font-display text-6xl font-black select-none">{project.title.charAt(0)}</div>
-            <p className="mt-2 font-mono text-xs text-slate-700">[ project screenshot — drop your image here ]</p>
-          </div>
+          <span className="font-display text-7xl font-black text-crimson/10 select-none z-10">
+            {project.title.charAt(0)}
+          </span>
         </div>
 
         {/* Metrics */}
-        <div className="grid grid-cols-2 gap-3 sm:grid-cols-4 mb-12">
+        <div className="mb-12 grid grid-cols-2 gap-3 sm:grid-cols-4">
           {project.metrics.map(m => (
-            <div key={m.label} className="rounded-lg border border-slate-800/60 bg-navy-700/30 px-4 py-4 text-center">
-              <div className={`font-mono text-2xl font-black ${accentCls.split(' ')[0]}`}>{m.value}</div>
-              <div className="text-xs text-slate-500 mt-0.5">{m.label}</div>
+            <div key={m.label} className="rounded-lg border border-line bg-surface-2/30 px-4 py-4 text-center">
+              <div className="font-mono text-2xl font-black text-crimson">{m.value}</div>
+              <div className="mt-0.5 text-xs text-grey-muted">{m.label}</div>
             </div>
           ))}
         </div>
@@ -142,19 +124,19 @@ export default async function ProjectDetail(props: Props) {
         <div className="space-y-10">
           <section>
             <SectionHeader label="01" title="Problem" />
-            <div className="rounded-lg border-l-2 border-accent/50 bg-accent/5 px-5 py-4">
-              <p className="text-sm text-slate-300 leading-relaxed">{project.problem}</p>
+            <div className="rounded-lg border-l-2 border-crimson/50 bg-crimson/5 px-5 py-4">
+              <p className="text-sm leading-relaxed text-ivory-dim">{project.problem}</p>
             </div>
           </section>
 
           <section>
             <SectionHeader label="02" title="Architecture" />
-            <p className="text-sm text-slate-400 leading-relaxed">{project.architecture}</p>
+            <p className="text-sm leading-relaxed text-grey">{project.architecture}</p>
           </section>
 
           <section>
             <SectionHeader label="03" title="Trade-offs" />
-            <p className="text-sm text-slate-400 leading-relaxed">{project.tradeoffs}</p>
+            <p className="text-sm leading-relaxed text-grey">{project.tradeoffs}</p>
           </section>
 
           <section>
@@ -172,23 +154,17 @@ export default async function ProjectDetail(props: Props) {
         </div>
 
         {/* Prev / Next navigation */}
-        <div className="flex items-center justify-between pt-10 mt-10 border-t border-slate-800/50">
+        <div className="mt-10 flex items-center justify-between border-t border-line pt-10">
           {prev ? (
-            <Link href={`/projects/${prev.slug}`} className="group flex items-center gap-2 text-sm text-slate-500 hover:text-accent transition-colors">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"
-                className="group-hover:-translate-x-0.5 transition-transform">
-                <path d="M19 12H5"/><path d="m12 19-7-7 7-7"/>
-              </svg>
+            <Link href={`/projects/${prev.slug}`} className="group flex items-center gap-2 text-sm text-grey-muted transition-colors hover:text-crimson">
+              <ArrowLeft className="h-4 w-4 transition-transform group-hover:-translate-x-0.5" />
               <span>{prev.title}</span>
             </Link>
           ) : <div />}
           {next ? (
-            <Link href={`/projects/${next.slug}`} className="group flex items-center gap-2 text-sm text-slate-500 hover:text-accent transition-colors">
+            <Link href={`/projects/${next.slug}`} className="group flex items-center gap-2 text-sm text-grey-muted transition-colors hover:text-crimson">
               <span>{next.title}</span>
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"
-                className="group-hover:translate-x-0.5 transition-transform">
-                <path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>
-              </svg>
+              <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
             </Link>
           ) : <div />}
         </div>
@@ -199,10 +175,10 @@ export default async function ProjectDetail(props: Props) {
 
 function SectionHeader({ label, title }: { label: string; title: string }) {
   return (
-    <div className="flex items-center gap-3 mb-4">
-      <span className="font-mono text-xs text-accent/50 tabular-nums">{label}</span>
-      <h2 className="font-display text-lg font-semibold text-slate-200">{title}</h2>
-      <div className="h-px flex-1 bg-slate-800/40" />
+    <div className="mb-4 flex items-center gap-3">
+      <span className="font-mono text-xs tabular-nums text-crimson/50">{label}</span>
+      <h2 className="font-display text-lg font-semibold text-ivory">{title}</h2>
+      <div className="h-px flex-1 bg-line" />
     </div>
   );
 }
