@@ -93,29 +93,42 @@ const categories: SkillCategory[] = [
 export function Skills3D() {
   return (
     <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-      {categories.map(cat => (
-        <div key={cat.label} className="card-surface p-5">
-          <div className="mb-4 flex items-center gap-2.5">
-            <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-md border border-crimson/25 bg-crimson/10">
-              <cat.icon className="h-4 w-4 text-crimson" strokeWidth={1.75} />
-            </div>
-            <span className="font-mono text-xs uppercase tracking-widest text-grey">{cat.label}</span>
-          </div>
-          <div className="flex flex-wrap gap-1.5">
-            {cat.skills.map(skill => (
-              <span
-                key={skill.name}
-                className="group inline-flex items-center gap-1.5 rounded-md border border-line bg-surface-2/50 py-1 pl-1 pr-2.5 text-xs text-grey transition-colors hover:border-crimson/30 hover:text-ivory"
+      {categories.map((cat, i) => {
+        const blueprint = i % 2 === 1;
+        return (
+          <div key={cat.label} className="card-surface p-5">
+            <div className="mb-4 flex items-center gap-2.5">
+              <div
+                className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-md border ${
+                  blueprint ? 'border-blueprint/25 bg-blueprint-dim' : 'border-crimson/25 bg-crimson/10'
+                }`}
               >
-                <span className="flex h-5 min-w-5 items-center justify-center rounded bg-surface-2 px-1 font-mono text-[9px] font-semibold text-crimson">
-                  {skill.mono}
+                <cat.icon className={`h-4 w-4 ${blueprint ? 'text-blueprint' : 'text-crimson'}`} strokeWidth={1.75} />
+              </div>
+              <span className="font-mono text-xs uppercase tracking-widest text-grey">{cat.label}</span>
+            </div>
+            <div className="flex flex-wrap gap-1.5">
+              {cat.skills.map(skill => (
+                <span
+                  key={skill.name}
+                  className={`group inline-flex items-center gap-1.5 rounded-md border border-line bg-surface-2/50 py-1 pl-1 pr-2.5 text-xs text-grey transition-colors ${
+                    blueprint ? 'hover:border-blueprint/30' : 'hover:border-crimson/30'
+                  } hover:text-ivory`}
+                >
+                  <span
+                    className={`flex h-5 min-w-5 items-center justify-center rounded bg-surface-2 px-1 font-mono text-[9px] font-semibold ${
+                      blueprint ? 'text-blueprint' : 'text-crimson'
+                    }`}
+                  >
+                    {skill.mono}
+                  </span>
+                  {skill.name}
                 </span>
-                {skill.name}
-              </span>
-            ))}
+              ))}
+            </div>
           </div>
-        </div>
-      ))}
+        );
+      })}
     </div>
   );
 }

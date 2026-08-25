@@ -1,5 +1,5 @@
 import type { Metadata } from 'next/types';
-import { Manrope, JetBrains_Mono } from 'next/font/google';
+import { Manrope, Space_Grotesk, JetBrains_Mono } from 'next/font/google';
 import { Navigation } from '@/components/nav/Navigation';
 import { Footer } from '@/components/nav/Footer';
 import { ThemeProvider } from '@/components/theme/ThemeProvider';
@@ -12,6 +12,12 @@ const manrope = Manrope({
   display: 'swap',
 });
 
+const spaceGrotesk = Space_Grotesk({
+  subsets: ['latin'],
+  variable: '--font-grotesk',
+  display: 'swap',
+});
+
 const jetBrainsMono = JetBrains_Mono({
   subsets: ['latin'],
   variable: '--font-mono',
@@ -20,7 +26,7 @@ const jetBrainsMono = JetBrains_Mono({
 
 export const metadata: Metadata = {
   title: {
-    default: 'Saravanan — Senior Full-Stack Engineer',
+    default: 'Saravanan, Senior Full-Stack Engineer',
     template: '%s | Saravanan',
   },
   description:
@@ -36,7 +42,7 @@ export default function RootLayout({
     <html
       lang="en"
       suppressHydrationWarning
-      className={`${manrope.variable} ${jetBrainsMono.variable}`}
+      className={`${manrope.variable} ${spaceGrotesk.variable} ${jetBrainsMono.variable}`}
     >
       <body className="min-h-screen flex flex-col antialiased">
         <ThemeProvider

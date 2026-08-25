@@ -5,12 +5,16 @@ import { Handle, Position } from '@xyflow/react';
 
 export type NodeCategory = 'client' | 'middleware' | 'service' | 'database' | 'queue';
 
+/* Emerald ("live") stays reserved for real status semantics site-wide
+   (available-for-work, live project). Diagram categories use crimson /
+   blueprint / neutral instead so a "service" node here never reads as an
+   "available" signal elsewhere on the site. */
 const categoryStyles: Record<NodeCategory, { border: string; dot: string; bg: string }> = {
-  client:     { border: 'border-crimson/40',      dot: 'bg-crimson',      bg: 'bg-crimson/5' },
-  middleware: { border: 'border-line-strong',      dot: 'bg-grey',         bg: 'bg-surface-2/40' },
-  service:    { border: 'border-live/40',          dot: 'bg-live',         bg: 'bg-live/5' },
+  client:     { border: 'border-crimson/40',        dot: 'bg-crimson',        bg: 'bg-crimson/5' },
+  middleware: { border: 'border-line-strong',       dot: 'bg-grey',           bg: 'bg-surface-2/40' },
+  service:    { border: 'border-blueprint/40',      dot: 'bg-blueprint',      bg: 'bg-blueprint-dim' },
   database:   { border: 'border-crimson-bright/40', dot: 'bg-crimson-bright', bg: 'bg-crimson-bright/5' },
-  queue:      { border: 'border-purple-500/40',    dot: 'bg-purple-400',   bg: 'bg-purple-500/5' },
+  queue:      { border: 'border-purple-500/40',     dot: 'bg-purple-400',     bg: 'bg-purple-500/5' },
 };
 
 export interface DiagramNodeData {

@@ -29,7 +29,7 @@
   --fg-grey-muted: #6b7280;
   --line: rgba(127, 29, 45, 0.12);
   --line-strong: rgba(127, 29, 45, 0.24);
-  --radius: 0.75rem;
+  --radius: 0.625rem;
 }
 
 .dark {
@@ -61,6 +61,15 @@
   --color-crimson-bright: #ff5a65;
   --color-wine: #7f1d2d;
   --color-live: #34d399;
+
+  /* ── Blueprint — second accent, scoped to technical/lab emphasis.
+     Motivated by the schematic-grid backgrounds already used across the
+     site; keeps crimson as the single action/brand color while giving
+     secondary emphasis (Lab pages, diagram "service" nodes, secondary
+     stats) somewhere else to live besides red-on-everything ── */
+  --color-blueprint: #4d8fdb;
+  --color-blueprint-bright: #6ea8ea;
+  --color-blueprint-dim: rgba(77, 143, 219, 0.12);
 
   /* ── Legacy scale names, repointed to the runtime tokens above so every
      existing navy and slate utility class site-wide inherits the new
@@ -132,9 +141,19 @@
   --radius-sm: calc(var(--radius) - 6px);
   --radius-xl: calc(var(--radius) + 4px);
 
-  --font-display: var(--font-manrope), system-ui, sans-serif;
+  /* Display face is intentionally distinct from body copy — Space Grotesk's
+     technical, slightly quirky counters read as "engineering" rather than
+     generic SaaS, and give headlines real contrast against Manrope body text
+     instead of one font doing every job. */
+  --font-display: var(--font-grotesk), var(--font-manrope), system-ui, sans-serif;
   --font-sans: var(--font-manrope), system-ui, sans-serif;
   --font-mono: var(--font-mono), Menlo, monospace;
+
+  /* ── Fluid editorial type scale — replaces ad hoc text-3xl/text-4xl
+     per page with a deliberate, consistent hierarchy ── */
+  --text-hero: clamp(2.75rem, 5vw, 4.5rem);
+  --text-page-h1: clamp(2.25rem, 3.2vw, 3.25rem);
+  --text-section-h2: clamp(1.375rem, 1.8vw, 1.75rem);
 
   --background-image-dot-grid: radial-gradient(
     circle,
@@ -246,6 +265,23 @@
 @utility tag-accent {
   @apply inline-flex items-center rounded-full border border-accent/30
            bg-accent-dim px-2.5 py-0.5 text-xs font-mono text-accent;
+}
+
+@utility tag-blueprint {
+  @apply inline-flex items-center rounded-full border border-blueprint/30
+           bg-blueprint-dim px-2.5 py-0.5 text-xs font-mono text-blueprint;
+}
+
+@utility text-hero {
+  font-size: var(--text-hero);
+}
+
+@utility text-page-h1 {
+  font-size: var(--text-page-h1);
+}
+
+@utility text-section-h2 {
+  font-size: var(--text-section-h2);
 }
 
 @utility animate-delay-100 {

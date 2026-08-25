@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { useRef } from 'react';
 import { motion, useScroll, useSpring, useReducedMotion } from 'framer-motion';
 import { ArrowRight, ArrowUpRight, GraduationCap } from 'lucide-react';
+import { ContentHeader } from '@/components/ui/ContentHeader';
 
 /* ─── Data ──────────────────────────────────────────────────────────────────── */
 
@@ -182,7 +183,7 @@ function SkillTag({ label, colorCls }: { label: string; colorCls: string }) {
   );
 }
 
-function ProjectBlock({ project, color }: { project: Project; color: typeof colorMap[string] }) {
+function ProjectBlock({ project }: { project: Project }) {
   const inner = (
     <div className="group h-full rounded-lg border border-line bg-surface-2/30 p-5 transition-all hover:border-crimson/30 hover:bg-surface-2/50">
       <div className="mb-3 flex items-start justify-between gap-3">
@@ -199,10 +200,9 @@ function ProjectBlock({ project, color }: { project: Project; color: typeof colo
         )}
       </div>
 
-      <ul className="mb-4 space-y-1.5">
+      <ul className="mb-4 space-y-1.5 border-l border-line pl-3">
         {project.highlights.map(h => (
-          <li key={h} className="flex items-start gap-2 text-xs text-grey">
-            <span className={`mt-1 h-1 w-1 shrink-0 rounded-full ${color.dot.split(' ')[0]}`} />
+          <li key={h} className="text-xs leading-relaxed text-grey">
             {h}
           </li>
         ))}
@@ -254,19 +254,11 @@ export function ExperienceContent() {
       <div className="section-container py-16">
 
         {/* Header */}
-        <div className="mb-14 max-w-2xl">
-          <div className="mb-4 flex items-center gap-3">
-            <div className="h-px w-8 bg-crimson" />
-            <span className="font-mono text-xs uppercase tracking-widest text-crimson">Career</span>
-          </div>
-          <h1 className="font-display text-3xl font-bold text-ivory sm:text-4xl">
-            Work Experience
-          </h1>
-          <p className="mt-3 leading-relaxed text-grey">
-            4+ years designing, building, and deploying scalable SaaS, LMS, CRM, and real-time
-            web applications — from architectural decisions to shipped features.
-          </p>
-        </div>
+        <ContentHeader
+          eyebrow="Career"
+          title="Work Experience"
+          description="4+ years designing, building, and deploying scalable SaaS, LMS, CRM, and real-time web applications, from architectural decisions to shipped features."
+        />
 
         {/* Summary strip */}
         <div className="mb-14 grid grid-cols-2 gap-3 sm:grid-cols-4">
@@ -314,12 +306,11 @@ export function ExperienceContent() {
                       )}
                     </div>
 
-                    <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-sm text-grey">
+                    <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-grey">
                       <span className={`font-semibold ${c.text}`}>{job.role}</span>
-                      <span className="text-grey-muted">·</span>
-                      <span>{job.location}</span>
-                      <span className="text-grey-muted">·</span>
-                      <span className="font-mono text-xs">{job.period}</span>
+                      <span className="text-grey-muted">
+                        {job.location} · {job.period}
+                      </span>
                       <span className={`inline-flex items-center rounded-full border px-2 py-0.5 font-mono text-[10px] ${c.badge}`}>
                         {job.duration}
                       </span>
@@ -333,7 +324,7 @@ export function ExperienceContent() {
                   {/* Projects */}
                   <div className="mb-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
                     {job.projects.map(p => (
-                      <ProjectBlock key={p.name} project={p} color={c} />
+                      <ProjectBlock key={p.name} project={p} />
                     ))}
                   </div>
 
@@ -398,10 +389,9 @@ export function ExperienceContent() {
                   </Link>
                 </div>
 
-                <div className="mb-5 grid gap-x-6 gap-y-1.5 sm:grid-cols-2">
+                <div className="mb-5 grid gap-x-6 gap-y-1.5 border-l border-crimson-bright/20 pl-3 sm:grid-cols-2">
                   {freelance.highlights.map(h => (
-                    <div key={h} className="flex items-start gap-2 text-xs text-grey">
-                      <span className="mt-1 h-1 w-1 shrink-0 rounded-full bg-crimson-bright" />
+                    <div key={h} className="text-xs leading-relaxed text-grey">
                       {h}
                     </div>
                   ))}
@@ -443,8 +433,7 @@ export function ExperienceContent() {
 
         {/* Bottom CTA */}
         <div className="mt-20 rounded-xl border border-line bg-elevated/60 p-8 text-center">
-          <p className="mb-3 font-mono text-xs uppercase tracking-widest text-crimson">Open to opportunities</p>
-          <h3 className="mb-2 font-display text-2xl font-bold text-ivory">
+          <h3 className="mb-2 font-display text-section-h2 font-bold tracking-tight text-ivory">
             Want to work together?
           </h3>
           <p className="mx-auto mb-6 max-w-md text-sm text-grey">
@@ -453,16 +442,16 @@ export function ExperienceContent() {
           <div className="flex flex-wrap items-center justify-center gap-3">
             <Link
               href="/contact"
-              className="inline-flex items-center gap-2 rounded-md bg-crimson px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-crimson-bright focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-crimson-bright focus-visible:ring-offset-2 focus-visible:ring-offset-obsidian"
+              className="inline-flex items-center gap-2 rounded-md bg-crimson px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-crimson-bright active:scale-[0.97] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-crimson-bright focus-visible:ring-offset-2 focus-visible:ring-offset-obsidian"
             >
               Get in touch
               <ArrowRight className="h-3.5 w-3.5" />
             </Link>
             <Link
               href="/projects"
-              className="inline-flex items-center gap-2 rounded-md border border-line-strong px-5 py-2.5 text-sm font-medium text-ivory transition-colors hover:border-crimson/40 hover:text-crimson"
+              className="inline-flex items-center gap-2 rounded-md border border-line-strong px-5 py-2.5 text-sm font-medium text-ivory transition-colors hover:border-crimson/40 hover:text-crimson active:scale-[0.97]"
             >
-              See my work
+              View selected work
               <ArrowUpRight className="h-3.5 w-3.5" />
             </Link>
           </div>

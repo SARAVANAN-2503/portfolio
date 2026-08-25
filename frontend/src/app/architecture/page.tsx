@@ -6,6 +6,7 @@ import { MultiTenantFlow } from '@/components/diagrams/MultiTenantFlow';
 import { RequestLifecycle } from '@/components/diagrams/RequestLifecycle';
 import { RbacFlow } from '@/components/diagrams/RbacFlow';
 import { QueueFlow } from '@/components/diagrams/QueueFlow';
+import { LabHeader } from '@/components/ui/LabHeader';
 
 const DIAGRAMS = [
   { id: 'multi-tenant', title: 'Multi-tenant Flow', description: 'Tenant resolution, DB isolation, and request routing.', component: MultiTenantFlow },
@@ -22,19 +23,11 @@ export default function ArchitecturePage() {
   return (
     <div className="pt-14">
       <div className="section-container py-16">
-        <div className="flex items-center gap-3 mb-4">
-          <div className="h-px w-8 bg-crimson" />
-          <span className="font-mono text-xs text-crimson tracking-widest uppercase">
-            System Design
-          </span>
-        </div>
-        <h1 className="font-display text-3xl font-bold text-ivory mb-3">
-          Architecture
-        </h1>
-        <p className="text-grey mb-10 max-w-xl">
-          The same engineering-system language from the homepage constellation,
-          expanded into interactive diagrams — click a node for details.
-        </p>
+        <LabHeader
+          title="Architecture"
+          description="The same engineering-system language from the homepage constellation, expanded into interactive diagrams. Click a node for details."
+          meta={`${DIAGRAMS.length} interactive diagrams`}
+        />
 
         <div className="grid gap-8 lg:grid-cols-4">
           {/* Sidebar */}
@@ -46,15 +39,15 @@ export default function ArchitecturePage() {
                 onClick={() => setActiveId(d.id)}
                 aria-pressed={activeId === d.id}
                 className={clsx(
-                  'w-full flex flex-col items-start gap-1 rounded-lg border p-4 text-left transition-all cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-crimson-bright',
+                  'w-full flex flex-col items-start gap-1 rounded-lg border p-4 text-left transition-all cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blueprint-bright',
                   activeId === d.id
-                    ? 'bg-crimson/10 border-crimson/40 ring-1 ring-crimson/20'
+                    ? 'bg-blueprint-dim border-blueprint/40 ring-1 ring-blueprint/20'
                     : 'bg-surface-2/30 border-line hover:border-line-strong text-grey'
                 )}
               >
                 <span className={clsx(
                   'font-display text-sm font-semibold transition-colors',
-                  activeId === d.id ? 'text-crimson' : 'text-ivory'
+                  activeId === d.id ? 'text-blueprint' : 'text-ivory'
                 )}>
                   {d.title}
                 </span>
@@ -72,7 +65,7 @@ export default function ArchitecturePage() {
                 Interactive Canvas
               </h2>
               <span className="text-[10px] text-grey-muted font-mono hidden sm:inline">
-                Click nodes for details • Drag to pan • Scroll to zoom
+                Click a node for details, drag to pan, scroll to zoom
               </span>
             </div>
             <ActiveComponent />

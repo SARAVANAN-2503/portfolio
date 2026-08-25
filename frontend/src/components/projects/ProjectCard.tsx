@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { ArrowUpRight } from 'lucide-react';
 import type { Project } from '@/content/projects';
+import { ProjectVisual } from './ProjectVisual';
 
 const statusLabel: Record<string, { label: string; cls: string }> = {
   live: { label: 'Live', cls: 'text-live border-live/30 bg-live/10' },
@@ -27,26 +28,14 @@ export function ProjectCard({ project, variant = 'default', headingLevel = 3 }: 
       href={`/projects/${project.slug}`}
       className="group card-surface relative flex flex-col overflow-hidden transition-all duration-300 hover:border-crimson/35 hover:shadow-[0_0_40px_-14px_rgba(229,72,77,0.28)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-crimson-bright"
     >
-      {/* Monogram visual — no fake screenshots, just brand + architecture-inspired texture */}
-      <div className={`relative overflow-hidden border-b border-line bg-elevated ${featured ? 'h-44 sm:h-52' : compact ? 'h-24' : 'h-32'}`}>
-        <div
-          className="absolute inset-0 opacity-40"
-          style={{
-            backgroundImage:
-              'linear-gradient(var(--color-line) 1px, transparent 1px), linear-gradient(90deg, var(--color-line) 1px, transparent 1px)',
-            backgroundSize: '28px 28px',
-          }}
+      {/* Procedural per-project visual — no fake screenshots, no letter placeholder */}
+      <div className={`relative border-b border-line bg-elevated ${featured ? 'h-44 sm:h-52' : compact ? 'h-24' : 'h-32'}`}>
+        <ProjectVisual
+          slug={project.slug}
+          category={project.category}
+          size={featured ? 'featured' : compact ? 'compact' : 'default'}
+          className="absolute inset-0"
         />
-        <div className="absolute -top-10 -right-10 h-40 w-40 rounded-full bg-crimson/10 blur-3xl" />
-        <div className="absolute inset-0 flex items-center justify-center">
-          <span
-            className={`font-display font-black text-crimson/12 select-none ${
-              featured ? 'text-8xl' : compact ? 'text-4xl' : 'text-6xl'
-            }`}
-          >
-            {project.title.charAt(0)}
-          </span>
-        </div>
         <div className="absolute top-3 left-3 right-3 flex items-center justify-between">
           <span className="inline-flex items-center rounded-full border border-line-strong bg-obsidian/60 px-2 py-0.5 font-mono text-[10px] uppercase tracking-wider text-grey">
             {project.category}
@@ -78,10 +67,9 @@ export function ProjectCard({ project, variant = 'default', headingLevel = 3 }: 
         <p className={`font-mono text-grey-muted ${compact ? 'text-[10px] mt-0.5' : 'text-xs mt-1'}`}>{project.tagline}</p>
 
         {project.highlights && !compact && (
-          <ul className="mt-3.5 space-y-1.5">
+          <ul className="mt-3.5 space-y-1.5 border-l border-line pl-3">
             {project.highlights.slice(0, highlightCount).map(h => (
-              <li key={h} className="flex items-start gap-2 text-xs text-grey">
-                <span className="mt-1.5 h-1 w-1 shrink-0 rounded-full bg-crimson/70" />
+              <li key={h} className="text-xs text-grey leading-relaxed">
                 {h}
               </li>
             ))}
@@ -92,7 +80,7 @@ export function ProjectCard({ project, variant = 'default', headingLevel = 3 }: 
           <div className="mt-4 grid grid-cols-2 gap-x-4 gap-y-1.5 border-t border-line pt-3.5 sm:grid-cols-4">
             {project.metrics.slice(0, 4).map(m => (
               <div key={m.label} className="flex items-baseline gap-1.5">
-                <span className="font-mono text-sm font-bold text-crimson">{m.value}</span>
+                <span className="font-mono text-sm font-bold text-ivory">{m.value}</span>
                 <span className="truncate text-[10px] text-grey-muted">{m.label}</span>
               </div>
             ))}

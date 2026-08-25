@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { ArrowLeft, ArrowRight, CheckCircle2 } from 'lucide-react';
 import { projects, getProject } from '@/content/projects';
 import { ExplainMode } from '@/components/projects/ExplainMode';
+import { ProjectVisual } from '@/components/projects/ProjectVisual';
 
 interface Props {
   params: Promise<{ slug: string }>;
@@ -95,26 +96,21 @@ export default async function ProjectDetail(props: Props) {
 
       <div className="section-container max-w-4xl py-12">
 
-        {/* Visual placeholder — brand monogram, no fake screenshots */}
-        <div className="relative mb-10 flex h-52 items-center justify-center overflow-hidden rounded-xl border border-line bg-surface">
-          <div
-            className="absolute inset-0 opacity-20"
-            style={{
-              backgroundImage:
-                'linear-gradient(var(--color-line) 1px, transparent 1px), linear-gradient(90deg, var(--color-line) 1px, transparent 1px)',
-              backgroundSize: '20px 20px',
-            }}
+        {/* Procedural per-project visual — no fake screenshots, no letter placeholder */}
+        <div className="relative mb-10 h-52 overflow-hidden rounded-xl border border-line bg-surface">
+          <ProjectVisual
+            slug={project.slug}
+            category={project.category}
+            size="featured"
+            className="absolute inset-0"
           />
-          <span className="font-display text-7xl font-black text-crimson/10 select-none z-10">
-            {project.title.charAt(0)}
-          </span>
         </div>
 
         {/* Metrics */}
         <div className="mb-12 grid grid-cols-2 gap-3 sm:grid-cols-4">
           {project.metrics.map(m => (
             <div key={m.label} className="rounded-lg border border-line bg-surface-2/30 px-4 py-4 text-center">
-              <div className="font-mono text-2xl font-black text-crimson">{m.value}</div>
+              <div className="font-mono text-2xl font-black text-ivory">{m.value}</div>
               <div className="mt-0.5 text-xs text-grey-muted">{m.label}</div>
             </div>
           ))}
@@ -123,24 +119,24 @@ export default async function ProjectDetail(props: Props) {
         {/* Sections */}
         <div className="space-y-10">
           <section>
-            <SectionHeader label="01" title="Problem" />
+            <SectionHeader title="Problem" />
             <div className="rounded-lg border-l-2 border-crimson/50 bg-crimson/5 px-5 py-4">
               <p className="text-sm leading-relaxed text-ivory-dim">{project.problem}</p>
             </div>
           </section>
 
           <section>
-            <SectionHeader label="02" title="Architecture" />
+            <SectionHeader title="Architecture" />
             <p className="text-sm leading-relaxed text-grey">{project.architecture}</p>
           </section>
 
           <section>
-            <SectionHeader label="03" title="Trade-offs" />
+            <SectionHeader title="Trade-offs" />
             <p className="text-sm leading-relaxed text-grey">{project.tradeoffs}</p>
           </section>
 
           <section>
-            <SectionHeader label="04" title="Tech Stack" />
+            <SectionHeader title="Tech Stack" />
             <div className="flex flex-wrap gap-2">
               {project.stack.map(tech => (
                 <span key={tech} className="tag">{tech}</span>
@@ -173,10 +169,9 @@ export default async function ProjectDetail(props: Props) {
   );
 }
 
-function SectionHeader({ label, title }: { label: string; title: string }) {
+function SectionHeader({ title }: { title: string }) {
   return (
     <div className="mb-4 flex items-center gap-3">
-      <span className="font-mono text-xs tabular-nums text-crimson/50">{label}</span>
       <h2 className="font-display text-lg font-semibold text-ivory">{title}</h2>
       <div className="h-px flex-1 bg-line" />
     </div>
