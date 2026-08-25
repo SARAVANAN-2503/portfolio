@@ -37,3 +37,40 @@ git clone --depth 1 https://github.com/Leonxlnx/taste-skill /tmp/taste-skill
 
 Upstream's own installer is `npx skills add https://github.com/Leonxlnx/taste-skill`,
 which installs into a personal skills directory rather than into this repo.
+
+---
+
+## Browser automation
+
+`playwright-skill` from <https://github.com/lackeyjb/playwright-skill> (MIT),
+vendored at `dd47a6a023e249eb1b36e9e943eab89d0900865d`.
+
+Self-contained: `SKILL.md`, `run.js`, `lib/helpers.js`, `API_REFERENCE.md`,
+plus its own `package.json`. First use runs `npm install && npx playwright
+install chromium` inside the skill directory; `node_modules/` is covered by the
+repo `.gitignore`. Needs Node 20+ (repo runs on 22).
+
+## Aesthetic skills
+
+Eight of the 68 skills in <https://github.com/bergside/awesome-design-skills>
+(MIT), vendored at `f631a09b4fcc0166f2e2c1a8c81906ef680c57e8`. Each is a `SKILL.md` plus a `DESIGN.md` of
+concrete tokens.
+
+Selected for fit with the Obsidian Crimson system (near-black `#08090b`, ivory
+text, crimson accent, light + dark):
+
+`power`, `premium`, `refined`, `editorial`, `minimal`, `sleek`,
+`contemporary`, `bento`
+
+The other 60 (`pacman`, `riso`, `claymorphism`, `sega`, …) are deliberately not
+vendored — they clash with this system, and 68 skill descriptions in every
+session's preamble is a real context cost. To add one:
+
+```bash
+git clone --depth 1 https://github.com/bergside/awesome-design-skills /tmp/ads
+cp -r /tmp/ads/skills/<name> .claude/skills/<name>
+```
+
+Note: these use short generic names (`power`, `minimal`, `bento`) that can
+trigger on loose phrasing, and `minimal` overlaps `minimalist-ui` above. Name
+the skill explicitly when you want a specific one.
