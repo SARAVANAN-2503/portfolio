@@ -6,6 +6,12 @@ import { Play, Square, Zap, TrendingDown } from 'lucide-react';
 
 const API = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000';
 
+/* Read lazily rather than at module scope: this component is a client island
+   but still renders on the server first, where `window` does not exist. */
+function currentOrigin(): string {
+  return typeof window === 'undefined' ? 'this origin' : window.location.origin;
+}
+
 interface PageResult {
   page: number;
   cursorMs: number;
@@ -127,9 +133,22 @@ export function PaginationRace() {
         </button>
       </div>
 
+      {/* "Failed to fetch" is opaque by design: the browser reports a blocked
+          CORS response and a refused connection identically, so this names both
+          causes rather than sending the reader to check only the server. The
+          CORS case is the easy one to miss, since the API can be up and
+          answering curl while every browser call still fails. */}
       {error && (
-        <div role="alert" className="rounded-md border border-red-500/30 bg-red-500/5 px-4 py-2.5 font-mono text-xs text-red-400">
-          Error: {error}. Is the backend running on {API}?
+        <div
+          role="alert"
+          className="rounded-[var(--radius)] border border-line-strong bg-surface px-4 py-3 text-xs text-ink"
+        >
+          <p className="font-mono text-[#c8442e]">Error: {error}</p>
+          <p className="mt-2 leading-relaxed text-muted">
+            Either the API is not running on {API}, or it is running but has
+            not allowed this origin ({currentOrigin()}). For the second case, add that
+            origin to CORS_ORIGIN in the backend environment.
+          </p>
         </div>
       )}
 
