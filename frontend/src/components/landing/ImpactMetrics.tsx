@@ -26,6 +26,9 @@ function subscribeReducedMotion(callback: () => void) {
   return () => query.removeEventListener('change', callback);
 }
 
+/* The count-up earns its place: these are the numbers the page is asking a
+   recruiter to believe, and the tick draws the eye to them on arrival.
+   It runs once, honors reduced motion, and cleans up its own frame. */
 function AnimatedValue({ metric, index }: { metric: Metric; index: number }) {
   const [display, setDisplay] = useState('0');
   const ref = useRef<HTMLDivElement>(null);
@@ -82,35 +85,34 @@ function AnimatedValue({ metric, index }: { metric: Metric; index: number }) {
   }, [metric.value, index, reduceMotion]);
 
   return (
-    <div
-      ref={ref}
-      className="group relative flex-1 px-5 py-5 transition-colors duration-300 hover:bg-crimson/[0.03] sm:px-6 sm:py-6"
-    >
-      <div className="font-mono text-2xl font-bold tracking-tight text-ivory sm:text-3xl">
+    <div ref={ref} className="px-5 py-8 sm:px-7 lg:py-10">
+      <div className="display text-[clamp(2.5rem,4.4vw,3.75rem)] text-ink tabular-nums">
         {reduceMotion ? metric.value.toLocaleString() : display}
-        <span className="text-crimson">{metric.suffix}</span>
+        <span className="text-ink/45">{metric.suffix}</span>
       </div>
-      <div className="mt-1 text-sm font-medium text-ivory-dim">
-        {metric.label}
-      </div>
-      <div className="mt-0.5 text-xs text-grey-muted">
+      <div className="mt-3 text-sm font-medium text-ink">{metric.label}</div>
+      <div className="mt-1 text-[13px] leading-relaxed text-muted">
         {metric.detail}
       </div>
     </div>
   );
 }
 
+/* Full-bleed band, not a card. The numbers are the section; a border around
+   them would just make them one more box on a page of boxes. */
 export function ImpactMetrics() {
   return (
-    <div className="grid overflow-hidden rounded-xl border border-line bg-surface/40 sm:grid-cols-2 lg:grid-cols-4 lg:divide-x lg:divide-line">
+    <div className="grid border-y border-line sm:grid-cols-2 lg:grid-cols-4">
       {metrics.map((metric, i) => (
         <div
           key={metric.label}
           className={[
-            i > 0 ? 'border-t border-line' : '',
-            i === 1 ? 'sm:border-t-0 sm:border-l sm:border-line lg:border-l-0' : '',
-            i === 2 ? 'lg:border-t-0' : '',
-            i === 3 ? 'sm:border-l sm:border-line lg:border-t-0 lg:border-l-0' : '',
+            'border-line',
+            i > 0 ? 'border-t sm:border-t-0' : '',
+            i % 2 === 1 ? 'sm:border-l' : '',
+            i >= 2 ? 'sm:border-t' : '',
+            'lg:border-t-0',
+            i > 0 ? 'lg:border-l' : '',
           ].join(' ')}
         >
           <AnimatedValue metric={metric} index={i} />

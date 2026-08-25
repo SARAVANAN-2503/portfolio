@@ -20,7 +20,7 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
   if (!project) return {};
   return {
     title: project.title,
-    description: `${project.tagline} — ${project.problem.split('.')[0]}.`,
+    description: `${project.tagline}: ${project.problem.split('.')[0]}.`,
   };
 }
 
@@ -41,7 +41,7 @@ export default async function ProjectDetail(props: Props) {
   const status = project.status ? statusLabel[project.status] : null;
 
   return (
-    <div className="pt-14">
+    <div className="pt-32 pb-24 lg:pt-40">
       {/* Hero banner */}
       <div className="relative overflow-hidden border-b border-line bg-elevated">
         <div
@@ -96,7 +96,7 @@ export default async function ProjectDetail(props: Props) {
 
       <div className="section-container max-w-4xl py-12">
 
-        {/* Procedural per-project visual — no fake screenshots, no letter placeholder */}
+        {/* Procedural per-project visual: no fake screenshots, no letter placeholder */}
         <div className="relative mb-10 h-52 overflow-hidden rounded-xl border border-line bg-surface">
           <ProjectVisual
             slug={project.slug}
