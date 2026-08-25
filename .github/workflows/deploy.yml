@@ -8,10 +8,59 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - name: SSH and deploy
+      # Reclaim disk before touching git.
+      #
+      # Three consecutive deploys failed with "fatal: write error: No space
+      # left on device" during `git pull`, which surfaces as
+      # "fatal: fetch-pack: invalid index-pack output" and reads like a git
+      # problem rather than a full volume. Every path cleared here is a build
+      # artifact or cache that the deploy regenerates. The SQLite database
+      # under backend/data and node_modules are deliberately left alone: the
+      # first is the only stateful thing on the box, and removing the second
+      # leaves the app unbootable if the reinstall then fails.
+      - name: Reclaim disk and deploy
         uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ secrets.EC2_HOST }}
           username: ${{ secrets.EC2_USER }}
           key: ${{ secrets.EC2_SSH_KEY }}
-          script: bash ~/portfolio/deploy.sh
+          script: |
+            set -uo pipefail
+
+            echo "[disk] before cleanup"
+            df -h / | tail -1
+
+            # Next.js build output: rebuilt on every deploy.
+            rm -rf ~/portfolio/frontend/.next 2>/dev/null || true
+            rm -rf ~/portfolio/frontend/node_modules/.cache 2>/dev/null || true
+
+            # npm's content-addressable cache: re-downloaded on demand.
+            npm cache clean --force >/dev/null 2>&1 || true
+
+            # pm2 logs grow without bound. Truncate rather than delete so pm2
+            # keeps writing to the same file handles.
+            if [ -d ~/.pm2/logs ]; then
+              find ~/.pm2/logs -name '*.log' -exec truncate -s 0 {} \; 2>/dev/null || true
+            fi
+
+            # Best effort, and only where permitted without a password prompt.
+            sudo -n journalctl --vacuum-time=3d >/dev/null 2>&1 || true
+            sudo -n apt-get clean >/dev/null 2>&1 || true
+            command -v docker >/dev/null 2>&1 && docker system prune -af >/dev/null 2>&1 || true
+
+            echo "[disk] after cleanup"
+            df -h / | tail -1
+
+            # Guard: fail with the real reason instead of letting git die with
+            # a misleading pack error several steps later.
+            AVAIL_KB=$(df --output=avail / | tail -1 | tr -d ' ')
+            MIN_KB=$((1024 * 1024))   # 1 GiB
+            if [ "$AVAIL_KB" -lt "$MIN_KB" ]; then
+              echo "::error::Deploy aborted: only $((AVAIL_KB / 1024)) MiB free on /, need at least 1024 MiB."
+              echo "Largest directories under \$HOME:"
+              du -xh ~ --max-depth=3 2>/dev/null | sort -rh | head -20
+              exit 1
+            fi
+
+            set -e
+            bash ~/portfolio/deploy.sh
