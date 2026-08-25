@@ -7,7 +7,12 @@ const ConfigSchema = z.object({
   DATABASE_PATH: z.string().default('./data/portfolio.db'),
   JWT_SECRET: z.string().min(16),
   JWT_EXPIRES_IN: z.string().default('15m'),
-  CORS_ORIGIN: z.string().default('http://localhost:3000'),
+  // The frontend dev server runs on 3001 (`next dev -p 3001`), so 3000
+  // alone silently blocked every browser call to this API. Both are
+  // allowed by default; the value is a comma-separated exact-origin list.
+  CORS_ORIGIN: z
+    .string()
+    .default('http://localhost:3000,http://localhost:3001'),
   WEBHOOK_SECRET: z.string().min(8).default('dev-webhook-secret'),
   RATE_LIMIT_TOKENS: z.coerce.number().int().positive().default(30),
   RATE_LIMIT_REFILL_MS: z.coerce.number().int().positive().default(10_000),
