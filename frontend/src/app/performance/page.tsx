@@ -9,8 +9,8 @@ export const metadata: Metadata = {
 
 export default function PerformancePage() {
   return (
-    <div className="pt-14">
-      <div className="section-container py-16">
+    <div className="pt-32 pb-24 lg:pt-40">
+      <div className="section-container">
         <LabHeader
           title="Performance Visualizer"
           description="Real-time benchmark comparing pagination strategies over a dataset of 10,000+ records. Watch offset-based performance degrade linearly while cursor-based stays constant."

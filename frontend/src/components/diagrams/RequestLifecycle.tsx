@@ -33,7 +33,7 @@ const nodes: Node<DiagramNodeData>[] = [
     data: { label: 'Route Handler', category: 'service', description: 'Business logic' } },
   { id: 'db', type: 'custom', position: { x: 460, y: 300 },
     data: { label: 'SQLite (WAL)', category: 'database', description: 'better-sqlite3',
-      detail: 'WAL mode for concurrent reads. Synchronous API — no callback chains.',
+      detail: 'WAL mode for concurrent reads. Synchronous API: no callback chains.',
       handles: { target: [Position.Top], source: [Position.Top] } } },
 ];
 

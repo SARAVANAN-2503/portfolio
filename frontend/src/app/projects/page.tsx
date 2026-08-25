@@ -10,11 +10,10 @@ export const metadata: Metadata = {
 
 export default function ProjectsPage() {
   return (
-    <div className="pt-14">
-      <div className="section-container py-16">
+    <div className="pt-32 pb-24 lg:pt-40">
+      <div className="section-container">
 
         <ContentHeader
-          eyebrow="Case Studies"
           title="Projects"
           description={`${projects.length} production systems, each with the problem statement, architectural decisions, trade-offs, metrics, and an interview-mode deep-dive.`}
         />

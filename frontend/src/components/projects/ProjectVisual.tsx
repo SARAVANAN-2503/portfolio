@@ -115,7 +115,7 @@ export function ProjectVisual({ slug, category, size = 'default', className = ''
     <div className={`overflow-hidden ${className}`}>
       {/* Blueprint grid base, consistent with Architecture/diagram surfaces */}
       <div
-        className="absolute inset-0 opacity-40"
+        className="absolute inset-0 opacity-70"
         style={{
           backgroundImage:
             'linear-gradient(var(--color-line) 1px, transparent 1px), linear-gradient(90deg, var(--color-line) 1px, transparent 1px)',
@@ -125,16 +125,16 @@ export function ProjectVisual({ slug, category, size = 'default', className = ''
       {/* Duotone wash seeded per-project */}
       <div
         className="absolute -top-10 -right-10 h-40 w-40 rounded-full blur-3xl"
-        style={{ backgroundColor: accentVar, opacity: 0.12 }}
+        style={{ backgroundColor: accentVar, opacity: 0.06 }}
       />
 
       {/* Generated circuit */}
       <svg viewBox="0 0 400 280" className="absolute inset-0 h-full w-full" aria-hidden="true">
         {traces.map((d, i) => (
-          <path key={i} d={d} fill="none" stroke={accentVar} strokeWidth={1} opacity={0.28} />
+          <path key={i} d={d} fill="none" stroke={accentVar} strokeWidth={1.25} opacity={0.5} />
         ))}
         {points.map((p, i) => (
-          <circle key={i} cx={p.x} cy={p.y} r={i === 0 ? 4 : 2.5} fill={accentVar} opacity={i === 0 ? 0.55 : 0.4} />
+          <circle key={i} cx={p.x} cy={p.y} r={i === 0 ? 4 : 2.5} fill={accentVar} opacity={i === 0 ? 0.8 : 0.6} />
         ))}
       </svg>
 
@@ -144,7 +144,7 @@ export function ProjectVisual({ slug, category, size = 'default', className = ''
           category={category}
           width={iconSize}
           height={iconSize}
-          style={{ color: accentVar, opacity: 0.16 }}
+          style={{ color: accentVar, opacity: 0.32 }}
         />
       </div>
     </div>

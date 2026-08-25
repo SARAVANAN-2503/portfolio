@@ -119,7 +119,7 @@ export function PaginationRace() {
             'inline-flex items-center gap-2 rounded-md px-4 py-2 text-sm font-semibold transition-colors cursor-pointer',
             running
               ? 'border border-red-500/30 bg-red-500/15 text-red-400 hover:bg-red-500/25'
-              : 'bg-crimson text-white hover:bg-crimson-bright'
+              : 'bg-volt text-[#171612] hover:brightness-[1.06]'
           )}
         >
           {running ? <Square className="h-3.5 w-3.5" /> : <Play className="h-3.5 w-3.5" />}

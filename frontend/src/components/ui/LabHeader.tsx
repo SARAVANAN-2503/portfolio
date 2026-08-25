@@ -1,8 +1,11 @@
 /**
- * Shared header for the three "Engineering Lab" pages (Architecture,
- * Performance, API Explorer). One consistent sub-brand marker instead of
- * three near-identical eyebrows, and an asymmetric layout distinct from
- * the content-page header (see ContentHeader).
+ * Shared header for the three Engineering Lab pages (Architecture,
+ * Performance, API Explorer).
+ *
+ * The "Engineering Lab" marker survives where ContentHeader's eyebrow did
+ * not, because it does real work: it groups three sibling pages under one
+ * sub-brand. It is set as a plain label against a rule rather than an
+ * uppercase wide-tracked pill, which is the form that reads as decoration.
  */
 interface LabHeaderProps {
   title: string;
@@ -12,21 +15,26 @@ interface LabHeaderProps {
 
 export function LabHeader({ title, description, meta }: LabHeaderProps) {
   return (
-    <div className="mb-10 flex flex-col gap-6 border-b border-line pb-8 lg:flex-row lg:items-end lg:justify-between">
-      <div className="max-w-xl">
-        <div className="mb-3 inline-flex items-center gap-1.5 rounded-full border border-blueprint/25 bg-blueprint-dim px-2.5 py-1 font-mono text-[10px] uppercase tracking-widest text-blueprint">
+    <header className="mb-12 border-b border-line pb-10">
+      <div className="mb-6 flex items-center gap-3">
+        <span aria-hidden className="h-px w-6 bg-volt-text" />
+        <span className="text-[13px] font-medium text-volt-text">
           Engineering Lab
-        </div>
-        <h1 className="font-display text-page-h1 font-bold tracking-tight text-ivory">
-          {title}
-        </h1>
-        <p className="mt-3 text-grey leading-relaxed">{description}</p>
+        </span>
       </div>
-      {meta && (
-        <div className="shrink-0 font-mono text-xs text-grey-muted lg:text-right">
-          {meta}
+      <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
+        <div className="max-w-[44ch]">
+          <h1 className="display text-page-h1 text-ink">{title}</h1>
+          <p className="mt-5 text-base leading-relaxed text-muted">
+            {description}
+          </p>
         </div>
-      )}
-    </div>
+        {meta && (
+          <div className="shrink-0 font-mono text-xs text-muted-2 lg:text-right">
+            {meta}
+          </div>
+        )}
+      </div>
+    </header>
   );
 }
