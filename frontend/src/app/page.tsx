@@ -1,11 +1,17 @@
 "use client";
 
+import { useRef } from "react";
 import Link from "next/link";
 import { ArrowRight, ArrowUpRight } from "lucide-react";
-import { motion, useReducedMotion } from "framer-motion";
+import {
+  motion,
+  useReducedMotion,
+  useScroll,
+  useTransform,
+} from "framer-motion";
 import { ImpactMetrics } from "@/components/landing/ImpactMetrics";
 import { SkillMatrix } from "@/components/landing/SkillMatrix";
-import { ProjectCard } from "@/components/projects/ProjectCard";
+import { CaseStudyStack } from "@/components/landing/CaseStudyStack";
 import { projects } from "@/content/projects";
 
 /* Icons stay on lucide-react: it is already a project dependency, which is
@@ -95,44 +101,71 @@ function Reveal({
   );
 }
 
-export default function Home() {
+/* ── Hero ────────────────────────────────────────────────────────────────
+   Asymmetric editorial. The headline runs the full measure at display
+   scale; the supporting block is deliberately indented to the right of the
+   grid rather than stacked flush-left under it, so the composition has a
+   diagonal instead of a single left edge. */
+function Hero() {
+  const ref = useRef<HTMLElement>(null);
   const reduce = useReducedMotion();
 
+  // Scrubbed parallax on the backdrop only. Motivated: it separates the
+  // grid from the type so the headline sits in front of the page rather
+  // than on it. The content itself never moves on scroll.
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    offset: ["start start", "end start"],
+  });
+  const gridY = useTransform(scrollYProgress, [0, 1], ["0%", "22%"]);
+
   return (
-    <div>
-      {/* ── Hero. Editorial manifesto: the sentence is the visual, so the
-             type fills the measure instead of leaving half the viewport
-             empty next to it. Three text elements total. ───────────────── */}
-      <section className="relative overflow-hidden border-b border-line">
+    <section
+      ref={ref}
+      className="relative overflow-hidden border-b border-line"
+    >
+      <motion.div
+        aria-hidden
+        style={reduce ? undefined : { y: gridY }}
+        className="pointer-events-none absolute inset-x-0 -top-24 bottom-0 opacity-70"
+      >
         <div
-          aria-hidden
-          className="pointer-events-none absolute inset-0 opacity-60"
+          className="h-full w-full"
           style={{
             backgroundImage: "var(--background-image-hero-grid)",
             backgroundSize: "var(--background-size-hero-grid)",
             maskImage:
-              "radial-gradient(ellipse 90% 70% at 70% 20%, black, transparent 75%)",
+              "radial-gradient(ellipse 80% 65% at 78% 25%, black, transparent 72%)",
             WebkitMaskImage:
-              "radial-gradient(ellipse 90% 70% at 70% 20%, black, transparent 75%)",
+              "radial-gradient(ellipse 80% 65% at 78% 25%, black, transparent 72%)",
           }}
         />
+      </motion.div>
 
-        <div className="section-container relative pt-28 pb-16 sm:pt-32 lg:pt-36 lg:pb-24">
-          <motion.div
-            initial={reduce ? undefined : { opacity: 0, y: 24 }}
-            animate={reduce ? undefined : { opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-          >
-            <h1 className="display max-w-[16ch] text-hero text-ink">
-              Systems that hold up in production.
-            </h1>
+      <div className="wide-container relative pt-28 pb-20 sm:pt-32 lg:pt-36 lg:pb-28">
+        <motion.h1
+          initial={reduce ? undefined : { opacity: 0, y: 28 }}
+          animate={reduce ? undefined : { opacity: 1, y: 0 }}
+          transition={{ duration: 0.75, ease: [0.16, 1, 0.3, 1] }}
+          className="display max-w-[14ch] text-[clamp(2.75rem,8.2vw,7.5rem)] text-ink"
+        >
+          Systems that hold up in production.
+        </motion.h1>
 
-            <p className="mt-8 max-w-[54ch] text-lg leading-relaxed text-ink-dim sm:text-xl">
+        <motion.div
+          initial={reduce ? undefined : { opacity: 0, y: 20 }}
+          animate={reduce ? undefined : { opacity: 1, y: 0 }}
+          transition={{ duration: 0.7, delay: 0.12, ease: [0.16, 1, 0.3, 1] }}
+          className="mt-14 grid gap-8 lg:grid-cols-12"
+        >
+          {/* Indented to column 6 on desktop: the offset is what keeps the
+              hero from being one flush-left stack. */}
+          <div className="lg:col-span-5 lg:col-start-6">
+            <p className="text-lg leading-relaxed text-ink-dim">
               Saravanan, a full-stack developer in Chennai. Multi-tenant SaaS,
               government platforms, LMS, and serverless pipelines.
             </p>
-
-            <div className="mt-10 flex flex-wrap items-center gap-3">
+            <div className="mt-8 flex flex-wrap items-center gap-3">
               <Link href="/projects" className="btn-primary">
                 View work
                 <ArrowRight className="h-4 w-4" strokeWidth={2} />
@@ -141,13 +174,21 @@ export default function Home() {
                 Get in touch
               </Link>
             </div>
-          </motion.div>
-        </div>
-      </section>
+          </div>
+        </motion.div>
+      </div>
+    </section>
+  );
+}
 
-      {/* ── Stack band. The one marquee on the page: it carries breadth that
-             does not need individual attention, and it sits under the hero
-             rather than inside it. ───────────────────────────────────────── */}
+export default function Home() {
+  return (
+    <div>
+      <Hero />
+
+      {/* ── Stack band. The one marquee on the page: breadth that does not
+             need individual attention, sitting under the hero rather than
+             inside it. ──────────────────────────────────────────────────── */}
       <section
         aria-label="Core stack"
         className="overflow-hidden border-b border-line bg-volt py-4"
@@ -173,72 +214,67 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ── Metrics ──────────────────────────────────────────────────────── */}
-      <ImpactMetrics />
-
-      {/* ── Selected work. Asymmetric pair, not a grid of equals. ────────── */}
-      <section className="section-container py-20 lg:py-28">
-        <Reveal className="flex flex-wrap items-end justify-between gap-6">
-          <h2 className="display max-w-[18ch] text-section-h2 text-ink">
-            Recent work, with the decisions behind it.
-          </h2>
-          <Link
-            href="/projects"
-            className="group inline-flex items-center gap-1.5 text-sm font-medium text-ink transition-colors hover:text-volt-text"
-          >
-            All {projects.length} projects
-            <ArrowUpRight
-              className="h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
-              strokeWidth={2}
-            />
-          </Link>
-        </Reveal>
-
-        {/* items-start: stretching the shorter card to match the featured one
-            left a large void above its footer, which reads as a bug rather
-            than as alignment. */}
-        <Reveal
-          className="mt-12 grid gap-6 lg:grid-cols-12 lg:items-start"
-          delay={0.05}
-        >
-          <div className="lg:col-span-7">
-            <ProjectCard project={projects[0]} variant="featured" />
-          </div>
-          <div className="lg:col-span-5">
-            <ProjectCard project={projects[1]} variant="default" />
-          </div>
+      {/* ── Impact. One lead number carrying the section, three supporting
+             rows beside it. ─────────────────────────────────────────────── */}
+      <section className="section-container py-24 lg:py-32">
+        <Reveal>
+          <ImpactMetrics />
         </Reveal>
       </section>
 
-      {/* ── Engineering lab. Hairline rows, not three identical cards. ───── */}
-      <section className="border-y border-line bg-elevated">
-        <div className="section-container py-20 lg:py-28">
-          <Reveal className="max-w-[42ch]">
+      {/* ── Work. Sticky stack: each case study pins until the next covers
+             it, so the reader finishes one before the next arrives. ─────── */}
+      <section className="border-t border-line bg-elevated">
+        <div className="section-container py-24 lg:py-32">
+          <Reveal className="mb-16 flex flex-wrap items-end justify-between gap-6">
+            <h2 className="display max-w-[16ch] text-section-h2 text-ink">
+              Recent work, with the decisions behind it.
+            </h2>
+            <Link
+              href="/projects"
+              className="group inline-flex items-center gap-1.5 text-sm font-medium text-ink transition-colors hover:text-volt-text"
+            >
+              All {projects.length} projects
+              <ArrowUpRight
+                className="h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+                strokeWidth={2}
+              />
+            </Link>
+          </Reveal>
+
+          <CaseStudyStack projects={projects.slice(0, 3)} />
+        </div>
+      </section>
+
+      {/* ── Lab. Wide indexed rows: numbered, full measure, and visually
+             unlike both the stack above and the sticky columns below. ───── */}
+      <section className="border-t border-line">
+        <div className="wide-container py-24 lg:py-32">
+          <Reveal className="mb-14 max-w-[36ch]">
             <h2 className="display text-section-h2 text-ink">
               Things you can actually click.
             </h2>
-            <p className="mt-5 text-base leading-relaxed text-muted">
-              Every claim on this site has something behind it you can poke at
-              yourself.
-            </p>
           </Reveal>
 
-          <Reveal className="mt-14 border-t border-line" delay={0.05}>
-            {labTools.map((tool) => (
+          <Reveal className="border-t border-line" delay={0.05}>
+            {labTools.map((tool, i) => (
               <Link
                 key={tool.href}
                 href={tool.href}
-                className="group grid grid-cols-1 gap-3 border-b border-line py-7 transition-colors hover:bg-surface md:grid-cols-12 md:items-baseline md:gap-6 md:px-4"
+                className="group grid grid-cols-1 items-baseline gap-4 border-b border-line py-9 transition-colors hover:bg-surface md:grid-cols-12 md:gap-8 md:px-5"
               >
+                <span className="display text-3xl text-ink/15 transition-colors group-hover:text-volt-text md:col-span-1">
+                  {String(i + 1).padStart(2, "0")}
+                </span>
                 <div className="md:col-span-4">
-                  <div className="display text-section-h3 text-ink transition-colors group-hover:text-volt-text">
+                  <div className="display text-[clamp(1.25rem,2vw,1.75rem)] text-ink transition-colors group-hover:text-volt-text">
                     {tool.title}
                   </div>
-                  <div className="mt-1.5 font-mono text-xs text-muted-2">
+                  <div className="mt-2 font-mono text-xs text-muted-2">
                     {tool.meta}
                   </div>
                 </div>
-                <p className="max-w-[60ch] text-[15px] leading-relaxed text-muted md:col-span-7">
+                <p className="max-w-[58ch] text-[15px] leading-relaxed text-muted md:col-span-6">
                   {tool.description}
                 </p>
                 <div className="md:col-span-1 md:justify-self-end">
@@ -253,72 +289,78 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ── Skills ───────────────────────────────────────────────────────── */}
-      <section className="section-container py-20 lg:py-28">
-        <Reveal>
-          <h2 className="display max-w-[20ch] text-section-h2 text-ink">
-            What I build with.
-          </h2>
-        </Reveal>
-        <Reveal className="mt-14" delay={0.05}>
-          <SkillMatrix />
-        </Reveal>
+      {/* ── Skills. Sticky heading against a scrolling column, which is a
+             different reading motion from every other section. ──────────── */}
+      <section className="border-t border-line bg-elevated">
+        <div className="section-container grid gap-10 py-24 lg:grid-cols-12 lg:gap-16 lg:py-32">
+          <div className="lg:col-span-4">
+            <h2 className="display text-section-h2 text-ink lg:sticky lg:top-28">
+              What I build with.
+            </h2>
+          </div>
+          <Reveal className="lg:col-span-8">
+            <SkillMatrix />
+          </Reveal>
+        </div>
       </section>
 
-      {/* ── About and experience. Split, no nested cards. ────────────────── */}
+      {/* ── About. Offset prose, then experience as a full-width table
+             underneath rather than a side-by-side split. ────────────────── */}
       <section className="border-t border-line">
-        <div className="section-container grid gap-14 py-20 lg:grid-cols-12 lg:gap-20 lg:py-28">
-          <Reveal className="lg:col-span-5">
-            <h2 className="display text-section-h2 text-ink">
+        <div className="section-container py-24 lg:py-32">
+          <Reveal className="grid gap-8 lg:grid-cols-12">
+            <h2 className="display text-section-h2 text-ink lg:col-span-5">
               A developer who wants the whole picture.
             </h2>
-            <p className="mt-6 text-base leading-relaxed text-muted">
-              I started on internal ERP and CRM tooling. Over the past four
-              years I have shipped government visa platforms, LMS and coaching
-              apps, expert marketplaces, and multi-tenant SaaS builders.
-            </p>
-            <p className="mt-4 text-base leading-relaxed text-muted">
-              The work I like most is the part where a vague requirement turns
-              into a schema, a boundary, and a decision someone can argue with.
-            </p>
+            <div className="lg:col-span-6 lg:col-start-7">
+              <p className="text-lg leading-relaxed text-ink-dim">
+                I started on internal ERP and CRM tooling. Over the past four
+                years I have shipped government visa platforms, LMS and
+                coaching apps, expert marketplaces, and multi-tenant SaaS
+                builders.
+              </p>
+              <p className="mt-5 text-base leading-relaxed text-muted">
+                The work I like most is the part where a vague requirement
+                turns into a schema, a boundary, and a decision someone can
+                argue with.
+              </p>
+            </div>
           </Reveal>
 
-          <Reveal className="lg:col-span-7" delay={0.05}>
-            <div className="border-t border-line">
-              {experiencePreview.map((job) => (
-                <div
-                  key={job.company}
-                  className="grid gap-3 border-b border-line py-7 sm:grid-cols-12 sm:gap-6"
-                >
-                  <div className="sm:col-span-7">
-                    <div className="flex flex-wrap items-center gap-2.5">
-                      <span className="display text-section-h3 text-ink">
-                        {job.company}
-                      </span>
-                      {job.current && (
-                        <span className="rounded-[var(--radius)] bg-volt px-2 py-0.5 font-mono text-[10px] font-semibold tracking-wide text-[#171612]">
-                          Current
-                        </span>
-                      )}
-                    </div>
-                    <p className="mt-1.5 text-sm text-muted">{job.role}</p>
-                    <div className="mt-3 flex flex-wrap gap-1.5">
-                      {job.stack.map((s) => (
-                        <span key={s} className="tag">
-                          {s}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-                  <div className="font-mono text-xs text-muted-2 sm:col-span-5 sm:text-right">
-                    {job.period}
-                  </div>
+          <Reveal className="mt-20 border-t border-line" delay={0.05}>
+            {experiencePreview.map((job) => (
+              <div
+                key={job.company}
+                className="grid gap-4 border-b border-line py-8 lg:grid-cols-12 lg:gap-8"
+              >
+                <div className="flex flex-wrap items-center gap-3 lg:col-span-4">
+                  <span className="display text-[clamp(1.25rem,2vw,1.625rem)] text-ink">
+                    {job.company}
+                  </span>
+                  {job.current && (
+                    <span className="rounded-[var(--radius)] bg-volt px-2 py-0.5 font-mono text-[10px] font-semibold tracking-wide text-[#171612]">
+                      Current
+                    </span>
+                  )}
                 </div>
-              ))}
-            </div>
+                <div className="lg:col-span-3">
+                  <p className="text-[15px] text-ink-dim">{job.role}</p>
+                  <p className="mt-1 font-mono text-xs text-muted-2">
+                    {job.period}
+                  </p>
+                </div>
+                <div className="flex flex-wrap gap-1.5 lg:col-span-5 lg:justify-end">
+                  {job.stack.map((s) => (
+                    <span key={s} className="tag">
+                      {s}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            ))}
             <Link
               href="/experience"
-              className="group mt-6 inline-flex items-center gap-1.5 text-sm font-medium text-ink transition-colors hover:text-volt-text"
+              className="group mt-8 inline-flex items-center gap-1.5 text-sm font-medium text-ink transition-colors hover:text-volt-text"
             >
               Full work history
               <ArrowUpRight
@@ -330,27 +372,27 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ── Contact. Full-bleed accent panel, left aligned. ──────────────── */}
+      {/* ── Contact. Full-bleed accent block at display scale. ───────────── */}
       <section className="bg-volt">
-        <div className="section-container py-20 lg:py-28">
-          <Reveal className="grid gap-10 lg:grid-cols-12 lg:items-end">
-            <div className="lg:col-span-8">
-              <h2 className="display max-w-[20ch] text-section-h2 text-[#171612]">
-                Looking for a full-stack engineer who ships.
-              </h2>
-              <p className="mt-5 max-w-[52ch] text-base leading-relaxed text-[#171612]/75">
+        <div className="wide-container py-24 lg:py-32">
+          <Reveal>
+            <h2 className="display max-w-[15ch] text-[clamp(2rem,5.2vw,4.5rem)] text-[#171612]">
+              Looking for a full-stack engineer who ships.
+            </h2>
+            <div className="mt-12 grid gap-8 lg:grid-cols-12 lg:items-end">
+              <p className="max-w-[46ch] text-lg leading-relaxed text-[#171612]/75 lg:col-span-6">
                 Open to remote and hybrid roles. If you have a system to build,
                 I would like to hear about it.
               </p>
-            </div>
-            <div className="lg:col-span-4 lg:justify-self-end">
-              <Link
-                href="/contact"
-                className="inline-flex items-center justify-center gap-2 rounded-[var(--radius)] bg-[#171612] px-6 py-3 text-sm font-semibold text-[#f4f3ef] transition-transform duration-150 hover:brightness-125 active:translate-y-px focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#171612] focus-visible:ring-offset-2 focus-visible:ring-offset-[#d8f34a]"
-              >
-                Get in touch
-                <ArrowRight className="h-4 w-4" strokeWidth={2} />
-              </Link>
+              <div className="lg:col-span-5 lg:col-start-8 lg:justify-self-end">
+                <Link
+                  href="/contact"
+                  className="inline-flex items-center justify-center gap-2 rounded-[var(--radius)] bg-[#171612] px-7 py-3.5 text-base font-semibold text-[#f4f3ef] transition-transform duration-150 hover:brightness-125 active:translate-y-px focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#171612] focus-visible:ring-offset-2 focus-visible:ring-offset-[#d8f34a]"
+                >
+                  Get in touch
+                  <ArrowRight className="h-4 w-4" strokeWidth={2} />
+                </Link>
+              </div>
             </div>
           </Reveal>
         </div>

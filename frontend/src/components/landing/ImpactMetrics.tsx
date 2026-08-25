@@ -9,8 +9,17 @@ interface Metric {
   detail: string;
 }
 
-const metrics: Metric[] = [
-  { value: 1000, suffix: '+', label: 'Concurrent Notifications', detail: 'Appolo Firebase FCM + SQS pipeline' },
+/* The lead metric carries the section; the rest are supporting evidence.
+   Four equal columns gave them all the same weight, which is the layout
+   equivalent of saying everything is equally important. */
+const lead: Metric = {
+  value: 1000,
+  suffix: '+',
+  label: 'Concurrent Notifications',
+  detail: 'Appolo Firebase FCM and SQS pipeline, with no memory spikes',
+};
+
+const supporting: Metric[] = [
   { value: 90, suffix: '%', label: 'Manual Effort Cut', detail: 'Appolo serverless PDF pipeline' },
   { value: 60, suffix: '%', label: 'Faster API Response', detail: 'Cursor-based MongoDB pagination' },
   { value: 10, suffix: '+', label: 'Production Apps', detail: 'Across SaaS, LMS, CRM, ERP domains' },
@@ -26,10 +35,10 @@ function subscribeReducedMotion(callback: () => void) {
   return () => query.removeEventListener('change', callback);
 }
 
-/* The count-up earns its place: these are the numbers the page is asking a
-   recruiter to believe, and the tick draws the eye to them on arrival.
-   It runs once, honors reduced motion, and cleans up its own frame. */
-function AnimatedValue({ metric, index }: { metric: Metric; index: number }) {
+/* The count-up earns its place: these are the numbers the page asks a
+   recruiter to believe, so the tick draws the eye to them on arrival. Runs
+   once, honors reduced motion, cleans up its own frame. */
+function useCountUp(value: number, index: number) {
   const [display, setDisplay] = useState('0');
   const ref = useRef<HTMLDivElement>(null);
   const animated = useRef(false);
@@ -50,13 +59,11 @@ function AnimatedValue({ metric, index }: { metric: Metric; index: number }) {
     }
 
     const observer = new IntersectionObserver(
-      entries => {
+      (entries) => {
         if (entries[0].isIntersecting && !animated.current) {
           animated.current = true;
           const duration = 1400;
-          const startDelay = index * 90;
-          const start = performance.now() + startDelay;
-          const isFloat = !Number.isInteger(metric.value);
+          const start = performance.now() + index * 90;
 
           const tick = (now: number) => {
             if (now < start) {
@@ -64,11 +71,8 @@ function AnimatedValue({ metric, index }: { metric: Metric; index: number }) {
               return;
             }
             const progress = Math.min((now - start) / duration, 1);
-            const eased = easeOutCubic(progress);
-            const current = eased * metric.value;
-            setDisplay(
-              isFloat ? current.toFixed(2) : Math.floor(current).toLocaleString()
-            );
+            const current = easeOutCubic(progress) * value;
+            setDisplay(Math.floor(current).toLocaleString());
             if (progress < 1) frame = requestAnimationFrame(tick);
           };
           frame = requestAnimationFrame(tick);
@@ -82,42 +86,60 @@ function AnimatedValue({ metric, index }: { metric: Metric; index: number }) {
       observer.disconnect();
       cancelAnimationFrame(frame);
     };
-  }, [metric.value, index, reduceMotion]);
+  }, [value, index, reduceMotion]);
 
+  return {
+    ref,
+    text: reduceMotion ? value.toLocaleString() : display,
+  };
+}
+
+function LeadMetric() {
+  const { ref, text } = useCountUp(lead.value, 0);
   return (
-    <div ref={ref} className="px-5 py-8 sm:px-7 lg:py-10">
-      <div className="display text-[clamp(2.5rem,4.4vw,3.75rem)] text-ink tabular-nums">
-        {reduceMotion ? metric.value.toLocaleString() : display}
-        <span className="text-ink/45">{metric.suffix}</span>
+    <div ref={ref} className="lg:col-span-7">
+      <div className="display text-[clamp(4rem,9vw,8.5rem)] leading-[0.85] text-ink tabular-nums">
+        {text}
+        <span className="text-volt-text">{lead.suffix}</span>
       </div>
-      <div className="mt-3 text-sm font-medium text-ink">{metric.label}</div>
-      <div className="mt-1 text-[13px] leading-relaxed text-muted">
-        {metric.detail}
+      <div className="mt-6 max-w-[34ch]">
+        <div className="text-lg font-medium text-ink">{lead.label}</div>
+        <div className="mt-1.5 text-[15px] leading-relaxed text-muted">
+          {lead.detail}
+        </div>
       </div>
     </div>
   );
 }
 
-/* Full-bleed band, not a card. The numbers are the section; a border around
-   them would just make them one more box on a page of boxes. */
+function SupportingMetric({ metric, index }: { metric: Metric; index: number }) {
+  const { ref, text } = useCountUp(metric.value, index + 1);
+  return (
+    <div
+      ref={ref}
+      className="grid grid-cols-[minmax(0,4.5rem)_1fr] items-baseline gap-5 border-b border-line py-5 first:border-t"
+    >
+      <div className="display text-[1.75rem] leading-none text-ink tabular-nums">
+        {text}
+        <span className="text-volt-text">{metric.suffix}</span>
+      </div>
+      <div>
+        <div className="text-[15px] font-medium text-ink">{metric.label}</div>
+        <div className="mt-0.5 text-[13px] text-muted">{metric.detail}</div>
+      </div>
+    </div>
+  );
+}
+
 export function ImpactMetrics() {
   return (
-    <div className="grid border-y border-line sm:grid-cols-2 lg:grid-cols-4">
-      {metrics.map((metric, i) => (
-        <div
-          key={metric.label}
-          className={[
-            'border-line',
-            i > 0 ? 'border-t sm:border-t-0' : '',
-            i % 2 === 1 ? 'sm:border-l' : '',
-            i >= 2 ? 'sm:border-t' : '',
-            'lg:border-t-0',
-            i > 0 ? 'lg:border-l' : '',
-          ].join(' ')}
-        >
-          <AnimatedValue metric={metric} index={i} />
-        </div>
-      ))}
+    <div className="grid gap-12 lg:grid-cols-12 lg:gap-16">
+      <LeadMetric />
+      <div className="lg:col-span-5">
+        {supporting.map((m, i) => (
+          <SupportingMetric key={m.label} metric={m} index={i} />
+        ))}
+      </div>
     </div>
   );
 }

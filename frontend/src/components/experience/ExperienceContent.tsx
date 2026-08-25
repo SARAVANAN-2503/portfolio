@@ -185,10 +185,10 @@ function SkillTag({ label, colorCls }: { label: string; colorCls: string }) {
 
 function ProjectBlock({ project }: { project: Project }) {
   const inner = (
-    <div className="group h-full rounded-lg border border-line bg-surface-2/30 p-5 transition-all hover:border-crimson/30 hover:bg-surface-2/50">
+    <div className="group h-full rounded-[var(--radius)] border border-line p-5 transition-colors hover:border-line-strong hover:bg-surface">
       <div className="mb-3 flex items-start justify-between gap-3">
         <div>
-          <h4 className="font-display text-base font-bold text-ivory transition-colors group-hover:text-crimson">
+          <h4 className="display text-base text-ink transition-colors group-hover:text-volt-text">
             {project.name}
           </h4>
           <p className="mt-0.5 font-mono text-xs text-grey-muted">{project.tagline}</p>
@@ -260,16 +260,18 @@ export function ExperienceContent() {
         />
 
         {/* Summary strip */}
-        <div className="mb-14 grid grid-cols-2 gap-3 sm:grid-cols-4">
+        {/* Hairline row rather than four centred cards: these are a caption
+            on the page, not four separate objects competing with the H1. */}
+        <div className="mb-20 grid grid-cols-2 gap-x-8 gap-y-8 border-y border-line py-8 sm:grid-cols-4">
           {[
             { label: 'Years Experience', value: '4+' },
             { label: 'Production Apps', value: '10+' },
             { label: 'Companies', value: '2' },
             { label: 'Open to', value: 'Remote / Hybrid' },
           ].map(s => (
-            <div key={s.label} className="rounded-lg border border-line bg-surface-2/30 px-4 py-4 text-center">
-              <div className="font-mono text-xl font-black text-crimson">{s.value}</div>
-              <div className="mt-0.5 text-[11px] text-grey-muted">{s.label}</div>
+            <div key={s.label}>
+              <div className="display text-[clamp(1.5rem,2.4vw,2rem)] text-ink">{s.value}</div>
+              <div className="mt-1.5 text-[13px] text-muted">{s.label}</div>
             </div>
           ))}
         </div>
@@ -279,7 +281,7 @@ export function ExperienceContent() {
           {/* Track + animated progress line */}
           <div className="absolute top-0 bottom-0 left-5 hidden w-px bg-line sm:block" />
           <motion.div
-            className="absolute top-0 left-5 hidden w-px origin-top bg-crimson sm:block"
+            className="absolute top-0 left-5 hidden w-px origin-top bg-volt-text sm:block"
             style={{ scaleY: reduce ? 1 : progress, height: '100%' }}
           />
 
@@ -289,17 +291,13 @@ export function ExperienceContent() {
               return (
                 <TimelineEntry key={job.company} markerColor={c.dot}>
                   {/* Sticky company header */}
-                  <div className="sticky top-16 z-10 mb-6 bg-obsidian/90 py-2 backdrop-blur-sm">
+                  <div className="sticky top-16 z-10 mb-6 bg-paper/90 py-3 backdrop-blur-sm">
                     <div className="mb-2 flex flex-wrap items-center gap-3">
-                      <h2 className="font-display text-2xl font-bold text-ivory">
+                      <h2 className="display text-[clamp(1.5rem,2.6vw,2.125rem)] text-ink">
                         {job.company}
                       </h2>
                       {job.current && (
-                        <span className="inline-flex items-center gap-1.5 rounded-full border border-live/30 bg-live/10 px-2.5 py-0.5 font-mono text-xs text-live">
-                          <span className="relative flex h-1.5 w-1.5">
-                            
-                            <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-live" />
-                          </span>
+                        <span className="rounded-[var(--radius)] bg-volt px-2 py-0.5 font-mono text-[10px] font-semibold tracking-wide text-[#171612]">
                           Current
                         </span>
                       )}
@@ -329,9 +327,6 @@ export function ExperienceContent() {
 
                   {/* Skills used */}
                   <div>
-                    <p className="mb-2 font-mono text-[10px] uppercase tracking-widest text-grey-muted">
-                      Skills used at {job.company}
-                    </p>
                     <div className="flex flex-wrap gap-1.5">
                       {job.skills.map(s => (
                         <SkillTag key={s} label={s} colorCls={c.tag} />
@@ -346,7 +341,7 @@ export function ExperienceContent() {
             <TimelineEntry markerColor="bg-crimson-bright ring-crimson-bright/30">
               <div className="mb-6">
                 <div className="mb-2 flex flex-wrap items-center gap-3">
-                  <h2 className="font-display text-2xl font-bold text-ivory">Freelance</h2>
+                  <h2 className="display text-[clamp(1.5rem,2.6vw,2.125rem)] text-ink">Freelance</h2>
                   <span className="inline-flex items-center rounded-full border border-crimson-bright/30 bg-crimson-bright/10 px-2.5 py-0.5 font-mono text-xs text-crimson-bright">
                     {freelance.period}
                   </span>
@@ -415,12 +410,12 @@ export function ExperienceContent() {
                 </div>
                 <div className="flex flex-1 items-start justify-between gap-3">
                   <div>
-                    <h3 className="font-semibold text-ivory">B.Sc. Electronics &amp; Communication</h3>
+                    <h3 className="display text-base text-ink">B.Sc. Electronics &amp; Communication</h3>
                     <p className="mt-0.5 text-sm text-grey">SRM Arts &amp; Science College</p>
                     <p className="mt-1 font-mono text-xs text-grey-muted">2018 - 2021</p>
                   </div>
                   <div className="shrink-0 text-right">
-                    <div className="font-mono text-lg font-bold text-crimson">7.8</div>
+                    <div className="display text-xl text-ink">7.8</div>
                     <div className="text-[10px] text-grey-muted">CGPA</div>
                   </div>
                 </div>
@@ -431,27 +426,28 @@ export function ExperienceContent() {
         </div>
 
         {/* Bottom CTA */}
-        <div className="mt-20 rounded-xl border border-line bg-elevated/60 p-8 text-center">
-          <h3 className="mb-2 font-display text-section-h2 font-bold tracking-tight text-ivory">
+        <div className="mt-24 border-t border-line pt-14">
+          <h3 className="display max-w-[18ch] text-section-h2 text-ink">
             Want to work together?
           </h3>
-          <p className="mx-auto mb-6 max-w-md text-sm text-grey">
-            I&apos;m actively looking for remote and hybrid full-stack roles. Let&apos;s build something great.
+          <p className="mt-5 max-w-[48ch] text-base leading-relaxed text-muted">
+            I&apos;m actively looking for remote and hybrid full-stack roles.
+            Let&apos;s build something great.
           </p>
-          <div className="flex flex-wrap items-center justify-center gap-3">
+          <div className="mt-8 flex flex-wrap items-center gap-3">
             <Link
               href="/contact"
               className="btn-primary"
             >
               Get in touch
-              <ArrowRight className="h-3.5 w-3.5" />
+              <ArrowRight className="h-4 w-4" strokeWidth={2} />
             </Link>
             <Link
               href="/projects"
-              className="inline-flex items-center gap-2 rounded-md border border-line-strong px-5 py-2.5 text-sm font-medium text-ivory transition-colors hover:border-crimson/40 hover:text-crimson active:scale-[0.97]"
+              className="btn-ghost"
             >
-              View selected work
-              <ArrowUpRight className="h-3.5 w-3.5" />
+              View work
+              <ArrowUpRight className="h-4 w-4" strokeWidth={2} />
             </Link>
           </div>
         </div>
