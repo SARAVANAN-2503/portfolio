@@ -14,171 +14,220 @@
   }
 }
 
-/* ─────────────────────────────────────────────────────────────────────────
-   Obsidian Crimson — runtime tokens (theme-aware via .dark / :root)
-   ───────────────────────────────────────────────────────────────────────── */
+/* ═════════════════════════════════════════════════════════════════════════
+   PAPER & VOLT
+
+   A light-first editorial-technical system. Warm bone paper, true ink,
+   and a single electric accent used as a FILL, not as decoration.
+
+   Three rules hold the whole thing together:
+
+   1. ONE accent. Volt (~72deg yellow-green). Every previous accent
+      (crimson, blueprint blue, live green) collapses into it. Accent as
+      a large fill uses ink text on top; accent as small text uses the
+      per-theme `--volt-text` value, which is darkened on paper so body
+      copy clears WCAG AA. Never the fill value as small text on light.
+
+   2. ONE radius. 4px on every surface and control. No pills, no 2xl.
+
+   3. Surfaces are earned. Default grouping is negative space and a
+      hairline. A filled card has to justify itself.
+   ═════════════════════════════════════════════════════════════════════════ */
+
 :root {
-  /* light theme (default, no .dark class) */
-  --bg-obsidian: #faf9f6;
-  --bg-elevated: #f3f1ea;
-  --bg-surface: #ffffff;
-  --bg-surface-2: #f0ede6;
-  --fg-ivory: #14161c;
-  --fg-ivory-dim: #383a42;
-  --fg-grey: #52545c;
-  --fg-grey-muted: #6b7280;
-  --line: rgba(127, 29, 45, 0.12);
-  --line-strong: rgba(127, 29, 45, 0.24);
-  --radius: 0.625rem;
+  /* ── light (default) ── */
+  --bg-paper: #f4f3ef;
+  --bg-elevated: #edebe4;
+  --bg-surface: #fdfcfa;
+  --bg-surface-2: #e6e4dc;
+
+  --fg-ink: #171612;
+  --fg-ink-dim: #3b3931;
+  --fg-muted: #66635a;
+  --fg-muted-2: #8a877d;
+
+  --line: rgba(23, 22, 18, 0.14);
+  --line-strong: rgba(23, 22, 18, 0.28);
+
+  /* Volt. `--volt` is the fill (ink text sits on it, ~14:1).
+     `--volt-text` is the same hue darkened for small text on paper
+     (~6.3:1 against --bg-paper). */
+  --volt: #d8f34a;
+  --volt-text: #4c5a00;
+  --volt-quiet: rgba(101, 122, 0, 0.14);
+
+  --radius: 4px;
 }
 
 .dark {
-  --bg-obsidian: #08090b;
-  --bg-elevated: #0e1014;
-  --bg-surface: #14161c;
-  --bg-surface-2: #1a1d24;
-  --fg-ivory: #f5f2ea;
-  --fg-ivory-dim: #d9d5cb;
-  --fg-grey: #9ca3af;
-  --fg-grey-muted: #6b7280;
-  --line: rgba(229, 72, 77, 0.18);
-  --line-strong: rgba(229, 72, 77, 0.35);
+  --bg-paper: #111110;
+  --bg-elevated: #171715;
+  --bg-surface: #1c1c19;
+  --bg-surface-2: #262622;
+
+  --fg-ink: #f2f1ea;
+  --fg-ink-dim: #cbc9bf;
+  --fg-muted: #918e85;
+  --fg-muted-2: #6f6d65;
+
+  --line: rgba(242, 241, 234, 0.14);
+  --line-strong: rgba(242, 241, 234, 0.28);
+
+  /* On ink, the fill value is already high-contrast as text (~12:1),
+     so text and fill converge. */
+  --volt: #d8f34a;
+  --volt-text: #cfe94a;
+  --volt-quiet: rgba(216, 243, 74, 0.12);
 }
 
-@theme {
-  /* ── Spec-named Obsidian Crimson tokens (new components use these) ── */
-  --color-obsidian: var(--bg-obsidian);
+@theme inline {
+  /* ── surfaces + ink ── */
+  --color-paper: var(--bg-paper);
   --color-elevated: var(--bg-elevated);
   --color-surface: var(--bg-surface);
   --color-surface-2: var(--bg-surface-2);
-  --color-ivory: var(--fg-ivory);
-  --color-ivory-dim: var(--fg-ivory-dim);
-  --color-grey: var(--fg-grey);
-  --color-grey-muted: var(--fg-grey-muted);
+
+  --color-ink: var(--fg-ink);
+  --color-ink-dim: var(--fg-ink-dim);
+  --color-muted: var(--fg-muted);
+  --color-muted-2: var(--fg-muted-2);
+
   --color-line: var(--line);
   --color-line-strong: var(--line-strong);
-  --color-crimson: #e5484d;
-  --color-crimson-bright: #ff5a65;
-  --color-wine: #7f1d2d;
-  --color-live: #34d399;
 
-  /* ── Blueprint — second accent, scoped to technical/lab emphasis.
-     Motivated by the schematic-grid backgrounds already used across the
-     site; keeps crimson as the single action/brand color while giving
-     secondary emphasis (Lab pages, diagram "service" nodes, secondary
-     stats) somewhere else to live besides red-on-everything ── */
-  --color-blueprint: #4d8fdb;
-  --color-blueprint-bright: #6ea8ea;
-  --color-blueprint-dim: rgba(77, 143, 219, 0.12);
+  /* ── the one accent ── */
+  --color-volt: var(--volt);
+  --color-volt-text: var(--volt-text);
+  --color-volt-quiet: var(--volt-quiet);
 
-  /* ── Legacy scale names, repointed to the runtime tokens above so every
-     existing navy and slate utility class site-wide inherits the new
-     system (and responds to theme toggling) without a JSX rewrite ── */
-  --color-navy-50: var(--fg-ivory);
-  --color-navy-100: var(--fg-ivory);
-  --color-navy-200: var(--fg-ivory-dim);
-  --color-navy-400: var(--fg-grey-muted);
+  /* ═══════════════════════════════════════════════════════════════════
+     LEGACY ALIASES
+
+     The previous system (Obsidian Crimson) named tokens after their
+     colors, so ~30 components reference `bg-obsidian`, `text-ivory`,
+     `text-crimson`, `text-blueprint`, `text-live`. Repointing those
+     names here moves every page onto the new palette at once instead of
+     leaving the site broken between commits.
+
+     Note `crimson` maps to the accent's TEXT value, never the fill.
+     Old `bg-crimson` button fills are rewritten at their call sites to
+     `.btn-primary` so they keep passing contrast.
+     ═══════════════════════════════════════════════════════════════════ */
+  --color-obsidian: var(--bg-paper);
+  --color-ivory: var(--fg-ink);
+  --color-ivory-dim: var(--fg-ink-dim);
+  --color-grey: var(--fg-muted);
+  --color-grey-muted: var(--fg-muted-2);
+
+  --color-crimson: var(--volt-text);
+  --color-crimson-bright: var(--volt-text);
+  --color-wine: var(--bg-surface-2);
+  --color-live: var(--volt-text);
+
+  --color-blueprint: var(--volt-text);
+  --color-blueprint-bright: var(--volt-text);
+  --color-blueprint-dim: var(--volt-quiet);
+
+  --color-accent: var(--volt-text);
+  --color-accent-foreground: var(--fg-ink);
+  --color-accent-dim: var(--volt-quiet);
+  --color-accent-hover: var(--volt-text);
+  --color-accent-muted: var(--volt-quiet);
+  --color-terminal: var(--volt-text);
+
+  --color-navy-50: var(--fg-ink);
+  --color-navy-100: var(--fg-ink);
+  --color-navy-200: var(--fg-ink-dim);
+  --color-navy-400: var(--fg-muted-2);
   --color-navy-600: var(--bg-surface-2);
   --color-navy-700: var(--bg-surface);
   --color-navy-800: var(--bg-elevated);
-  --color-navy-900: var(--bg-obsidian);
-  --color-navy-950: var(--bg-obsidian);
-  --color-navy: var(--bg-obsidian);
+  --color-navy-900: var(--bg-paper);
+  --color-navy-950: var(--bg-paper);
+  --color-navy: var(--bg-paper);
 
-  --color-slate-50: var(--fg-ivory);
-  --color-slate-100: var(--fg-ivory);
-  --color-slate-200: var(--fg-ivory);
-  --color-slate-300: var(--fg-ivory-dim);
-  --color-slate-400: var(--fg-grey);
-  --color-slate-500: var(--fg-grey);
-  --color-slate-600: var(--fg-grey-muted);
+  --color-slate-50: var(--fg-ink);
+  --color-slate-100: var(--fg-ink);
+  --color-slate-200: var(--fg-ink);
+  --color-slate-300: var(--fg-ink-dim);
+  --color-slate-400: var(--fg-muted);
+  --color-slate-500: var(--fg-muted);
+  --color-slate-600: var(--fg-muted-2);
   --color-slate-700: var(--line-strong);
   --color-slate-800: var(--bg-surface);
   --color-slate-900: var(--bg-elevated);
-  --color-slate-950: var(--bg-obsidian);
+  --color-slate-950: var(--bg-paper);
 
-  /* amber-* repointed to the deep-wine family (used for freelance /
-     "explain mode" secondary-highlight sections) */
-  --color-amber-400: #c77680;
-  --color-amber-500: #7f1d2d;
-  --color-amber-900: #2a0a10;
-
-  --color-accent: #e5484d;
-  --color-accent-foreground: #ffffff;
-  --color-accent-dim: rgba(229, 72, 77, 0.15);
-  --color-accent-hover: #ff5a65;
-  --color-accent-muted: rgba(229, 72, 77, 0.08);
-
-  --color-terminal: #34d399;
+  --color-amber-400: var(--volt-text);
+  --color-amber-500: var(--volt-text);
+  --color-amber-900: var(--volt-quiet);
 
   /* ── shadcn/ui semantic tokens ── */
   --color-border: var(--line);
   --color-input: var(--line);
-  --color-ring: #ff5a65;
-  --color-background: var(--bg-obsidian);
-  --color-foreground: var(--fg-ivory);
-
-  --color-primary: #e5484d;
-  --color-primary-foreground: #ffffff;
-
+  --color-ring: var(--volt-text);
+  --color-background: var(--bg-paper);
+  --color-foreground: var(--fg-ink);
+  --color-primary: var(--volt-text);
+  --color-primary-foreground: var(--fg-ink);
   --color-secondary: var(--bg-elevated);
-  --color-secondary-foreground: var(--fg-ivory);
-
-  --color-destructive: #dc2626;
+  --color-secondary-foreground: var(--fg-ink);
+  --color-destructive: #c8442e;
   --color-destructive-foreground: #ffffff;
-
-  --color-muted: var(--bg-elevated);
-  --color-muted-foreground: var(--fg-grey);
-
+  --color-muted-foreground: var(--fg-muted);
   --color-popover: var(--bg-surface);
-  --color-popover-foreground: var(--fg-ivory);
-
+  --color-popover-foreground: var(--fg-ink);
   --color-card: var(--bg-surface);
-  --color-card-foreground: var(--fg-ivory);
+  --color-card-foreground: var(--fg-ink);
 
+  /* ── ONE radius scale (rule 2). Every alias resolves to the same 4px
+     so stray `rounded-xl` / `rounded-2xl` in older components cannot
+     reintroduce a second shape language. ── */
+  --radius-sm: var(--radius);
+  --radius-md: var(--radius);
   --radius-lg: var(--radius);
-  --radius-md: calc(var(--radius) - 4px);
-  --radius-sm: calc(var(--radius) - 6px);
-  --radius-xl: calc(var(--radius) + 4px);
+  --radius-xl: var(--radius);
+  --radius-2xl: var(--radius);
+  --radius-3xl: var(--radius);
 
-  /* Display face is intentionally distinct from body copy — Space Grotesk's
-     technical, slightly quirky counters read as "engineering" rather than
-     generic SaaS, and give headlines real contrast against Manrope body text
-     instead of one font doing every job. */
-  --font-display: var(--font-grotesk), var(--font-manrope), system-ui, sans-serif;
-  --font-sans: var(--font-manrope), system-ui, sans-serif;
-  --font-mono: var(--font-mono), Menlo, monospace;
+  /* ── type ──
+     Bricolage Grotesque carries display: a variable grotesque with real
+     character in the counters, so headlines read as designed rather than
+     as system-default. Geist handles body and mono. Bricolage ships no
+     italic, so emphasis is weight contrast, never a mixed-family italic. */
+  --font-display: var(--font-bricolage), var(--font-geist), system-ui, sans-serif;
+  --font-sans: var(--font-geist), system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, Menlo, monospace;
 
-  /* ── Fluid editorial type scale — replaces ad hoc text-3xl/text-4xl
-     per page with a deliberate, consistent hierarchy ── */
-  --text-hero: clamp(2.75rem, 5vw, 4.5rem);
-  --text-page-h1: clamp(2.25rem, 3.2vw, 3.25rem);
-  --text-section-h2: clamp(1.375rem, 1.8vw, 1.75rem);
+  /* ── scale ──
+     The old scale topped out at 1.75rem for section headings, which is
+     why nothing read as bold. Display now runs to 6.5rem and headings
+     to 2.75rem, so hierarchy comes from scale and weight instead of
+     from color alone. */
+  --text-hero: clamp(2.75rem, 6.4vw, 6.25rem);
+  --text-page-h1: clamp(2.25rem, 4.6vw, 3.75rem);
+  --text-section-h2: clamp(1.625rem, 3vw, 2.5rem);
+  --text-section-h3: clamp(1.0625rem, 1.5vw, 1.25rem);
 
   --background-image-dot-grid: radial-gradient(
     circle,
-    rgba(245, 242, 234, 0.05) 1px,
+    var(--grid-tint) 1px,
     transparent 1px
   );
-  --background-image-glow-radial: radial-gradient(
-    ellipse 70% 55% at 62% 42%,
-    rgba(245, 242, 234, 0.05),
-    transparent 70%
-  );
   --background-image-hero-grid: linear-gradient(
-      rgba(245, 242, 234, 0.05) 1px,
+      var(--grid-tint) 1px,
       transparent 1px
     ),
-    linear-gradient(90deg, rgba(245, 242, 234, 0.05) 1px, transparent 1px);
+    linear-gradient(90deg, var(--grid-tint) 1px, transparent 1px);
 
   --background-size-dot-grid: 24px 24px;
-  --background-size-hero-grid: 56px 56px;
+  --background-size-hero-grid: 64px 64px;
 
   --animate-fade-in: fadeIn 0.6s ease-out both;
   --animate-slide-up: slideUp 0.6s ease-out both;
   --animate-accordion-down: accordion-down 0.2s ease-out;
   --animate-accordion-up: accordion-up 0.2s ease-out;
-  --animate-pulse-slow: pulseSlow 3s ease-in-out infinite;
+  --animate-marquee: marquee 38s linear infinite;
 
   @keyframes fadeIn {
     from {
@@ -219,21 +268,25 @@
       height: 0;
     }
   }
-  @keyframes pulseSlow {
-    0%,
-    100% {
-      opacity: 1;
+  @keyframes marquee {
+    from {
+      transform: translateX(0);
     }
-    50% {
-      opacity: 0.5;
+    to {
+      transform: translateX(-50%);
     }
   }
 }
 
+:root {
+  --grid-tint: rgba(23, 22, 18, 0.05);
+}
+.dark {
+  --grid-tint: rgba(242, 241, 234, 0.05);
+}
+
 /*
-  The default border color has changed to `currentcolor` in Tailwind CSS v4,
-  so we've added these compatibility styles to make sure everything still
-  looks the same as it did with Tailwind CSS v3.
+  Tailwind v4 defaults borders to `currentcolor`; pin them to the line token.
 */
 @layer base {
   *,
@@ -241,47 +294,94 @@
   ::before,
   ::backdrop,
   ::file-selector-button {
-    border-color: var(--color-line, currentcolor);
+    border-color: var(--line, currentcolor);
   }
 }
 
 @utility section-container {
-  @apply mx-auto max-w-7xl px-4 sm:px-6 lg:px-8;
+  @apply mx-auto w-full max-w-[1240px] px-5 sm:px-8 lg:px-10;
 }
 
+/* Wider track for full-bleed editorial moments. */
+@utility wide-container {
+  @apply mx-auto w-full max-w-[1440px] px-5 sm:px-8 lg:px-10;
+}
+
+/* ── Surfaces ───────────────────────────────────────────────────────────
+   `card-surface` is kept because ~14 components call it, but it is now a
+   hairline-and-tint rather than a heavy floating card, so grids of them
+   read as one grouped field instead of a pile of separate objects. */
 @utility card-surface {
-  @apply rounded-lg border border-line bg-surface/60 backdrop-blur-xs;
+  @apply rounded-[var(--radius)] border border-line bg-surface;
 }
 
-@utility text-gradient {
-  @apply bg-linear-to-r from-crimson to-crimson-bright bg-clip-text text-transparent;
+@utility card-quiet {
+  @apply rounded-[var(--radius)] border border-line bg-transparent;
 }
 
-@utility tag {
-  @apply inline-flex items-center rounded-full border border-line
-           bg-surface-2/60 px-2.5 py-0.5 text-xs font-mono text-grey;
+/* ── Controls ───────────────────────────────────────────────────────────
+   Primary is the volt fill with ink text (~14:1 both themes). This is the
+   only place the fill value is allowed to carry text on top of it. */
+@utility btn-primary {
+  @apply inline-flex items-center justify-center gap-2 rounded-[var(--radius)]
+    bg-volt px-5 py-2.5 text-sm font-semibold text-[#171612]
+    transition-[transform,filter] duration-150
+    hover:brightness-[1.06] active:translate-y-px
+    focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-volt-text
+    focus-visible:ring-offset-2 focus-visible:ring-offset-paper;
 }
 
-@utility tag-accent {
-  @apply inline-flex items-center rounded-full border border-accent/30
-           bg-accent-dim px-2.5 py-0.5 text-xs font-mono text-accent;
+@utility btn-ghost {
+  @apply inline-flex items-center justify-center gap-2 rounded-[var(--radius)]
+    border border-line-strong bg-transparent px-5 py-2.5 text-sm font-medium
+    text-ink transition-colors duration-150
+    hover:bg-surface-2 active:translate-y-px
+    focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-volt-text;
 }
 
-@utility tag-blueprint {
-  @apply inline-flex items-center rounded-full border border-blueprint/30
-           bg-blueprint-dim px-2.5 py-0.5 text-xs font-mono text-blueprint;
-}
-
+/* ── Type helpers ───────────────────────────────────────────────────── */
 @utility text-hero {
   font-size: var(--text-hero);
 }
-
 @utility text-page-h1 {
   font-size: var(--text-page-h1);
 }
-
 @utility text-section-h2 {
   font-size: var(--text-section-h2);
+}
+@utility text-section-h3 {
+  font-size: var(--text-section-h3);
+}
+
+@utility display {
+  @apply font-display font-semibold tracking-[-0.035em] leading-[0.95];
+}
+
+/* Gradient text is an AI tell at display sizes. The utility is retained so
+   existing call sites keep compiling, but it now resolves to solid ink. */
+@utility text-gradient {
+  @apply text-ink;
+}
+
+/* ── Tags ───────────────────────────────────────────────────────────── */
+@utility tag {
+  @apply inline-flex items-center rounded-[var(--radius)] border border-line
+    bg-transparent px-2 py-0.5 font-mono text-[11px] text-muted;
+}
+
+@utility tag-accent {
+  @apply inline-flex items-center rounded-[var(--radius)] border border-line
+    bg-volt-quiet px-2 py-0.5 font-mono text-[11px] text-volt-text;
+}
+
+@utility tag-blueprint {
+  @apply inline-flex items-center rounded-[var(--radius)] border border-line
+    bg-volt-quiet px-2 py-0.5 font-mono text-[11px] text-volt-text;
+}
+
+/* ── Rules ──────────────────────────────────────────────────────────── */
+@utility rule {
+  @apply h-px w-full bg-line;
 }
 
 @utility animate-delay-100 {
@@ -306,27 +406,23 @@
     overflow-x: clip;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    color-scheme: dark;
-  }
-  html:not(.dark) {
     color-scheme: light;
+  }
+  html.dark {
+    color-scheme: dark;
   }
 
   body {
-    @apply bg-obsidian text-ivory font-sans;
+    @apply bg-paper text-ink font-sans;
     overflow-x: clip;
-    background-image: radial-gradient(
-      ellipse 80% 45% at 50% -10%,
-      rgba(245, 242, 234, 0.025),
-      transparent 72%
-    );
     transition:
       background-color 0.2s ease,
       color 0.2s ease;
   }
 
   ::selection {
-    @apply bg-crimson/30 text-ivory;
+    background: var(--volt);
+    color: #171612;
   }
 
   ::-webkit-scrollbar {
@@ -337,10 +433,10 @@
     background: transparent;
   }
   ::-webkit-scrollbar-thumb {
-    @apply bg-line-strong rounded-full;
+    @apply rounded-[var(--radius)] bg-line-strong;
   }
   ::-webkit-scrollbar-thumb:hover {
-    @apply bg-crimson/40;
+    background: var(--volt-text);
   }
 
   @media (prefers-reduced-motion: reduce) {

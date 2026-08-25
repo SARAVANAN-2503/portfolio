@@ -21,8 +21,8 @@ export default function ArchitecturePage() {
   const ActiveComponent = activeDiagram.component;
 
   return (
-    <div className="pt-14">
-      <div className="section-container py-16">
+    <div className="pt-32 pb-24 lg:pt-40">
+      <div className="section-container">
         <LabHeader
           title="Architecture"
           description="The same engineering-system language from the homepage constellation, expanded into interactive diagrams. Click a node for details."

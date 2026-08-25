@@ -1,21 +1,16 @@
 "use client";
 
 import Link from "next/link";
-import {
-  ArrowRight,
-  ArrowUpRight,
-  Terminal,
-  Waypoints,
-  Gauge,
-  MapPin,
-  CalendarClock,
-} from "lucide-react";
+import { ArrowRight, ArrowUpRight } from "lucide-react";
 import { motion, useReducedMotion } from "framer-motion";
 import { ImpactMetrics } from "@/components/landing/ImpactMetrics";
-import { Skills3D } from "@/components/landing/Skills3D";
+import { SkillMatrix } from "@/components/landing/SkillMatrix";
 import { ProjectCard } from "@/components/projects/ProjectCard";
-import { Badge } from "@/components/ui/badge";
 import { projects } from "@/content/projects";
+
+/* Icons stay on lucide-react: it is already a project dependency, which is
+   the documented exception to preferring Phosphor. Mixing a second icon
+   family in would be worse than the discouraged default. */
 
 const techStack = [
   "React",
@@ -25,29 +20,32 @@ const techStack = [
   "MySQL",
   "MongoDB",
   "AWS",
+  "Socket.IO",
+  "Redis",
+  "Docker",
 ];
 
 const labTools = [
   {
     href: "/api-explorer",
-    icon: Terminal,
-    eyebrow: "/api/users?cursor=xyz",
     title: "API Explorer",
-    description: "Real endpoints, real latency, real pagination.",
+    description:
+      "Call the real endpoints behind these projects and watch actual latency and cursor pagination come back.",
+    meta: "/api/users?cursor=xyz",
   },
   {
     href: "/architecture",
-    icon: Waypoints,
-    eyebrow: "client → api → db",
     title: "Architecture",
-    description: "Interactive flows for multi-tenant, RBAC, queues.",
+    description:
+      "Interactive flow diagrams for multi-tenant isolation, RBAC permission resolution, and queue-backed jobs.",
+    meta: "client to api to db",
   },
   {
     href: "/performance",
-    icon: Gauge,
-    eyebrow: "O(1) vs O(N)",
     title: "Performance Lab",
-    description: "Live cursor vs offset pagination benchmark.",
+    description:
+      "A live benchmark racing cursor-based pagination against offset pagination as the dataset grows.",
+    meta: "O(1) vs O(N)",
   },
 ] as const;
 
@@ -55,21 +53,21 @@ const experiencePreview = [
   {
     company: "Gnxtace Technology",
     role: "Full Stack Developer",
-    period: "May 2024 – Present",
+    period: "May 2024 - Present",
     current: true,
     stack: ["NexusOne.coach", "Seltrix", "GovPass", "ZPONZ"],
   },
   {
     company: "Jnana Inventive Pvt Ltd",
     role: "Full Stack Developer",
-    period: "Jun 2022 – May 2024",
+    period: "Jun 2022 - May 2024",
     current: false,
     stack: ["AdUnity", "QuickBizz"],
   },
 ];
 
 const fadeUp = {
-  hidden: { opacity: 0, y: 16 },
+  hidden: { opacity: 0, y: 20 },
   show: { opacity: 1, y: 0 },
 };
 
@@ -101,299 +99,262 @@ export default function Home() {
   const reduce = useReducedMotion();
 
   return (
-    <div className="pt-14">
-      {/* ── Hero ─────────────────────────────────────────────────────────── */}
-      <section className="relative overflow-hidden">
-        {/* Neutral depth wash across the whole hero */}
-        <div className="absolute inset-0 bg-glow-radial pointer-events-none" />
-        {/* Blueprint texture grounds the quiet right-hand space now that
-            there's no diagram sitting in it — fades out toward the text
-            so it stays background, not a competing object. */}
+    <div>
+      {/* ── Hero. Editorial manifesto: the sentence is the visual, so the
+             type fills the measure instead of leaving half the viewport
+             empty next to it. Three text elements total. ───────────────── */}
+      <section className="relative overflow-hidden border-b border-line">
         <div
-          className="pointer-events-none absolute inset-y-0 right-0 w-[55%]"
+          aria-hidden
+          className="pointer-events-none absolute inset-0 opacity-60"
           style={{
             backgroundImage: "var(--background-image-hero-grid)",
             backgroundSize: "var(--background-size-hero-grid)",
-            maskImage: "linear-gradient(to left, black, transparent)",
-            WebkitMaskImage: "linear-gradient(to left, black, transparent)",
+            maskImage:
+              "radial-gradient(ellipse 90% 70% at 70% 20%, black, transparent 75%)",
+            WebkitMaskImage:
+              "radial-gradient(ellipse 90% 70% at 70% 20%, black, transparent 75%)",
           }}
         />
 
-        <div className="relative mx-auto max-w-[1440px] px-4 py-16 sm:px-6 sm:py-20 lg:px-8 lg:py-24">
+        <div className="section-container relative pt-28 pb-16 sm:pt-32 lg:pt-36 lg:pb-24">
           <motion.div
-            className="max-w-[760px]"
-            initial={reduce ? undefined : { opacity: 0, y: 20 }}
+            initial={reduce ? undefined : { opacity: 0, y: 24 }}
             animate={reduce ? undefined : { opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, ease: "easeOut" }}
+            transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
           >
-            <div className="flex flex-wrap items-center gap-4">
-              <div className="inline-flex items-center gap-2 rounded-full border border-live/25 bg-live/5 px-3 py-1">
-                <span className="relative flex h-2 w-2">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-live opacity-75" />
-                  <span className="relative inline-flex rounded-full h-2 w-2 bg-live" />
-                </span>
-                <span className="font-mono text-xs text-live tracking-wide">
-                  Open to Remote &amp; Hybrid roles
-                </span>
-              </div>
-              <div className="flex items-center gap-3">
-                <div className="h-px w-8 bg-crimson" />
-                <span className="font-mono text-xs text-crimson tracking-widest uppercase">
-                  Chennai, India
-                </span>
-              </div>
-            </div>
-
-            <h1 className="mt-6 text-balance font-display font-extrabold text-ivory text-hero leading-[0.98] tracking-[-0.045em]">
-              <span className="block">Saravanan</span>
-              <span className="block">Full-Stack Developer</span>
-              <span className="block max-[374px]:text-[0.84em]">
-                building <span className="text-gradient">reliable</span>
-              </span>
-              <span className="text-gradient block max-[374px]:text-[0.82em] max-[374px]:tracking-[-0.055em]">
-                digital systems
-              </span>
+            <h1 className="display max-w-[16ch] text-hero text-ink">
+              Systems that hold up in production.
             </h1>
 
-            <p className="mt-5 max-w-[580px] text-base text-ivory-dim leading-relaxed">
-              I build clean architecture, measurable performance and code that
-              actually works in production, multi-tenant SaaS, LMS platforms,
-              marketplace and wallet flows, and serverless pipelines.
+            <p className="mt-8 max-w-[54ch] text-lg leading-relaxed text-ink-dim sm:text-xl">
+              Saravanan, a full-stack developer in Chennai. Multi-tenant SaaS,
+              government platforms, LMS, and serverless pipelines.
             </p>
 
-            <div className="mt-7 flex flex-wrap items-center gap-3">
-              <Link
-                href="/projects"
-                className="inline-flex items-center gap-2 rounded-md bg-crimson px-4 py-2.5 text-sm font-semibold text-white transition-all hover:bg-crimson-bright active:scale-[0.97] active:bg-wine focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-crimson-bright focus-visible:ring-offset-2 focus-visible:ring-offset-obsidian"
-              >
-                View selected work
-                <ArrowRight className="h-3.5 w-3.5" />
+            <div className="mt-10 flex flex-wrap items-center gap-3">
+              <Link href="/projects" className="btn-primary">
+                View work
+                <ArrowRight className="h-4 w-4" strokeWidth={2} />
               </Link>
-              <Link
-                href="/architecture"
-                className="inline-flex items-center gap-2 rounded-md border border-line-strong px-4 py-2.5 text-sm font-medium text-ivory transition-all hover:border-crimson/40 hover:bg-surface/40 hover:text-crimson active:scale-[0.97] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-crimson-bright"
-              >
-                Explore engineering lab
+              <Link href="/contact" className="btn-ghost">
+                Get in touch
               </Link>
-            </div>
-
-            <div className="mt-10 border-t border-line pt-5">
-              <span className="font-mono text-[10px] uppercase tracking-widest text-grey-muted">
-                Core Stack
-              </span>
-              <div className="mt-2.5 flex flex-wrap gap-x-5 gap-y-1.5">
-                {techStack.map((tech) => (
-                  <span key={tech} className="font-mono text-xs text-ivory-dim">
-                    {tech}
-                  </span>
-                ))}
-              </div>
             </div>
           </motion.div>
         </div>
       </section>
 
-      {/* ── Metrics ──────────────────────────────────────────────────────── */}
-      <Reveal className="section-container pt-2 pb-16 lg:pt-0">
-        <ImpactMetrics />
-      </Reveal>
+      {/* ── Stack band. The one marquee on the page: it carries breadth that
+             does not need individual attention, and it sits under the hero
+             rather than inside it. ───────────────────────────────────────── */}
+      <section
+        aria-label="Core stack"
+        className="overflow-hidden border-b border-line bg-volt py-4"
+      >
+        <div className="flex w-max animate-[marquee_38s_linear_infinite] motion-reduce:animate-none">
+          {[0, 1].map((copy) => (
+            <ul
+              key={copy}
+              aria-hidden={copy === 1}
+              className="flex shrink-0 items-center"
+            >
+              {techStack.map((tech) => (
+                <li
+                  key={tech}
+                  className="flex items-center gap-10 px-5 font-mono text-sm font-medium text-[#171612]"
+                >
+                  {tech}
+                  <span className="h-1 w-1 rounded-[var(--radius)] bg-[#171612]/35" />
+                </li>
+              ))}
+            </ul>
+          ))}
+        </div>
+      </section>
 
-      {/* ── Selected Work ────────────────────────────────────────────────── */}
-      <Reveal className="section-container pb-16" delay={0.05}>
-        <div className="flex items-center gap-4 mb-8">
-          <span className="font-mono text-xs text-crimson tracking-widest uppercase">
-            Selected Work
-          </span>
-          <div className="h-px flex-1 bg-line" />
+      {/* ── Metrics ──────────────────────────────────────────────────────── */}
+      <ImpactMetrics />
+
+      {/* ── Selected work. Asymmetric pair, not a grid of equals. ────────── */}
+      <section className="section-container py-20 lg:py-28">
+        <Reveal className="flex flex-wrap items-end justify-between gap-6">
+          <h2 className="display max-w-[18ch] text-section-h2 text-ink">
+            Recent work, with the decisions behind it.
+          </h2>
           <Link
             href="/projects"
-            className="text-xs font-mono text-grey-muted transition-colors hover:text-crimson"
+            className="group inline-flex items-center gap-1.5 text-sm font-medium text-ink transition-colors hover:text-volt-text"
           >
-            View all {projects.length} projects &rarr;
+            All {projects.length} projects
+            <ArrowUpRight
+              className="h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+              strokeWidth={2}
+            />
           </Link>
-        </div>
-        <div className="grid gap-5 lg:grid-cols-5">
-          <div className="lg:col-span-3">
+        </Reveal>
+
+        {/* items-start: stretching the shorter card to match the featured one
+            left a large void above its footer, which reads as a bug rather
+            than as alignment. */}
+        <Reveal
+          className="mt-12 grid gap-6 lg:grid-cols-12 lg:items-start"
+          delay={0.05}
+        >
+          <div className="lg:col-span-7">
             <ProjectCard project={projects[0]} variant="featured" />
           </div>
-          <div className="lg:col-span-2">
+          <div className="lg:col-span-5">
             <ProjectCard project={projects[1]} variant="default" />
           </div>
-        </div>
-      </Reveal>
+        </Reveal>
+      </section>
 
-      {/* ── Engineering Lab ──────────────────────────────────────────────── */}
-      <Reveal className="border-t border-line bg-elevated/60" delay={0.05}>
-        <div className="section-container py-16">
-          <div className="grid gap-8 lg:grid-cols-4">
-            <div>
-              <span className="font-mono text-xs text-crimson tracking-widest uppercase">
-                Engineering Lab
-              </span>
-              <h2 className="mt-3 font-display text-xl font-bold text-ivory">
-                Interactive tools and visualizations from my lab.
-              </h2>
-              <p className="mt-3 text-sm text-grey leading-relaxed">
-                Every project includes interactive diagrams, live API endpoints
-                you can test, and performance visualizations comparing real
-                approaches.
-              </p>
+      {/* ── Engineering lab. Hairline rows, not three identical cards. ───── */}
+      <section className="border-y border-line bg-elevated">
+        <div className="section-container py-20 lg:py-28">
+          <Reveal className="max-w-[42ch]">
+            <h2 className="display text-section-h2 text-ink">
+              Things you can actually click.
+            </h2>
+            <p className="mt-5 text-base leading-relaxed text-muted">
+              Every claim on this site has something behind it you can poke at
+              yourself.
+            </p>
+          </Reveal>
+
+          <Reveal className="mt-14 border-t border-line" delay={0.05}>
+            {labTools.map((tool) => (
               <Link
-                href="/architecture"
-                className="mt-4 inline-flex items-center gap-1.5 text-xs font-mono text-grey-muted transition-colors hover:text-blueprint"
+                key={tool.href}
+                href={tool.href}
+                className="group grid grid-cols-1 gap-3 border-b border-line py-7 transition-colors hover:bg-surface md:grid-cols-12 md:items-baseline md:gap-6 md:px-4"
               >
-                Explore all tools <ArrowUpRight className="h-3 w-3" />
-              </Link>
-            </div>
-            <div className="grid gap-4 sm:grid-cols-3 lg:col-span-3">
-              {labTools.map((tool) => (
-                <Link
-                  key={tool.href}
-                  href={tool.href}
-                  className="card-surface group flex flex-col justify-between p-5 transition-all hover:border-blueprint/35 hover:shadow-[0_0_32px_-14px_rgba(77,143,219,0.3)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blueprint-bright"
-                >
-                  <div>
-                    <tool.icon
-                      className="h-5 w-5 text-blueprint"
-                      strokeWidth={1.75}
-                    />
-                    <div className="mt-4 font-mono text-[11px] text-grey-muted">
-                      {tool.eyebrow}
-                    </div>
-                    <div className="mt-1 text-sm font-semibold text-ivory transition-colors group-hover:text-blueprint">
-                      {tool.title}
-                    </div>
-                    <div className="mt-1 text-xs text-grey-muted">
-                      {tool.description}
-                    </div>
+                <div className="md:col-span-4">
+                  <div className="display text-section-h3 text-ink transition-colors group-hover:text-volt-text">
+                    {tool.title}
                   </div>
-                  <ArrowUpRight className="mt-4 h-4 w-4 text-grey-muted transition-all group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-blueprint" />
-                </Link>
-              ))}
-            </div>
-          </div>
+                  <div className="mt-1.5 font-mono text-xs text-muted-2">
+                    {tool.meta}
+                  </div>
+                </div>
+                <p className="max-w-[60ch] text-[15px] leading-relaxed text-muted md:col-span-7">
+                  {tool.description}
+                </p>
+                <div className="md:col-span-1 md:justify-self-end">
+                  <ArrowUpRight
+                    className="h-5 w-5 text-muted-2 transition-all group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-volt-text"
+                    strokeWidth={1.75}
+                  />
+                </div>
+              </Link>
+            ))}
+          </Reveal>
         </div>
-      </Reveal>
+      </section>
 
       {/* ── Skills ───────────────────────────────────────────────────────── */}
-      <Reveal className="section-container py-16">
-        <h2 className="mb-10 font-display text-section-h2 font-bold tracking-tight text-ivory">
-          What I build with
-        </h2>
-        <Skills3D />
-      </Reveal>
+      <section className="section-container py-20 lg:py-28">
+        <Reveal>
+          <h2 className="display max-w-[20ch] text-section-h2 text-ink">
+            What I build with.
+          </h2>
+        </Reveal>
+        <Reveal className="mt-14" delay={0.05}>
+          <SkillMatrix />
+        </Reveal>
+      </section>
 
-      {/* ── About + Experience preview ───────────────────────────────────── */}
-      <Reveal className="section-container pb-16">
-        <div className="card-surface flex flex-col gap-8 p-8 lg:flex-row lg:gap-12 lg:p-10">
-          <div className="shrink-0">
-            <div className="flex h-16 w-16 items-center justify-center rounded-2xl border border-crimson/25 bg-crimson/10">
-              <span className="font-display text-2xl font-bold text-crimson">
-                S
-              </span>
-            </div>
-          </div>
-
-          <div className="flex-1">
-            <h2 className="font-display text-section-h2 font-bold tracking-tight text-ivory mb-3">
-              A developer who loves the full picture
+      {/* ── About and experience. Split, no nested cards. ────────────────── */}
+      <section className="border-t border-line">
+        <div className="section-container grid gap-14 py-20 lg:grid-cols-12 lg:gap-20 lg:py-28">
+          <Reveal className="lg:col-span-5">
+            <h2 className="display text-section-h2 text-ink">
+              A developer who wants the whole picture.
             </h2>
-            <p className="text-sm text-grey leading-relaxed max-w-2xl">
-              I&apos;m Saravanan, a full-stack developer based in Chennai,
-              India. I started out building internal ERP and CRM tooling, and
-              over the past 4+ years I&apos;ve shipped everything from
-              government visa platforms to LMS/coaching apps, expert
-              marketplaces, and multi-tenant SaaS builders.
+            <p className="mt-6 text-base leading-relaxed text-muted">
+              I started on internal ERP and CRM tooling. Over the past four
+              years I have shipped government visa platforms, LMS and coaching
+              apps, expert marketplaces, and multi-tenant SaaS builders.
             </p>
-            <div className="mt-5 flex flex-wrap gap-4">
-              <span className="flex items-center gap-1.5 text-xs text-grey-muted">
-                <MapPin className="h-3.5 w-3.5" /> Chennai, India
-              </span>
-              <span className="flex items-center gap-1.5 text-xs text-grey-muted">
-                <CalendarClock className="h-3.5 w-3.5" /> 4+ years experience
-              </span>
-              <span className="flex items-center gap-1.5 text-xs text-live">
-                <span className="h-1.5 w-1.5 rounded-full bg-live" /> Open to
-                remote &amp; hybrid
-              </span>
-            </div>
+            <p className="mt-4 text-base leading-relaxed text-muted">
+              The work I like most is the part where a vague requirement turns
+              into a schema, a boundary, and a decision someone can argue with.
+            </p>
+          </Reveal>
 
-            <div className="mt-6 grid gap-3 border-t border-line pt-6 sm:grid-cols-2">
+          <Reveal className="lg:col-span-7" delay={0.05}>
+            <div className="border-t border-line">
               {experiencePreview.map((job) => (
                 <div
                   key={job.company}
-                  className="rounded-lg border border-line bg-surface-2/40 p-4"
+                  className="grid gap-3 border-b border-line py-7 sm:grid-cols-12 sm:gap-6"
                 >
-                  <div className="flex items-start justify-between gap-2">
-                    <div>
-                      <div className="flex items-center gap-2">
-                        <span className="text-sm font-semibold text-ivory">
-                          {job.company}
-                        </span>
-                        {job.current && (
-                          <Badge
-                            variant="outline"
-                            className="border-live/30 bg-live/10 text-live text-[9px]"
-                          >
-                            Current
-                          </Badge>
-                        )}
-                      </div>
-                      <p className="mt-0.5 font-mono text-[11px] text-grey-muted">
-                        {job.role}
-                      </p>
-                    </div>
-                    <span className="shrink-0 font-mono text-[10px] text-grey-muted">
-                      {job.period}
-                    </span>
-                  </div>
-                  <div className="mt-2.5 flex flex-wrap gap-1">
-                    {job.stack.map((s) => (
-                      <span key={s} className="tag text-[9px]">
-                        {s}
+                  <div className="sm:col-span-7">
+                    <div className="flex flex-wrap items-center gap-2.5">
+                      <span className="display text-section-h3 text-ink">
+                        {job.company}
                       </span>
-                    ))}
+                      {job.current && (
+                        <span className="rounded-[var(--radius)] bg-volt px-2 py-0.5 font-mono text-[10px] font-semibold tracking-wide text-[#171612]">
+                          Current
+                        </span>
+                      )}
+                    </div>
+                    <p className="mt-1.5 text-sm text-muted">{job.role}</p>
+                    <div className="mt-3 flex flex-wrap gap-1.5">
+                      {job.stack.map((s) => (
+                        <span key={s} className="tag">
+                          {s}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                  <div className="font-mono text-xs text-muted-2 sm:col-span-5 sm:text-right">
+                    {job.period}
                   </div>
                 </div>
               ))}
             </div>
             <Link
               href="/experience"
-              className="mt-4 inline-flex items-center gap-1.5 text-xs font-mono text-grey-muted transition-colors hover:text-crimson"
+              className="group mt-6 inline-flex items-center gap-1.5 text-sm font-medium text-ink transition-colors hover:text-volt-text"
             >
-              Full work history <ArrowUpRight className="h-3 w-3" />
+              Full work history
+              <ArrowUpRight
+                className="h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+                strokeWidth={2}
+              />
             </Link>
-          </div>
+          </Reveal>
         </div>
-      </Reveal>
+      </section>
 
-      {/* ── Contact CTA ──────────────────────────────────────────────────── */}
-      <Reveal className="border-t border-line bg-elevated/60">
-        <div className="section-container py-16 text-center">
-          <h2 className="font-display text-section-h2 font-bold tracking-tight text-ivory">
-            Let&apos;s build something reliable.
-          </h2>
-          <p className="mx-auto mt-3 max-w-md text-sm text-grey leading-relaxed">
-            I&apos;m actively looking for remote and hybrid full-stack roles. If
-            you have a system to build, reach out.
-          </p>
-          <div className="mt-7 flex flex-wrap items-center justify-center gap-3">
-            <Link
-              href="/contact"
-              className="inline-flex items-center gap-2 rounded-md bg-crimson px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-crimson-bright active:scale-[0.97] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-crimson-bright focus-visible:ring-offset-2 focus-visible:ring-offset-obsidian"
-            >
-              Get in touch
-              <ArrowRight className="h-3.5 w-3.5" />
-            </Link>
-            <Link
-              href="/projects"
-              className="inline-flex items-center gap-2 rounded-md border border-line-strong px-5 py-2.5 text-sm font-medium text-ivory transition-colors hover:border-crimson/40 hover:text-crimson active:scale-[0.97]"
-            >
-              View selected work
-            </Link>
-          </div>
+      {/* ── Contact. Full-bleed accent panel, left aligned. ──────────────── */}
+      <section className="bg-volt">
+        <div className="section-container py-20 lg:py-28">
+          <Reveal className="grid gap-10 lg:grid-cols-12 lg:items-end">
+            <div className="lg:col-span-8">
+              <h2 className="display max-w-[20ch] text-section-h2 text-[#171612]">
+                Looking for a full-stack engineer who ships.
+              </h2>
+              <p className="mt-5 max-w-[52ch] text-base leading-relaxed text-[#171612]/75">
+                Open to remote and hybrid roles. If you have a system to build,
+                I would like to hear about it.
+              </p>
+            </div>
+            <div className="lg:col-span-4 lg:justify-self-end">
+              <Link
+                href="/contact"
+                className="inline-flex items-center justify-center gap-2 rounded-[var(--radius)] bg-[#171612] px-6 py-3 text-sm font-semibold text-[#f4f3ef] transition-transform duration-150 hover:brightness-125 active:translate-y-px focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#171612] focus-visible:ring-offset-2 focus-visible:ring-offset-[#d8f34a]"
+              >
+                Get in touch
+                <ArrowRight className="h-4 w-4" strokeWidth={2} />
+              </Link>
+            </div>
+          </Reveal>
         </div>
-      </Reveal>
+      </section>
     </div>
   );
 }

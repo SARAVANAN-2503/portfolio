@@ -42,7 +42,7 @@ function ResumeMenu({ compact }: { compact?: boolean }) {
         <button
           type="button"
           className={clsx(
-            'inline-flex items-center gap-1.5 rounded-md border border-crimson/40 bg-crimson/10 font-mono text-xs font-semibold text-crimson transition-colors hover:bg-crimson/20 hover:border-crimson/60 cursor-pointer',
+            'inline-flex items-center gap-1.5 rounded-md border border-line-strong font-mono text-xs font-semibold text-volt-text transition-colors hover:bg-surface-2 hover:border-line-strong cursor-pointer',
             compact ? 'w-full justify-center px-4 py-2.5' : 'px-3 py-1.5'
           )}
         >
@@ -81,16 +81,16 @@ export function Navigation() {
       className={clsx(
         'fixed top-0 z-50 w-full transition-all duration-300',
         scrolled
-          ? 'border-b border-line bg-obsidian/85 backdrop-blur-xl shadow-[0_1px_0_0_rgba(229,72,77,0.08)]'
+          ? 'border-b border-line bg-paper/85 backdrop-blur-xl shadow-[0_1px_0_0_var(--line)]'
           : 'border-b border-transparent bg-transparent'
       )}
     >
       <div className="section-container flex h-14 items-center justify-between">
         <Link
           href="/"
-          className="font-display text-lg font-bold tracking-tight text-ivory transition-colors hover:text-crimson focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-crimson-bright focus-visible:ring-offset-2 focus-visible:ring-offset-obsidian rounded-sm"
+          className="font-display text-lg font-bold tracking-tight text-ink transition-colors hover:text-volt-text focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-volt-text focus-visible:ring-offset-2 focus-visible:ring-offset-paper rounded-sm"
         >
-          Saravanan<span className="text-crimson">.</span>
+          Saravanan<span className="text-volt-text">.</span>
         </Link>
 
         {/* Desktop links */}
@@ -102,14 +102,16 @@ export function Navigation() {
                 key={href}
                 href={href}
                 className={clsx(
-                  'relative rounded-md px-3 py-1.5 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-crimson-bright',
-                  active ? 'text-ivory' : 'text-grey hover:text-ivory'
+                  'relative rounded-md px-3 py-1.5 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-volt-text',
+                  // Ink-on-volt in both themes: `text-ink` would flip to
+                  // ivory in dark mode and sit unreadable on the lime pill.
+                  active ? 'text-[#171612]' : 'text-muted hover:text-ink'
                 )}
               >
                 {active && (
                   <motion.span
                     layoutId="nav-active-pill"
-                    className="absolute inset-0 rounded-md bg-crimson/12 ring-1 ring-crimson/30"
+                    className="absolute inset-0 rounded-md bg-volt"
                     transition={{ type: 'spring', stiffness: 400, damping: 32 }}
                   />
                 )}
@@ -133,15 +135,15 @@ export function Navigation() {
               <button
                 type="button"
                 aria-label="Open navigation menu"
-                className="flex h-9 w-9 items-center justify-center rounded-md border border-line text-ivory transition-colors hover:border-crimson/40 hover:text-crimson focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-crimson-bright cursor-pointer"
+                className="flex h-9 w-9 items-center justify-center rounded-md border border-line text-ink transition-colors hover:border-line-strong hover:text-volt-text focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-volt-text cursor-pointer"
               >
                 <Menu className="h-4.5 w-4.5" />
               </button>
             </SheetTrigger>
-            <SheetContent side="right" className="w-72 border-l border-line bg-obsidian">
+            <SheetContent side="right" className="w-72 border-l border-line bg-paper">
               <SheetHeader>
-                <SheetTitle className="font-display text-ivory">
-                  Saravanan<span className="text-crimson">.</span>
+                <SheetTitle className="font-display text-ink">
+                  Saravanan<span className="text-volt-text">.</span>
                 </SheetTitle>
               </SheetHeader>
               <div className="mt-4 flex flex-col gap-1 px-4">
@@ -154,8 +156,8 @@ export function Navigation() {
                         className={clsx(
                           'rounded-md px-3 py-2.5 text-sm font-medium transition-colors',
                           active
-                            ? 'bg-crimson/12 text-crimson ring-1 ring-crimson/30'
-                            : 'text-grey hover:bg-surface hover:text-ivory'
+                            ? 'bg-volt text-[#171612]'
+                            : 'text-muted hover:bg-surface-2 hover:text-ink'
                         )}
                       >
                         {label}
