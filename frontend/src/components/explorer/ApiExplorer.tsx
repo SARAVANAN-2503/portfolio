@@ -40,28 +40,28 @@ const endpoints: EndpointDef[] = [
     method: 'POST',
     path: '/api/auth/login',
     label: 'Login',
-    description: 'JWT auth — returns bearer token that auto-populates into subsequent requests',
+    description: 'JWT auth: returns bearer token that auto-populates into subsequent requests',
   },
   {
     id: 'tenants',
     method: 'GET',
     path: '/api/tenants',
     label: 'Tenants',
-    description: 'Public endpoint — lists tenants with isolation metadata',
+    description: 'Public endpoint: lists tenants with isolation metadata',
   },
   {
     id: 'users',
     method: 'GET',
     path: '/api/users?limit=5',
     label: 'Users',
-    description: 'Cursor-paginated, tenant-scoped — requires auth + X-Tenant-ID',
+    description: 'Cursor-paginated, tenant-scoped: requires auth + X-Tenant-ID',
   },
   {
     id: 'webhook',
     method: 'POST',
     path: '/api/payments/webhook',
     label: 'Webhook',
-    description: 'HMAC-SHA256 verified — signature auto-computed client-side',
+    description: 'HMAC-SHA256 verified: signature auto-computed client-side',
   },
 ];
 
@@ -310,7 +310,7 @@ export function ApiExplorer() {
                   'inline-flex items-center gap-2 rounded-md px-4 py-2 text-sm font-semibold transition-colors cursor-pointer disabled:cursor-not-allowed',
                   isLoading || (activeId === 'users' && !token)
                     ? 'bg-surface-2 text-grey-muted'
-                    : 'bg-crimson text-white hover:bg-crimson-bright'
+                    : 'bg-volt text-[#171612] hover:brightness-[1.06]'
                 )}
               >
                 {isLoading ? (

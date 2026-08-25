@@ -1,28 +1,22 @@
 /**
- * Shared header for content pages (Projects, Experience, Contact). Distinct
- * from LabHeader — crimson eyebrow + centered rhythm, each page keeps its
- * own eyebrow word since these are standalone pages, not a scrolling stack
- * of sections competing for the eyebrow budget.
+ * Shared header for content pages (Projects, Experience, Contact).
+ *
+ * The eyebrow this used to render was removed rather than restyled. On a
+ * standalone page the label was saying what the H1 already said ("GET IN
+ * TOUCH" above "Let's work together") while the nav had already marked the
+ * current section, and repeating that uppercase mono rhythm at the top of
+ * every page is most of what made the site read as templated.
  */
 interface ContentHeaderProps {
-  eyebrow: string;
   title: string;
   description: React.ReactNode;
 }
 
-export function ContentHeader({ eyebrow, title, description }: ContentHeaderProps) {
+export function ContentHeader({ title, description }: ContentHeaderProps) {
   return (
-    <div className="mb-12 max-w-2xl">
-      <div className="mb-4 flex items-center gap-3">
-        <div className="h-px w-8 bg-crimson" />
-        <span className="font-mono text-xs uppercase tracking-widest text-crimson">
-          {eyebrow}
-        </span>
-      </div>
-      <h1 className="font-display text-page-h1 font-bold tracking-tight text-ivory">
-        {title}
-      </h1>
-      <p className="mt-3 text-grey leading-relaxed">{description}</p>
-    </div>
+    <header className="mb-14 max-w-[46ch]">
+      <h1 className="display text-page-h1 text-ink">{title}</h1>
+      <p className="mt-6 text-lg leading-relaxed text-muted">{description}</p>
+    </header>
   );
 }

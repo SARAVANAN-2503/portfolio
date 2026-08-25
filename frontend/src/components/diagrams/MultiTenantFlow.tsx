@@ -15,7 +15,7 @@ const nodes: Node<DiagramNodeData>[] = [
   },
   {
     id: 'subdomain', type: 'custom', position: { x: 220, y: 160 },
-    data: { label: 'Subdomain Router', category: 'middleware', description: 'Resolve tenant', detail: 'Extracts tenant slug from Host header before any app code runs — zero-trust at the edge' },
+    data: { label: 'Subdomain Router', category: 'middleware', description: 'Resolve tenant', detail: 'Extracts tenant slug from Host header before any app code runs, zero-trust at the edge' },
   },
   {
     id: 'express', type: 'custom', position: { x: 460, y: 160 },
@@ -23,7 +23,7 @@ const nodes: Node<DiagramNodeData>[] = [
   },
   {
     id: 'auth', type: 'custom', position: { x: 680, y: 80 },
-    data: { label: 'Auth (JWT)', category: 'middleware', description: 'Verify & extract tid', detail: 'JWT carries authoritative tenant_id in the "tid" claim — header forgery cannot bypass this' },
+    data: { label: 'Auth (JWT)', category: 'middleware', description: 'Verify & extract tid', detail: 'JWT carries authoritative tenant_id in the "tid" claim: header forgery cannot bypass this' },
   },
   {
     id: 'tenant', type: 'custom', position: { x: 680, y: 240 },

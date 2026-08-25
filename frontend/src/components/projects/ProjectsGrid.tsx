@@ -16,17 +16,17 @@ export function ProjectsGrid({ projects }: { projects: Project[] }) {
 
   return (
     <div>
-      <div className="mb-10 flex flex-wrap gap-2" role="group" aria-label="Filter projects by category">
+      <div className="mb-12 flex flex-wrap gap-2" role="group" aria-label="Filter projects by category">
         {categories.map(cat => (
           <button
             type="button"
             key={cat}
             aria-pressed={active === cat}
             onClick={() => setActive(cat)}
-            className={`rounded-full border px-3 py-1.5 font-mono text-xs transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-crimson-bright ${
+            className={`rounded-[var(--radius)] border px-3 py-1.5 text-[13px] font-medium transition-colors cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-volt-text ${
               active === cat
-                ? 'border-crimson/40 bg-crimson/10 text-crimson'
-                : 'border-line text-grey-muted hover:border-line-strong hover:text-ivory'
+                ? 'border-transparent bg-volt text-[#171612]'
+                : 'border-line text-muted hover:border-line-strong hover:text-ink'
             }`}
           >
             {cat}
@@ -34,7 +34,7 @@ export function ProjectsGrid({ projects }: { projects: Project[] }) {
         ))}
       </div>
 
-      <div className="grid gap-5 lg:grid-cols-6">
+      <div className="grid gap-6 lg:grid-cols-6">
         {filtered.map((project, i) => {
           const span = active === 'All' ? SPANS[i] ?? 'lg:col-span-3' : 'lg:col-span-3';
           const variant = active === 'All' ? VARIANTS[i] ?? 'default' : 'default';
@@ -47,7 +47,7 @@ export function ProjectsGrid({ projects }: { projects: Project[] }) {
       </div>
 
       {filtered.length === 0 && (
-        <p className="py-16 text-center text-sm text-grey-muted">No projects in this category yet.</p>
+        <p className="py-16 text-center text-sm text-muted-2">No projects in this category yet.</p>
       )}
     </div>
   );

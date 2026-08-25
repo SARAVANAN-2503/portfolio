@@ -13,6 +13,9 @@ export interface ContactMethod {
   icon: ReactNode;
 }
 
+/* A hairline row, not a card. Five of these stacked used to be five identical
+   bordered boxes each holding a bordered icon tile, which is the same object
+   repeated down the page. As rows they read as one list. */
 export function ContactCard({ contact }: { contact: ContactMethod }) {
   const [copied, setCopied] = useState(false);
 
@@ -26,37 +29,57 @@ export function ContactCard({ contact }: { contact: ContactMethod }) {
       })
       .catch(() => {
         // Clipboard access can be denied by the browser (permissions,
-        // unfocused document, insecure context) — fail silently.
+        // unfocused document, insecure context). Fail silently.
       });
   }
 
   return (
-    <a
-      href={contact.href}
-      target={contact.external ? '_blank' : undefined}
-      rel={contact.external ? 'noopener noreferrer' : undefined}
-      className="card-surface group flex items-center gap-4 p-5 transition-all hover:border-crimson/30 hover:shadow-[0_0_24px_-8px_rgba(229,72,77,0.18)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-crimson-bright"
-    >
-      <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-line bg-surface-2/60 text-grey-muted transition-colors group-hover:border-crimson/30 group-hover:text-crimson [&_svg]:h-4.5 [&_svg]:w-4.5">
-        {contact.icon}
-      </div>
-      <div className="min-w-0 flex-1">
-        <div className="text-sm font-semibold text-ivory">{contact.label}</div>
-        <div className="mt-0.5 truncate font-mono text-xs text-grey-muted">{contact.value}</div>
-        <div className="mt-0.5 text-[10px] text-grey-muted">{contact.note}</div>
-      </div>
-      {contact.copyable ? (
+    <div className="group relative border-b border-line">
+      <a
+        href={contact.href}
+        target={contact.external ? '_blank' : undefined}
+        rel={contact.external ? 'noopener noreferrer' : undefined}
+        className="grid grid-cols-1 items-baseline gap-1 py-6 transition-colors sm:grid-cols-12 sm:gap-6 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-volt-text"
+      >
+        <div className="display text-section-h3 text-ink transition-colors group-hover:text-volt-text sm:col-span-3">
+          {contact.label}
+        </div>
+        <div className="min-w-0 sm:col-span-6">
+          <div className="truncate font-mono text-sm text-ink-dim">
+            {contact.value}
+          </div>
+          <div className="mt-1 text-[13px] text-muted">{contact.note}</div>
+        </div>
+        <div className="sm:col-span-3 sm:justify-self-end">
+          {!contact.copyable && (
+            <ArrowUpRight
+              className="h-5 w-5 text-muted-2 transition-all group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-volt-text"
+              strokeWidth={1.75}
+            />
+          )}
+        </div>
+      </a>
+
+      {/* Kept outside the anchor: a button nested inside a link is invalid
+          markup and breaks keyboard activation of both. */}
+      {contact.copyable && (
         <button
           type="button"
           onClick={handleCopy}
           aria-label={`Copy ${contact.label.toLowerCase()}`}
-          className="shrink-0 rounded-md border border-line p-2 text-grey-muted transition-colors hover:border-crimson/40 hover:text-crimson cursor-pointer"
+          className="absolute top-1/2 right-0 flex -translate-y-1/2 items-center gap-1.5 rounded-[var(--radius)] border border-line px-2.5 py-1.5 text-xs text-muted transition-colors hover:border-line-strong hover:text-ink cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-volt-text"
         >
-          {copied ? <Check className="h-3.5 w-3.5 text-live" /> : <Copy className="h-3.5 w-3.5" />}
+          {copied ? (
+            <>
+              <Check className="h-3.5 w-3.5" /> Copied
+            </>
+          ) : (
+            <>
+              <Copy className="h-3.5 w-3.5" /> Copy
+            </>
+          )}
         </button>
-      ) : (
-        <ArrowUpRight className="h-4 w-4 shrink-0 text-grey-muted transition-colors group-hover:text-crimson" />
       )}
-    </a>
+    </div>
   );
 }
