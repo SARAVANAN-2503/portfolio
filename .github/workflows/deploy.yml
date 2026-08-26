@@ -37,6 +37,11 @@ jobs:
             # npm's content-addressable cache: re-downloaded on demand.
             npm cache clean --force >/dev/null 2>&1 || true
 
+            # node-gyp's downloaded node headers, one copy per Node version
+            # ever used on the box. Re-fetched automatically when a native
+            # module next needs to compile.
+            rm -rf ~/.cache/node-gyp 2>/dev/null || true
+
             # pm2 logs grow without bound. Truncate rather than delete so pm2
             # keeps writing to the same file handles.
             if [ -d ~/.pm2/logs ]; then
