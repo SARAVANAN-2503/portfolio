@@ -7,6 +7,7 @@ export const seltrix: Project = {
   category: 'SaaS Platform',
   status: 'shipped',
   year: '2024',
+  image: '/Seltrix.png',
   highlights: [
     'Multi-tenant SaaS website builder with custom-domain publishing',
     'Template marketplace for buying and selling reusable site templates',

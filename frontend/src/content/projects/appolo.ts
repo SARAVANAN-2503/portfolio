@@ -7,6 +7,7 @@ export const appolo: Project = {
   category: 'Serverless / EdTech',
   status: 'live',
   year: '2025',
+  image: '/Appolo Smart Test.png',
   highlights: [
     'Serverless PDF processing pipeline, 90% less manual grading effort',
     'Cursor-based MongoDB pagination: 60% faster API response times',

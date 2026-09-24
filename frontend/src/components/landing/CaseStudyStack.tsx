@@ -2,6 +2,7 @@
 
 import { useRef } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { ArrowUpRight } from 'lucide-react';
 import { motion, useScroll, useTransform, useReducedMotion } from 'framer-motion';
 import { ProjectVisual } from '@/components/projects/ProjectVisual';
@@ -56,14 +57,24 @@ function StackCard({
         <div className="grid lg:grid-cols-12">
           {/* Visual rail. Full-height on desktop so the card reads as one
               object instead of a header image stacked on a text block. */}
-          <div className="relative min-h-[180px] border-b border-line bg-elevated lg:col-span-5 lg:min-h-[420px] lg:border-r lg:border-b-0">
-            <ProjectVisual
-              slug={project.slug}
-              category={project.category}
-              size="featured"
-              className="absolute inset-0"
-            />
-            <div className="absolute bottom-5 left-6 display text-[clamp(3rem,5vw,4.5rem)] leading-none text-ink/12">
+          <div className="relative min-h-[180px] overflow-hidden border-b border-line bg-elevated lg:col-span-5 lg:min-h-[420px] lg:border-r lg:border-b-0">
+            {project.image ? (
+              <Image
+                src={project.image}
+                alt={project.title}
+                fill
+                sizes="(min-width: 1024px) 42vw, 100vw"
+                className="object-cover object-top transition-transform duration-500 group-hover:scale-[1.02]"
+              />
+            ) : (
+              <ProjectVisual
+                slug={project.slug}
+                category={project.category}
+                size="featured"
+                className="absolute inset-0"
+              />
+            )}
+            <div className="absolute bottom-5 left-6 display text-[clamp(3rem,5vw,4.5rem)] leading-none text-ink/12 pointer-events-none drop-shadow-sm">
               {String(index + 1).padStart(2, '0')}
             </div>
           </div>

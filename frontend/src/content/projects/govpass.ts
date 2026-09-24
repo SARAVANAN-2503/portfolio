@@ -7,6 +7,7 @@ export const govpass: Project = {
   category: 'Government / Compliance',
   status: 'shipped',
   year: '2024',
+  image: '/GovPass.png',
   highlights: [
     'Replaced paper workflow: 30% error rate → < 2%',
     'Immutable event-sourced audit log (7-year retention)',

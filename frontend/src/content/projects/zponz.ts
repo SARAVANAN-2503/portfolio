@@ -7,6 +7,7 @@ export const zponz: Project = {
   category: 'Marketplace / Wallet',
   status: 'shipped',
   year: '2024',
+  image: '/ZPONZ.png',
   highlights: [
     'Drag-and-drop page builder with master components and ordered schema sections',
     'Stripe-backed wallet: deposits, withdrawals, escrow, scheduled expert payouts',

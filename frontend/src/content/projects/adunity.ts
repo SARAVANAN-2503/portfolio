@@ -7,6 +7,7 @@ export const adunity: Project = {
   category: 'AI / CRM',
   status: 'shipped',
   year: '2023',
+  image: '/AdUnity.png',
   highlights: [
     'Real-estate CRM: lead tracking, site-visit planning, tenant-scoped workflows',
     'Click-to-call with AI transcription and sentiment analysis via AssemblyAI',

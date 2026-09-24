@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import Image from 'next/image';
 import { ArrowUpRight } from 'lucide-react';
 import type { Project } from '@/content/projects';
 import { ProjectVisual } from './ProjectVisual';
@@ -32,20 +33,31 @@ export function ProjectCard({
       href={`/projects/${project.slug}`}
       className="group flex h-full flex-col overflow-hidden rounded-[var(--radius)] border border-line bg-surface transition-colors duration-200 hover:border-line-strong focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-volt-text"
     >
-      {/* Procedural per-project schematic. Nothing is overlaid on it: labels
-          sitting on top of an image is one of the more reliable tells, and
-          the metadata reads better as a real line of text underneath. */}
       <div
-        className={`relative border-b border-line bg-elevated ${
-          featured ? 'h-48 sm:h-56' : compact ? 'h-24' : 'h-32'
+        className={`relative overflow-hidden border-b border-line bg-elevated ${
+          featured ? 'h-52 sm:h-64' : compact ? 'h-28' : 'h-40'
         }`}
       >
-        <ProjectVisual
-          slug={project.slug}
-          category={project.category}
-          size={featured ? 'featured' : compact ? 'compact' : 'default'}
-          className="absolute inset-0"
-        />
+        {project.image ? (
+          <Image
+            src={project.image}
+            alt={project.title}
+            fill
+            sizes={
+              featured
+                ? '(min-width: 1024px) 66vw, 100vw'
+                : '(min-width: 1024px) 33vw, 100vw'
+            }
+            className="object-cover object-top transition-transform duration-300 group-hover:scale-[1.03]"
+          />
+        ) : (
+          <ProjectVisual
+            slug={project.slug}
+            category={project.category}
+            size={featured ? 'featured' : compact ? 'compact' : 'default'}
+            className="absolute inset-0"
+          />
+        )}
       </div>
 
       <div

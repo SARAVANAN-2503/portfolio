@@ -1,6 +1,7 @@
 import { notFound } from 'next/navigation';
 import type { Metadata } from 'next/types';
 import Link from 'next/link';
+import Image from 'next/image';
 import { ArrowLeft, ArrowRight } from 'lucide-react';
 import { projects, getProject } from '@/content/projects';
 import { ExplainMode } from '@/components/projects/ExplainMode';
@@ -109,13 +110,24 @@ export default async function ProjectDetail(props: Props) {
       <div className="wide-container grid gap-12 py-20 lg:grid-cols-12 lg:gap-16 lg:py-24">
         <aside className="lg:col-span-4">
           <div className="lg:sticky lg:top-28">
-            <div className="relative h-56 overflow-hidden rounded-[var(--radius)] border border-line bg-elevated">
-              <ProjectVisual
-                slug={project.slug}
-                category={project.category}
-                size="featured"
-                className="absolute inset-0"
-              />
+            <div className="relative h-56 sm:h-64 overflow-hidden rounded-[var(--radius)] border border-line bg-elevated shadow-sm">
+              {project.image ? (
+                <Image
+                  src={project.image}
+                  alt={project.title}
+                  fill
+                  priority
+                  sizes="(min-width: 1024px) 33vw, 100vw"
+                  className="object-cover object-top"
+                />
+              ) : (
+                <ProjectVisual
+                  slug={project.slug}
+                  category={project.category}
+                  size="featured"
+                  className="absolute inset-0"
+                />
+              )}
             </div>
 
             {project.highlights && (

@@ -7,6 +7,7 @@ export const nexusone: Project = {
   category: 'LMS / Coaching',
   status: 'shipped',
   year: '2024',
+  image: '/NexusOne.coach.png',
   highlights: [
     'Courses, live Zoom classes, cohort management, automated assessments',
     'RBAC permission controls with Socket.IO-driven attendance tracking',
