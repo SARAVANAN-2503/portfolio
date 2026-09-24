@@ -55,9 +55,12 @@ jobs:
               find ~/.pm2/logs -name '*.log' -exec truncate -s 0 {} \; 2>/dev/null || true
             fi
 
-            # Best effort, and only where permitted without a password prompt.
-            sudo -n journalctl --vacuum-time=3d >/dev/null 2>&1 || true
+            # Best effort system cleanup, and only where permitted without a password prompt.
+            sudo -n journalctl --vacuum-size=20M >/dev/null 2>&1 || true
+            sudo -n apt-get autoremove -y >/dev/null 2>&1 || true
             sudo -n apt-get clean >/dev/null 2>&1 || true
+            sudo -n rm -rf /var/log/*.gz /var/log/*.[0-9] /var/log/*/*.gz 2>/dev/null || true
+            sudo -n rm -rf /var/cache/apt/archives/* 2>/dev/null || true
             command -v docker >/dev/null 2>&1 && docker system prune -af >/dev/null 2>&1 || true
 
             echo "[disk] after cleanup"
@@ -65,13 +68,16 @@ jobs:
 
             # Guard: fail with the real reason instead of letting git die with
             # a misleading pack error several steps later.
-            # EC2 volume is ~6.7 GiB with ~1 GiB available post-cleanup.
+            # EC2 volume is ~6.7 GiB. Threshold calibrated to 450 MiB which gives
+            # sufficient headroom for git pull and next build.
             AVAIL_KB=$(df --output=avail / | tail -1 | tr -d ' ')
-            MIN_KB=$((750 * 1024))   # 750 MiB
+            MIN_KB=$((450 * 1024))   # 450 MiB
             if [ "$AVAIL_KB" -lt "$MIN_KB" ]; then
-              echo "::error::Deploy aborted: only $((AVAIL_KB / 1024)) MiB free on /, need at least 750 MiB."
+              echo "::error::Deploy aborted: only $((AVAIL_KB / 1024)) MiB free on /, need at least 450 MiB."
               echo "Largest directories under \$HOME:"
               du -xh ~ --max-depth=3 2>/dev/null | sort -rh | head -20
+              echo "Largest directories on /:"
+              du -xh / --max-depth=2 2>/dev/null | sort -rh | head -15
               exit 1
             fi
 
