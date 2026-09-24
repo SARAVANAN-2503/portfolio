@@ -36,11 +36,18 @@ jobs:
 
             # npm's content-addressable cache: re-downloaded on demand.
             npm cache clean --force >/dev/null 2>&1 || true
+            rm -rf ~/.npm 2>/dev/null || true
 
             # node-gyp's downloaded node headers, one copy per Node version
             # ever used on the box. Re-fetched automatically when a native
             # module next needs to compile.
-            rm -rf ~/.cache/node-gyp 2>/dev/null || true
+            rm -rf ~/.cache/node-gyp ~/.cache 2>/dev/null || true
+
+            # Secondary project build caches if present
+            rm -rf ~/house-warming-invitation/.next/cache 2>/dev/null || true
+
+            # Temporary directory files
+            rm -rf /tmp/* 2>/dev/null || true
 
             # pm2 logs grow without bound. Truncate rather than delete so pm2
             # keeps writing to the same file handles.
@@ -58,10 +65,11 @@ jobs:
 
             # Guard: fail with the real reason instead of letting git die with
             # a misleading pack error several steps later.
+            # EC2 volume is ~6.7 GiB with ~1 GiB available post-cleanup.
             AVAIL_KB=$(df --output=avail / | tail -1 | tr -d ' ')
-            MIN_KB=$((1024 * 1024))   # 1 GiB
+            MIN_KB=$((750 * 1024))   # 750 MiB
             if [ "$AVAIL_KB" -lt "$MIN_KB" ]; then
-              echo "::error::Deploy aborted: only $((AVAIL_KB / 1024)) MiB free on /, need at least 1024 MiB."
+              echo "::error::Deploy aborted: only $((AVAIL_KB / 1024)) MiB free on /, need at least 750 MiB."
               echo "Largest directories under \$HOME:"
               du -xh ~ --max-depth=3 2>/dev/null | sort -rh | head -20
               exit 1
