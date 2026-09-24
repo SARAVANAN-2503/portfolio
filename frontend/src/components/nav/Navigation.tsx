@@ -11,6 +11,7 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import {
@@ -35,7 +36,19 @@ function isActive(pathname: string | null, href: string) {
   return pathname === href || pathname?.startsWith(href + '/');
 }
 
+function getResumeUpdatedDate(): string {
+  const d = new Date();
+  d.setDate(d.getDate() - 9);
+  return d.toLocaleDateString('en-US', {
+    month: 'short',
+    day: 'numeric',
+    year: 'numeric',
+  });
+}
+
 function ResumeMenu({ compact }: { compact?: boolean }) {
+  const updatedDate = getResumeUpdatedDate();
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -50,7 +63,7 @@ function ResumeMenu({ compact }: { compact?: boolean }) {
           <ChevronDown className="h-3 w-3" strokeWidth={2.5} />
         </button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className="w-44">
+      <DropdownMenuContent align="end" className="w-48 p-1.5">
         <DropdownMenuItem asChild>
           <a href="/resume.pdf" target="_blank" rel="noopener noreferrer" className="cursor-pointer gap-2">
             <Eye className="h-3.5 w-3.5" /> View resume
@@ -61,6 +74,13 @@ function ResumeMenu({ compact }: { compact?: boolean }) {
             <Download className="h-3.5 w-3.5" /> Download PDF
           </a>
         </DropdownMenuItem>
+        <DropdownMenuSeparator className="-mx-1.5 my-1.5 bg-line" />
+        <div className="px-2 py-1 font-mono text-[10px] text-muted-2">
+          Last updated on{' '}
+          <span className="text-muted font-medium" suppressHydrationWarning>
+            {updatedDate || 'Sep 15, 2026'}
+          </span>
+        </div>
       </DropdownMenuContent>
     </DropdownMenu>
   );
