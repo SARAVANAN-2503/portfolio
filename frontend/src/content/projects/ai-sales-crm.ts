@@ -1,18 +1,26 @@
 import type { Project } from './types';
 
-export const adunity: Project = {
-  slug: 'adunity',
-  title: 'AdUnity',
+export const aiSalesCrm: Project = {
+  id: 'proj-06',
+  slug: 'ai-sales-crm',
+  title: 'AI-Powered Sales CRM',
   tagline: 'Multi-Tenant CRM & AI Call Analytics Platform',
   category: 'AI / CRM',
+  engagementType: 'employer',
+  employerId: 'jnana',
   status: 'shipped',
   year: '2023',
-  image: '/AdUnity.png',
+  image: '/projects/ai-sales-crm.png',
+  imageAlt: 'Illustrative architectural diagram for AI-Powered Sales CRM',
+  imageCaption: 'Illustrative system architecture',
+  hasCaseStudy: true,
+  summary:
+    'Multi-tenant real-estate sales CRM with click-to-call telephony, AssemblyAI call transcription and sentiment analysis, and duplicate lead detection.',
   highlights: [
-    'Real-estate CRM: lead tracking, site-visit planning, tenant-scoped workflows',
-    'Click-to-call with AI transcription and sentiment analysis via AssemblyAI',
-    'Real-time incoming-call alerts and duplicate lead detection',
-    'Automated lead-expiry actions to boost agent sales velocity',
+    'Real-estate CRM: lead tracking, site-visit planning, team performance analytics, tenant-scoped workflows',
+    'Integrated Aloha & Knowlarity communication utilities and AssemblyAI for click-to-call, transcription, sentiment analysis',
+    'Real-time incoming-call alerts, duplicate lead detection, automated lead-expiry actions',
+    'Strict tenant boundary enforced at the query layer across shared infrastructure',
   ],
   problem:
     'Real-estate sales teams juggle leads across multiple channels and vendors, and the same prospect frequently gets logged twice by different agents. Meanwhile calls happen and the useful information, what the client actually wants, how the call went: lives only in an agent\'s memory unless someone manually writes it up. Every tenant (agency/team) needed strict data isolation, since agencies compete with each other on the same platform.',
@@ -35,9 +43,10 @@ export const adunity: Project = {
     'Knowlarity',
     'Aloha',
   ],
+  confidentialityStatus: 'anonymized-case-study',
   explainMode: {
     interviewPitch:
-      "AdUnity is a multi-tenant real-estate CRM where the interesting engineering wasn't the CRUD: it was turning phone calls into structured data via AssemblyAI, catching duplicate leads before they split an agent's follow-up effort, and keeping every tenant's pipeline strictly isolated on shared infrastructure.",
+      'AI-Powered Sales CRM is a multi-tenant real-estate CRM where the interesting engineering wasn\'t the CRUD: it was turning phone calls into structured data via AssemblyAI, catching duplicate leads before they split an agent\'s follow-up effort, and keeping every tenant\'s pipeline strictly isolated on shared infrastructure.',
     talkingPoints: [
       'Tenant boundary enforced at the query layer across leads, site visits, and analytics',
       'Click-to-call via Aloha/Knowlarity feeds recordings straight into AssemblyAI for transcription + sentiment',

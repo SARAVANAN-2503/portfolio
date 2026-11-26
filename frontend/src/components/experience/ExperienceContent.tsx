@@ -5,16 +5,14 @@ import { useRef } from 'react';
 import { motion, useScroll, useSpring, useReducedMotion } from 'framer-motion';
 import { ArrowRight, ArrowUpRight, GraduationCap } from 'lucide-react';
 import { ContentHeader } from '@/components/ui/ContentHeader';
+import {
+  getProjectsByEmployer,
+  getFreelanceProjects,
+  getExternalLink,
+  type Project,
+} from '@/content/projects';
 
 /* ─── Data ──────────────────────────────────────────────────────────────────── */
-
-interface Project {
-  name: string;
-  tagline: string;
-  stack: string[];
-  slug?: string; // links to /projects/[slug] if present
-  highlights: string[];
-}
 
 interface Job {
   company: string;
@@ -40,56 +38,7 @@ const experience: Job[] = [
     color: 'emerald',
     summary:
       'Building production SaaS, marketplace, and LMS platforms end-to-end. Leading architectural decisions on multi-tenant isolation, wallet/payment flows, RBAC, and real-time infrastructure across four shipped products.',
-    projects: [
-      {
-        name: 'NexusOne.coach',
-        tagline: 'LMS, Live Classes & Coaching Platform',
-        stack: ['React', 'Node.js', 'MySQL', 'Socket.IO', 'Stripe', 'Zoom SDK'],
-        slug: 'nexusone',
-        highlights: [
-          'Architected a full-stack coaching/LMS platform: courses, live Zoom classes, cohorts, automated assessments',
-          'Secure REST APIs, comprehensive RBAC/permission controls, Socket.IO-driven attendance tracking, audit logging',
-          'Integrated Stripe (Checkout/Subscriptions/Connect), Zoom Meeting SDK, Google Calendar, and Firebase',
-          'Automated live-class reminders and engagement notifications',
-        ],
-      },
-      {
-        name: 'Seltrix',
-        tagline: 'Multi-Tenant Website Builder & Template Commerce Platform',
-        stack: ['Next.js', 'Node.js', 'MySQL', 'Stripe', 'Cloudinary'],
-        slug: 'seltrix',
-        highlights: [
-          'Developed a multi-tenant SaaS website builder with custom-domain publishing',
-          'Template marketplace for buying and selling reusable page templates',
-          'Dynamic public tenant rendering resolves tenant identity per request',
-        ],
-      },
-      {
-        name: 'GovPass',
-        tagline: 'Government Visa Application Management System',
-        stack: ['React', 'Node.js', 'MySQL', 'AWS S3', 'Stripe', 'Square'],
-        slug: 'govpass',
-        highlights: [
-          'Replaced paper-based workflow: error rate dropped from 30% to < 2%',
-          'Event-sourced audit log satisfying 7-year regulatory retention',
-          'RBAC permission matrix for 15+ officer roles evaluated at middleware',
-          'Fault-tolerant payment flows with retry, idempotency, and failure handling',
-        ],
-      },
-      {
-        name: 'ZPONZ',
-        tagline: 'Expert Marketplace, Wallet & CMS Platform',
-        stack: ['React', 'Node.js', 'MySQL', 'Socket.IO', 'Stripe', 'AWS S3/CloudFront'],
-        slug: 'zponz',
-        highlights: [
-          'Reusable drag-and-drop page-builder: master components, layout configs, ordered schema sections',
-          'Stripe automated billing, DNS verification flows, and Cloudinary media asset management',
-          'Expert monetization marketplace: landing site, ad dashboard, centralized admin CMS',
-          'Stripe-backed wallet: deposits, withdrawals, transfers, escrow/locked balances, scheduled payouts',
-          'Real-time notifications via Socket.IO and Firebase Cloud Messaging + AWS S3/CloudFront media pipeline',
-        ],
-      },
-    ],
+    projects: getProjectsByEmployer('gnxtace'),
     skills: [
       'Next.js', 'React', 'Node.js', 'Express.js', 'MySQL', 'Socket.IO', 'Stripe',
       'Zoom SDK', 'Firebase/FCM', 'AWS S3/CloudFront', 'Cloudinary', 'JWT', 'OAuth',
@@ -106,29 +55,7 @@ const experience: Job[] = [
     color: 'blue',
     summary:
       'Built an AI-integrated real-estate CRM and a multi-tenant ERP/POS SaaS platform. Focused heavily on backend performance, tenant-scoped data isolation, and API design across React and Vue frontends.',
-    projects: [
-      {
-        name: 'AdUnity',
-        tagline: 'Multi-Tenant CRM & AI Call Analytics Platform',
-        stack: ['React', 'Node.js', 'SQL', 'Socket.IO', 'AssemblyAI'],
-        slug: 'adunity',
-        highlights: [
-          'Real-estate CRM: lead tracking, site-visit planning, team performance analytics, tenant-scoped workflows',
-          'Integrated Aloha & Knowlarity communication utilities and AssemblyAI for click-to-call, transcription, sentiment analysis',
-          'Real-time incoming-call alerts, duplicate lead detection, automated lead-expiry actions',
-        ],
-      },
-      {
-        name: 'QuickBizz',
-        tagline: 'Multi-Tenant ERP/POS SaaS Platform',
-        stack: ['Laravel', 'Vue.js', 'MySQL', 'Stripe', 'Razorpay'],
-        highlights: [
-          'Co-developed a secure ERP/POS SaaS platform with company-level tenant isolation',
-          'Retail workflows: POS billing, multi-warehouse inventory, purchases, online storefronts, PDF invoicing',
-          'Usage-based subscription billing across 15 distinct functional modules with automated overdue restrictions',
-        ],
-      },
-    ],
+    projects: getProjectsByEmployer('jnana'),
     skills: [
       'React', 'Vue.js', 'Node.js', 'Laravel', 'MySQL', 'Socket.IO', 'AssemblyAI',
       'Stripe', 'Razorpay', 'JWT', 'REST APIs', 'Event-Driven Architecture',
@@ -138,23 +65,8 @@ const experience: Job[] = [
 
 /* ─── Freelance ─────────────────────────────────────────────────────────────── */
 
-const freelance = {
-  period: '2025',
-  project: 'Appolo Smart Test',
-  tagline: 'Enterprise Exam Evaluation Platform',
-  url: 'https://appolosmarttest.com',
-  slug: 'appolo',
-  stack: ['AWS Lambda', 'SQS', 'S3', 'MongoDB', 'React', 'Node.js', 'Firebase FCM', 'Razorpay'],
-  highlights: [
-    'Serverless PDF processing pipeline (AWS Lambda, S3, SQS) that cut manual effort by 90%',
-    'Firebase Cloud Messaging + SQS queue worker notifications, 1,000+ concurrent pushes, no memory spikes',
-    'Agenda.js job scheduler: timed start/end, auto-submission on timeout, idempotent reminder notifications',
-    'Scalable REST APIs: 50+ endpoints, JWT auth (RS256), validation, structured logging',
-    'Responsive React dashboard: 40+ routes, optimized state management',
-    'Razorpay LMS subscriptions + cursor-based MongoDB pagination, 60% faster API responses',
-    'TUS resumable uploads for 500MB+ video files; Helmet, XSS sanitization, injection prevention, rate limiting',
-  ],
-};
+const freelanceProject = getFreelanceProjects()[0];
+const freelanceExternalLink = freelanceProject ? getExternalLink(freelanceProject.slug) : null;
 
 /* ─── Color helpers ──────────────────────────────────────────────────────────── */
 
@@ -189,11 +101,11 @@ function ProjectBlock({ project }: { project: Project }) {
       <div className="mb-3 flex items-start justify-between gap-3">
         <div>
           <h4 className="display text-base text-ink transition-colors group-hover:text-volt-text">
-            {project.name}
+            {project.title}
           </h4>
           <p className="mt-0.5 font-mono text-xs text-grey-muted">{project.tagline}</p>
         </div>
-        {project.slug && (
+        {project.hasCaseStudy && (
           <span className="shrink-0 font-mono text-[10px] text-grey-muted transition-colors group-hover:text-crimson">
             case study →
           </span>
@@ -216,7 +128,7 @@ function ProjectBlock({ project }: { project: Project }) {
     </div>
   );
 
-  return project.slug ? (
+  return project.hasCaseStudy ? (
     <Link href={`/projects/${project.slug}`} className="block h-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-crimson-bright rounded-lg">{inner}</Link>
   ) : (
     inner
@@ -321,7 +233,7 @@ export function ExperienceContent() {
                   {/* Projects */}
                   <div className="mb-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
                     {job.projects.map(p => (
-                      <ProjectBlock key={p.name} project={p} />
+                      <ProjectBlock key={p.id} project={p} />
                     ))}
                   </div>
 
@@ -338,12 +250,13 @@ export function ExperienceContent() {
             })}
 
             {/* Freelance */}
+            {freelanceProject && (
             <TimelineEntry markerColor="bg-crimson-bright ring-crimson-bright/30">
               <div className="mb-6">
                 <div className="mb-2 flex flex-wrap items-center gap-3">
                   <h2 className="display text-[clamp(1.5rem,2.6vw,2.125rem)] text-ink">Freelance</h2>
                   <span className="inline-flex items-center rounded-full border border-crimson-bright/30 bg-crimson-bright/10 px-2.5 py-0.5 font-mono text-xs text-crimson-bright">
-                    {freelance.period}
+                    {freelanceProject.year ?? '2025'}
                   </span>
                 </div>
                 <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-sm text-grey">
@@ -359,24 +272,26 @@ export function ExperienceContent() {
                   <div>
                     <div className="mb-1 flex items-center gap-2">
                       <h3 className="font-display text-lg font-bold text-ivory">
-                        {freelance.project}
+                        {freelanceProject.title}
                       </h3>
                       <span className="inline-flex items-center gap-1 rounded-full border border-live/30 bg-live/10 px-2 py-0.5 font-mono text-[10px] text-live">
                         ● Live
                       </span>
                     </div>
-                    <p className="text-sm text-grey">{freelance.tagline}</p>
-                    <a
-                      href={freelance.url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="mt-0.5 inline-block font-mono text-xs text-crimson-bright/80 transition-colors hover:text-crimson-bright"
-                    >
-                      {freelance.url.replace('https://', '')} ↗
-                    </a>
+                    <p className="text-sm text-grey">{freelanceProject.tagline}</p>
+                    {freelanceExternalLink?.url && (
+                      <a
+                        href={freelanceExternalLink.url}
+                        target="_blank"
+                        rel="noopener noreferrer nofollow"
+                        className="mt-0.5 inline-block font-mono text-xs text-crimson-bright/80 transition-colors hover:text-crimson-bright"
+                      >
+                        {freelanceExternalLink.label} ↗
+                      </a>
+                    )}
                   </div>
                   <Link
-                    href={`/projects/${freelance.slug}`}
+                    href={`/projects/${freelanceProject.slug}`}
                     className="shrink-0 whitespace-nowrap font-mono text-[10px] text-grey-muted transition-colors hover:text-crimson"
                   >
                     case study →
@@ -384,7 +299,7 @@ export function ExperienceContent() {
                 </div>
 
                 <div className="mb-5 grid gap-x-6 gap-y-1.5 border-l border-crimson-bright/20 pl-3 sm:grid-cols-2">
-                  {freelance.highlights.map(h => (
+                  {freelanceProject.highlights.map(h => (
                     <div key={h} className="text-xs leading-relaxed text-grey">
                       {h}
                     </div>
@@ -392,12 +307,13 @@ export function ExperienceContent() {
                 </div>
 
                 <div className="flex flex-wrap gap-1.5 border-t border-line pt-4">
-                  {freelance.stack.map(t => (
+                  {freelanceProject.stack.map(t => (
                     <span key={t} className="tag text-[10px]">{t}</span>
                   ))}
                 </div>
               </div>
             </TimelineEntry>
+            )}
 
             {/* Education */}
             <TimelineEntry markerColor="bg-grey-muted ring-grey-muted/30">

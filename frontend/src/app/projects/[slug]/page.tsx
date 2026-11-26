@@ -2,10 +2,12 @@ import { notFound } from 'next/navigation';
 import type { Metadata } from 'next/types';
 import Link from 'next/link';
 import Image from 'next/image';
-import { ArrowLeft, ArrowRight } from 'lucide-react';
-import { projects, getProject } from '@/content/projects';
+import { ArrowLeft, ArrowRight, ArrowUpRight } from 'lucide-react';
+import { projects, getProject, getExternalLink } from '@/content/projects';
 import { ExplainMode } from '@/components/projects/ExplainMode';
 import { ProjectVisual } from '@/components/projects/ProjectVisual';
+
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://saravanan.krelyvo.in';
 
 interface Props {
   params: Promise<{ slug: string }>;
@@ -19,9 +21,30 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
   const params = await props.params;
   const project = getProject(params.slug);
   if (!project) return {};
+
+  const title = `${project.title} | Full-Stack Engineering Case Study`;
+  const description = project.summary;
+  const canonicalPath = `/projects/${project.slug}`;
+
   return {
-    title: project.title,
-    description: `${project.tagline}: ${project.problem.split('.')[0]}.`,
+    title,
+    description,
+    alternates: {
+      canonical: canonicalPath,
+    },
+    openGraph: {
+      title,
+      description,
+      url: canonicalPath,
+      type: 'article',
+      ...(project.image ? { images: [{ url: project.image, alt: project.imageAlt ?? project.title }] } : {}),
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title,
+      description,
+      ...(project.image ? { images: [project.image] } : {}),
+    },
   };
 }
 
@@ -29,6 +52,11 @@ const statusLabel: Record<string, string> = {
   live: 'Live',
   shipped: 'Shipped',
   internal: 'Internal',
+};
+
+const engagementLabel: Record<string, string> = {
+  employer: 'Employer Engineering Contribution',
+  freelance: 'Freelance Engineering Engagement',
 };
 
 export default async function ProjectDetail(props: Props) {
@@ -40,9 +68,41 @@ export default async function ProjectDetail(props: Props) {
   const prev = currentIdx > 0 ? projects[currentIdx - 1] : null;
   const next = currentIdx < projects.length - 1 ? projects[currentIdx + 1] : null;
   const status = project.status ? statusLabel[project.status] : null;
+  const externalLink = getExternalLink(project.slug);
+
+  const breadcrumbJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: SITE_URL },
+      { '@type': 'ListItem', position: 2, name: 'Projects', item: `${SITE_URL}/projects` },
+      { '@type': 'ListItem', position: 3, name: project.title, item: `${SITE_URL}/projects/${project.slug}` },
+    ],
+  };
+
+  const articleJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'TechArticle',
+    headline: `${project.title} | Full-Stack Engineering Case Study`,
+    description: project.summary,
+    author: {
+      '@type': 'Person',
+      name: 'Saravanan Ramesh',
+      url: SITE_URL,
+    },
+    url: `${SITE_URL}/projects/${project.slug}`,
+  };
 
   return (
     <article>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(articleJsonLd) }}
+      />
       {/* ── Masthead. Full-bleed, with the title at display scale. The old
              version squeezed the whole case study into a 730px centre
              column, which left most of a desktop viewport empty. ───────── */}
@@ -60,16 +120,20 @@ export default async function ProjectDetail(props: Props) {
           }}
         />
         <div className="wide-container relative pt-28 pb-16 sm:pt-32 lg:pt-36 lg:pb-20">
-          <Link
-            href="/projects"
-            className="group inline-flex items-center gap-1.5 text-sm text-muted transition-colors hover:text-ink"
-          >
-            <ArrowLeft
-              className="h-4 w-4 transition-transform group-hover:-translate-x-0.5"
-              strokeWidth={2}
-            />
-            Projects
-          </Link>
+          <nav aria-label="Breadcrumb" className="flex items-center gap-2 text-sm text-muted">
+            <Link
+              href="/projects"
+              className="group inline-flex items-center gap-1.5 transition-colors hover:text-ink"
+            >
+              <ArrowLeft
+                className="h-4 w-4 transition-transform group-hover:-translate-x-0.5"
+                strokeWidth={2}
+              />
+              Projects
+            </Link>
+            <span aria-hidden className="text-muted-2">/</span>
+            <span className="truncate text-ink-dim">{project.title}</span>
+          </nav>
 
           <h1 className="display mt-10 max-w-[16ch] text-[clamp(2.5rem,6.5vw,5.5rem)] text-ink">
             {project.title}
@@ -80,8 +144,20 @@ export default async function ProjectDetail(props: Props) {
 
           <div className="mt-10 flex flex-wrap items-center gap-x-8 gap-y-3 font-mono text-[13px] text-muted">
             <span className="uppercase tracking-wide">{project.category}</span>
+            <span>{engagementLabel[project.engagementType]}</span>
             {project.year && <span>{project.year}</span>}
             {status && <span className="text-volt-text">{status}</span>}
+            {externalLink?.url && (
+              <a
+                href={externalLink.url}
+                target="_blank"
+                rel="noopener noreferrer nofollow"
+                className="inline-flex items-center gap-1 text-ink underline decoration-line-strong underline-offset-4 transition-colors hover:text-volt-text"
+              >
+                {externalLink.label}
+                <ArrowUpRight className="h-3.5 w-3.5" strokeWidth={2} />
+              </a>
+            )}
           </div>
         </div>
       </header>
@@ -114,7 +190,7 @@ export default async function ProjectDetail(props: Props) {
               {project.image ? (
                 <Image
                   src={project.image}
-                  alt={project.title}
+                  alt={project.imageAlt ?? project.title}
                   fill
                   priority
                   sizes="(min-width: 1024px) 33vw, 100vw"
@@ -129,6 +205,11 @@ export default async function ProjectDetail(props: Props) {
                 />
               )}
             </div>
+            {project.image && project.imageCaption && (
+              <p className="mt-2 font-mono text-[11px] text-muted-2">
+                {project.imageCaption}
+              </p>
+            )}
 
             {project.highlights && (
               <ul className="mt-8 space-y-3">

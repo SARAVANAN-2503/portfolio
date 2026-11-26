@@ -1,18 +1,25 @@
 import type { Project } from './types';
 
-export const appolo: Project = {
-  slug: 'appolo',
-  title: 'Appolo Smart Test',
+export const intelligentAssessmentPlatform: Project = {
+  id: 'proj-05',
+  slug: 'intelligent-assessment-platform',
+  title: 'Intelligent Assessment Platform',
   tagline: 'Enterprise Exam Evaluation & Serverless Processing',
   category: 'Serverless / EdTech',
+  engagementType: 'freelance',
   status: 'live',
   year: '2025',
-  image: '/Appolo Smart Test.png',
+  image: '/projects/intelligent-assessment-platform.png',
+  imageAlt: 'Illustrative architectural diagram for Intelligent Assessment Platform',
+  imageCaption: 'Illustrative system architecture',
+  hasCaseStudy: true,
+  summary:
+    'Serverless exam evaluation platform handling bursty submission loads with AWS Lambda, SQS, Agenda.js scheduling, and cursor-based MongoDB pagination.',
   highlights: [
-    'Serverless PDF processing pipeline, 90% less manual grading effort',
-    'Cursor-based MongoDB pagination: 60% faster API response times',
-    'TUS resumable uploads for 500MB+ video files, XSS/injection hardened',
-    'Firebase FCM + SQS: 1,000+ concurrent push notifications, zero memory spikes',
+    'Serverless PDF processing pipeline (AWS Lambda, S3, SQS) that cut manual effort by 90%',
+    'Firebase Cloud Messaging + SQS queue worker notifications, 1,000+ concurrent pushes, no memory spikes',
+    'Agenda.js job scheduler: timed start/end, auto-submission on timeout, idempotent reminder notifications',
+    'Cursor-based MongoDB pagination + TUS resumable 500MB+ video uploads, 60% faster API responses',
   ],
   problem:
     'Processing exam submissions after an exam closes used to mean manual grading and PDF handling. It was slow, error-prone, and impossible to scale during peak windows. The workload is bursty (zero traffic for weeks, then a flood at exam close) making always-on infrastructure wasteful. Cold starts on serverless functions were adding 3-8 seconds to the first invocation, violating the SLA.',
@@ -40,9 +47,10 @@ export const appolo: Project = {
     'Agenda.js',
     'JWT (RS256)',
   ],
+  confidentialityStatus: 'anonymized-case-study',
   explainMode: {
     interviewPitch:
-      "Appolo Smart Test is a serverless exam evaluation platform, a completely bursty workload that's zero for weeks then floods in at exam close. The interesting engineering was cold-start mitigation on Lambda, an Agenda.js scheduler driving the exam lifecycle itself (timed auto-submission, idempotent reminders), and cursor-based MongoDB pagination that cut API response times by 60%.",
+      'Intelligent Assessment Platform is a serverless exam evaluation system built for a completely bursty workload that sits idle for weeks and then floods in at exam close. The interesting engineering was cold-start mitigation on Lambda, an Agenda.js scheduler driving the exam lifecycle itself (timed auto-submission, idempotent reminders), and cursor-based MongoDB pagination that cut API response times by 60%.',
     talkingPoints: [
       'Fan-out: REST API → SQS queue → Lambda workers → MongoDB, with 50+ documented endpoints behind JWT (RS256)',
       'Agenda.js job scheduler: timed exam start/end, auto-submission on timeout, idempotent reminder notifications',
@@ -52,6 +60,6 @@ export const appolo: Project = {
       'Cost: ~60% cheaper than an always-on ECS cluster sized for the same peak load',
     ],
     tradeoffsExplained:
-      "Serverless is the right call for a workload that's idle for weeks and then spikes hard: an always-on cluster sized for that peak would sit mostly idle. The cost is cold starts, which we addressed with provisioned concurrency rather than accepting multi-second latency on the first request of a burst. On the data side, cursor pagination is more work to implement correctly than offset pagination, but offset degrades badly exactly when it matters most, during the post-exam flood when everyone is querying submission lists at once.",
+      'Serverless is the right call for a workload that\'s idle for weeks and then spikes hard: an always-on cluster sized for that peak would sit mostly idle. The cost is cold starts, which we addressed with provisioned concurrency rather than accepting multi-second latency on the first request of a burst. On the data side, cursor pagination is more work to implement correctly than offset pagination, but offset degrades badly exactly when it matters most, during the post-exam flood when everyone is querying submission lists at once.',
   },
 };

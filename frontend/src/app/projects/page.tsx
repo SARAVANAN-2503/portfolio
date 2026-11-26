@@ -5,7 +5,17 @@ import { projects } from '@/content/projects';
 
 export const metadata: Metadata = {
   title: 'Projects',
-  description: 'Production-grade systems: multi-tenant SaaS, government platforms, real-time WebSocket, serverless processing.',
+  description:
+    'Selected engineering case studies covering multi-tenant SaaS, government compliance systems, real-time WebSocket platforms, and serverless processing.',
+  alternates: {
+    canonical: '/projects',
+  },
+  openGraph: {
+    title: 'Projects | Saravanan',
+    description:
+      'Selected engineering case studies covering multi-tenant SaaS, government compliance systems, real-time WebSocket platforms, and serverless processing.',
+    url: '/projects',
+  },
 };
 
 export default function ProjectsPage() {
@@ -22,7 +32,7 @@ export default function ProjectsPage() {
 
         {/* Bottom note */}
         <p className="mt-14 text-center font-mono text-xs text-grey-muted">
-          All projects are from real production environments. Company names omitted per NDA.
+          Selected professional case studies presented using generic project names to respect confidentiality. Product identities and internal implementation details are intentionally omitted where appropriate.
         </p>
       </div>
     </div>

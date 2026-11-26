@@ -1,6 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
+  productionBrowserSourceMaps: false,
   // Allow imports from ../shared via the file system
   transpilePackages: [],
   // Enable typed routes for App Router

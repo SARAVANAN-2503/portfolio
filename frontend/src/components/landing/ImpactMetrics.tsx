@@ -16,11 +16,11 @@ const lead: Metric = {
   value: 1000,
   suffix: '+',
   label: 'Concurrent Notifications',
-  detail: 'Appolo Firebase FCM and SQS pipeline, with no memory spikes',
+  detail: 'Serverless Firebase FCM and SQS pipeline, with no memory spikes',
 };
 
 const supporting: Metric[] = [
-  { value: 90, suffix: '%', label: 'Manual Effort Cut', detail: 'Appolo serverless PDF pipeline' },
+  { value: 90, suffix: '%', label: 'Manual Effort Cut', detail: 'Serverless assessment PDF pipeline' },
   { value: 60, suffix: '%', label: 'Faster API Response', detail: 'Cursor-based MongoDB pagination' },
   { value: 10, suffix: '+', label: 'Production Apps', detail: 'Across SaaS, LMS, CRM, ERP domains' },
 ];

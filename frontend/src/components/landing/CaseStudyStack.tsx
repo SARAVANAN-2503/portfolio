@@ -61,7 +61,7 @@ function StackCard({
             {project.image ? (
               <Image
                 src={project.image}
-                alt={project.title}
+                alt={project.imageAlt ?? project.title}
                 fill
                 sizes="(min-width: 1024px) 42vw, 100vw"
                 className="object-cover object-top transition-transform duration-500 group-hover:scale-[1.02]"

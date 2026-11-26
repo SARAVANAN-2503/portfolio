@@ -1,18 +1,26 @@
 import type { Project } from './types';
 
-export const zponz: Project = {
-  slug: 'zponz',
-  title: 'ZPONZ',
+export const expertCommercePlatform: Project = {
+  id: 'proj-03',
+  slug: 'expert-commerce-platform',
+  title: 'Expert Commerce Platform',
   tagline: 'Expert Marketplace, Wallet & CMS Platform',
   category: 'Marketplace / Wallet',
+  engagementType: 'employer',
+  employerId: 'gnxtace',
   status: 'shipped',
   year: '2024',
-  image: '/ZPONZ.png',
+  image: '/projects/expert-commerce-platform.png',
+  imageAlt: 'Illustrative architectural diagram for Expert Commerce Platform',
+  imageCaption: 'Illustrative system architecture',
+  hasCaseStudy: true,
+  summary:
+    'Expert monetization marketplace with a ledger-based Stripe wallet, escrow semantics, scheduled payouts, and a shared drag-and-drop page builder.',
   highlights: [
-    'Drag-and-drop page builder with master components and ordered schema sections',
-    'Stripe-backed wallet: deposits, withdrawals, escrow, scheduled expert payouts',
-    'Expert monetization marketplace: landing site, ad dashboard, admin CMS',
-    'Real-time notifications via Socket.IO and Firebase Cloud Messaging',
+    'Reusable drag-and-drop page builder: master components, layout configs, ordered schema sections',
+    'Stripe-backed wallet: deposits, withdrawals, transfers, escrow/locked balances, scheduled payouts',
+    'Expert monetization marketplace: landing site, ad dashboard, centralized admin CMS',
+    'Real-time notifications via Socket.IO and Firebase Cloud Messaging + AWS S3/CloudFront media pipeline',
   ],
   problem:
     'Experts monetizing their time and content need three things working together: a public storefront to be discovered, a way to get paid reliably (including holding funds in escrow until a session completes), and an admin layer for the platform operator to manage the whole marketplace. Building each in isolation is easy, making them share one consistent data model and page-building system is the hard part.',
@@ -37,9 +45,10 @@ export const zponz: Project = {
     'Cloudinary',
     'Firebase FCM',
   ],
+  confidentialityStatus: 'anonymized-case-study',
   explainMode: {
     interviewPitch:
-      "ZPONZ is an expert marketplace with a Stripe-backed wallet covering deposits, withdrawals, escrow, and scheduled payouts: built on top of a single reusable drag-and-drop page-builder that also powers the ad dashboard and the admin CMS. The core engineering problem was making the wallet's escrow semantics airtight while keeping three very different surfaces on one component system.",
+      'Expert Commerce Platform is an expert marketplace with a Stripe-backed wallet covering deposits, withdrawals, escrow, and scheduled payouts, built on top of a single reusable drag-and-drop page-builder that also powers the ad dashboard and the admin CMS. The core engineering problem was making the wallet\'s escrow semantics airtight while keeping three very different surfaces on one component system.',
     talkingPoints: [
       'One page-builder schema (master components + ordered sections) powers landing site, ad dashboard, and admin CMS',
       'Wallet modeled as ledger entries, not a mutable balance, so escrow is just an unreleased entry',

@@ -1,18 +1,26 @@
 import type { Project } from './types';
 
-export const nexusone: Project = {
-  slug: 'nexusone',
-  title: 'NexusOne.coach',
+export const learningCoachingPlatform: Project = {
+  id: 'proj-01',
+  slug: 'learning-coaching-platform',
+  title: 'Digital Learning & Coaching Platform',
   tagline: 'LMS, Live Classes & Coaching Platform',
   category: 'LMS / Coaching',
+  engagementType: 'employer',
+  employerId: 'gnxtace',
   status: 'shipped',
   year: '2024',
-  image: '/NexusOne.coach.png',
+  image: '/projects/learning-coaching-platform.png',
+  imageAlt: 'Illustrative architectural diagram for Digital Learning & Coaching Platform',
+  imageCaption: 'Illustrative system architecture',
+  hasCaseStudy: true,
+  summary:
+    'Full-stack coaching and LMS platform unifying course delivery, live video classes, Socket.IO attendance tracking, and multi-instructor payouts.',
   highlights: [
-    'Courses, live Zoom classes, cohort management, automated assessments',
-    'RBAC permission controls with Socket.IO-driven attendance tracking',
-    'Stripe Checkout, Subscriptions & Connect for instructor payouts',
-    'Automated live-class reminders via Zoom SDK, Google Calendar and Firebase',
+    'Architected a full-stack coaching/LMS platform: courses, live Zoom classes, cohorts, automated assessments',
+    'Secure REST APIs, comprehensive RBAC/permission controls, Socket.IO-driven attendance tracking, audit logging',
+    'Integrated Stripe (Checkout/Subscriptions/Connect), Zoom Meeting SDK, Google Calendar, and Firebase',
+    'Automated live-class reminders and engagement notifications',
   ],
   problem:
     'Coaches and course creators running live cohort-based programs need more than a video call link. They need enrollment, scheduling, attendance that actually reflects who showed up, automated assessments, and a way to get paid per-instructor across potentially many collaborators on one platform. Most LMS tools handle content well and live delivery poorly, or vice versa.',
@@ -37,9 +45,10 @@ export const nexusone: Project = {
     'Firebase',
     'RBAC',
   ],
+  confidentialityStatus: 'anonymized-case-study',
   explainMode: {
     interviewPitch:
-      "NexusOne.coach is a coaching and LMS platform where content, live delivery, and payouts had to work as one system rather than three bolted-together tools. The engineering focus was on RBAC that actually holds up across student/instructor/admin roles, attendance derived from real socket events instead of self-reporting, and Stripe Connect for multi-instructor payouts.",
+      'This digital learning and coaching platform combined content, live delivery, and payouts into one system rather than three bolted-together tools. The engineering focus was on RBAC that holds up across student/instructor/admin roles, attendance derived from real socket events instead of self-reporting, and Stripe Connect for multi-instructor payouts.',
     talkingPoints: [
       'Three pillars: content (courses/cohorts/assessments), live delivery (Zoom SDK + Socket.IO attendance), money (Stripe Checkout/Subscriptions/Connect)',
       'RBAC permission layer evaluated per-endpoint: same API surface, different capabilities by role',

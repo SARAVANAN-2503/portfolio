@@ -28,7 +28,7 @@ describe('GET /api/users — cursor pagination', () => {
     const res = await request(app)
       .get('/api/users')
       .set('authorization', `Bearer ${token}`)
-      .set('x-tenant-id', 'tnt_govpass');
+      .set('x-tenant-id', 'tnt_civicflow');
     expect(res.status).toBe(403);
     expect(res.body.error.code).toBe('FORBIDDEN');
   });

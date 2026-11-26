@@ -10,7 +10,7 @@ describe('GET /api/tenants', () => {
     expect(res.status).toBe(200);
     expect(res.body.data).toHaveLength(2);
     const slugs = res.body.data.map((t: { slug: string }) => t.slug).sort();
-    expect(slugs).toEqual(['govpass', 'tenantcraft']);
+    expect(slugs).toEqual(['civicflow', 'tenantcraft']);
     expect(res.body.isolation.strategy).toBe('row-level');
     expect(res.body.isolation.tenantIdHeader).toBe('X-Tenant-ID');
   });

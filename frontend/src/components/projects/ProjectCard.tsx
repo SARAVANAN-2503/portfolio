@@ -41,7 +41,7 @@ export function ProjectCard({
         {project.image ? (
           <Image
             src={project.image}
-            alt={project.title}
+            alt={project.imageAlt ?? project.title}
             fill
             sizes={
               featured

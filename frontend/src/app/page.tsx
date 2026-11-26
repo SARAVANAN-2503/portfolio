@@ -12,7 +12,7 @@ import {
 import { ImpactMetrics } from "@/components/landing/ImpactMetrics";
 import { SkillMatrix } from "@/components/landing/SkillMatrix";
 import { CaseStudyStack } from "@/components/landing/CaseStudyStack";
-import { projects } from "@/content/projects";
+import { projects, getProjectsByEmployer } from "@/content/projects";
 
 /* Icons stay on lucide-react: it is already a project dependency, which is
    the documented exception to preferring Phosphor. Mixing a second icon
@@ -61,14 +61,14 @@ const experiencePreview = [
     role: "Full Stack Developer",
     period: "May 2024 - Present",
     current: true,
-    stack: ["NexusOne.coach", "Seltrix", "GovPass", "ZPONZ"],
+    stack: getProjectsByEmployer("gnxtace").map((p) => p.title),
   },
   {
     company: "Jnana Inventive Pvt Ltd",
     role: "Full Stack Developer",
     period: "Jun 2022 - May 2024",
     current: false,
-    stack: ["AdUnity", "QuickBizz"],
+    stack: getProjectsByEmployer("jnana").map((p) => p.title),
   },
 ];
 

@@ -1,16 +1,24 @@
 import type { Project } from './types';
 
-export const seltrix: Project = {
-  slug: 'seltrix',
-  title: 'Seltrix',
+export const multiTenantWebStudio: Project = {
+  id: 'proj-02',
+  slug: 'multi-tenant-web-studio',
+  title: 'Multi-Tenant Web Studio',
   tagline: 'Multi-Tenant Website Builder & Template Commerce Platform',
   category: 'SaaS Platform',
+  engagementType: 'employer',
+  employerId: 'gnxtace',
   status: 'shipped',
   year: '2024',
-  image: '/Seltrix.png',
+  image: '/projects/multi-tenant-web-studio.png',
+  imageAlt: 'Illustrative architectural diagram for Multi-Tenant Web Studio',
+  imageCaption: 'Illustrative system architecture',
+  hasCaseStudy: true,
+  summary:
+    'Multi-tenant SaaS website builder with custom-domain publishing, versioned SSR snapshots, and a Stripe-backed template marketplace.',
   highlights: [
-    'Multi-tenant SaaS website builder with custom-domain publishing',
-    'Template marketplace for buying and selling reusable site templates',
+    'Developed a multi-tenant SaaS website builder with custom-domain publishing',
+    'Template marketplace for buying and selling reusable page templates',
     'Dynamic public tenant rendering resolves tenant identity per request',
     'Stripe-powered billing for marketplace transactions',
   ],
@@ -36,9 +44,10 @@ export const seltrix: Project = {
     'Custom Domain Routing',
     'Multi-Tenant Architecture',
   ],
+  confidentialityStatus: 'anonymized-case-study',
   explainMode: {
     interviewPitch:
-      "Seltrix is a multi-tenant SaaS website builder where tenants publish under their own custom domain and can buy or sell page templates from each other. The interesting problems were tenant resolution at the request layer and turning the builder into a small two-sided marketplace without bolting commerce on as an afterthought.",
+      'Multi-Tenant Web Studio is a SaaS website builder where tenants publish under their own custom domain and can buy or sell page templates from each other. The interesting problems were tenant resolution at the request layer and turning the builder into a small two-sided marketplace without bolting commerce on as an afterthought.',
     talkingPoints: [
       'Request pipeline resolves tenant identity from custom domain or subdomain before any query runs',
       'Publish flow writes a versioned snapshot: drafts stay private, published sites go live atomically',

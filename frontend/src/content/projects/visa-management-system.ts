@@ -1,18 +1,26 @@
 import type { Project } from './types';
 
-export const govpass: Project = {
-  slug: 'govpass',
-  title: 'GovPass',
+export const visaManagementSystem: Project = {
+  id: 'proj-04',
+  slug: 'visa-management-system',
+  title: 'Digital Visa Management System',
   tagline: 'Government Visa Application Management System',
   category: 'Government / Compliance',
+  engagementType: 'employer',
+  employerId: 'gnxtace',
   status: 'shipped',
   year: '2024',
-  image: '/GovPass.png',
+  image: '/projects/visa-management-system.png',
+  imageAlt: 'Illustrative architectural diagram for Digital Visa Management System',
+  imageCaption: 'Illustrative system architecture',
+  hasCaseStudy: true,
+  summary:
+    'Compliance-focused visa processing platform featuring state-machine workflows, immutable event-sourced audit logs, and 15+ tier RBAC.',
   highlights: [
-    'Replaced paper workflow: 30% error rate → < 2%',
-    'Immutable event-sourced audit log (7-year retention)',
-    '15+ officer role tiers with RBAC middleware',
-    'Fault-tolerant Stripe + Square payment flows',
+    'Replaced paper-based workflow: error rate dropped from 30% to < 2%',
+    'Event-sourced audit log satisfying 7-year regulatory retention',
+    'RBAC permission matrix for 15+ officer roles evaluated at middleware',
+    'Fault-tolerant payment flows with retry, idempotency, and failure handling',
   ],
   problem:
     'Processing visa applications for a government agency with strict regulatory constraints: mandatory document retention, audit trails for every state transition, role-based access across 15+ officer tiers, and zero tolerance for data loss. The existing paper-based workflow processed ~200 applications/day with a 30% error rate from manual data entry.',
@@ -39,9 +47,10 @@ export const govpass: Project = {
     'Swagger/OpenAPI',
     'Knex.js',
   ],
+  confidentialityStatus: 'anonymized-case-study',
   explainMode: {
     interviewPitch:
-      "GovPass replaced a paper-based visa processing system handling 200 applications/day at a 30% error rate. The hard part wasn't the CRUD: it was the compliance requirements: immutable audit trails, mandatory 7-year retention, and a 15-tier RBAC model that had to match the agency's exact organizational hierarchy.",
+      'Digital Visa Management System replaced a paper-based visa processing workflow handling 200 applications/day at a 30% error rate. The hard part wasn\'t the CRUD: it was the compliance requirements—immutable audit trails, mandatory 7-year retention, and a 15-tier RBAC model that had to match the agency\'s exact organizational hierarchy.',
     talkingPoints: [
       'State machine ensures applications can only transition through valid paths, so there are no skip-ahead bugs',
       'Event-sourced audit log: append-only, immutable, satisfies 7-year regulatory retention',

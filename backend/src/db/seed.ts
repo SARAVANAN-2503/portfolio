@@ -14,7 +14,7 @@ export function seed(db: Db, opts: SeedOptions = {}): void {
   const now = Date.now();
   const tenants = [
     { id: 'tnt_tenantcraft', name: 'TenantCraft', slug: 'tenantcraft', plan: 'pro' },
-    { id: 'tnt_govpass', name: 'GovPass', slug: 'govpass', plan: 'enterprise' },
+    { id: 'tnt_civicflow', name: 'CivicFlow', slug: 'civicflow', plan: 'enterprise' },
   ];
 
   const insertTenant = db.prepare(
